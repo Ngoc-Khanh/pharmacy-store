@@ -5,7 +5,7 @@ import { routes, siteConfig } from "@/config";
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: siteConfig.backend.base_api_url, // Replace with your API base URL
+  baseURL: `${siteConfig.backend.base_api_url}/api`, // Replace with your API base URL
   headers: siteConfig.backend.base_headers,
 });
 

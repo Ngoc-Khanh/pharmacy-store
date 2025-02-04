@@ -29,6 +29,7 @@
     "react-router-dom": "^7.1.5",
     "sass": "^1.83.4",
     "scss": "^0.2.4",
+    "sonner": "^1.7.4",
     "sooner": "^1.1.4",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
