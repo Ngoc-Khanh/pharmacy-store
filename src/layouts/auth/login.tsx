@@ -49,7 +49,7 @@ export default function LoginPage({
   const loginMutation = useMutation({
     mutationFn: AuthAPI.fetchLogin,
     onSuccess: (data) => {
-      localStorage.setItem(`${siteConfig.auth.jwt_key}`, data.access_token);
+      localStorage.setItem(siteConfig.auth.jwt_key, data.access_token);
       setIsLoading(false);
       toast.success("Login successful!");
       setTimeout(() => {

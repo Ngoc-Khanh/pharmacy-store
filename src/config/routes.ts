@@ -8,6 +8,7 @@ const baseRoutes = {
   home: "/",
 
   admin: "/admin",
+  dashboard: "/admin/dashboard",
 
   // ERROR ROUTES
   generalError: "/500",

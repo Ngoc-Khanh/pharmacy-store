@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider, ThemeProvider } from "@/providers";
+import { RouterProvider, ThemeProvider, UserProvider } from "@/providers";
 import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
@@ -7,9 +7,11 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster />
+      <Toaster richColors />
       <ThemeProvider defaultTheme="dark" storageKey="theme">
-        <RouterProvider />
+        <UserProvider>
+          <RouterProvider />
+        </UserProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )
