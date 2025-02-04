@@ -13,7 +13,7 @@ export const siteConfig = {
 
   // AUTH JWT
   auth: {
-    jwt_key: "ACCESS_TOKEN",
+    jwt_key: "access_token",
   },
 
   // CONFIG LOCALES
