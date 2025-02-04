@@ -1,12 +1,14 @@
 import { QueryClient, QueryClientProvider } from "react-query";
-import { RouterProvider } from "@/providers";
+import { RouterProvider, ThemeProvider } from "@/providers";
 
 function App() {
   const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider />
+      <ThemeProvider defaultTheme="dark">
+        <RouterProvider />
+      </ThemeProvider>
     </QueryClientProvider>
   )
 }
