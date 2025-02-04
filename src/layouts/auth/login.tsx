@@ -7,14 +7,17 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { z } from "zod";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { routes } from "@/config";
 import { Link } from "react-router-dom";
 import AuthLayout from "./auth.layouts";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+import { routes, siteConfig } from "@/config";
 import { Button } from "@/components/ui/button";
+import { AuthAPI } from "@/services/api/auth.api";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BriefcaseMedical, Loader2 } from "lucide-react";
 import { TextAnimate } from "@/components/ui/text-animate";
@@ -43,6 +46,22 @@ export default function LoginPage({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [isLoading, setIsLoading] = useState(false);
 
+  const loginMutation = useMutation({
+    mutationFn: AuthAPI.fetchLogin,
+    onSuccess: (data) => {
+      localStorage.setItem(`${siteConfig.auth.jwt_key}`, data.access_token);
+      setIsLoading(false);
+      toast.success("Login successful!");
+      setTimeout(() => {
+        window.location.href = routes.home;
+      }, 500);
+    },
+    onError: (error) => {
+      toast.error("Login failed!", { description: error.message });
+      setIsLoading(false);
+    },
+  })
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,6 +72,11 @@ export default function LoginPage({
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+    loginMutation.mutate(data, {
+      onSettled: () => {
+        setIsLoading(false);
+      },
+    });
   }
 
   return (
