@@ -40,7 +40,7 @@ export function UserNav({ user }: { user: User }) {
         <DropdownMenuGroup>
           {user.role === "admin" && (
             <DropdownMenuItem asChild>
-              <Link to={routes.dashboard} target="_blank">
+              <Link to={routes.adminDashboard} target="_blank">
                 Admin Dashboard
               </Link>
             </DropdownMenuItem>
