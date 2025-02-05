@@ -8,7 +8,10 @@ const baseRoutes = {
   home: "/",
 
   admin: "/admin",
-  dashboard: "/admin/dashboard",
+  adminDashboard: "/admin/dashboard",
+
+  settingsProfile: "admin/settings/profile",
+  settingsPreferences: "admin/settings/preferences",
 
   // ERROR ROUTES
   generalError: "/500",
@@ -23,6 +26,7 @@ export const routeNames = {
 
   // AUTHENTICATION NAME ROUTES
   [baseRoutes.admin]: "Admin",
+  [baseRoutes.adminDashboard]: "Dashboard",
 };
 
 export const routes = {
