@@ -34,7 +34,7 @@ export const Hero = () => {
           </h2>
         </PageHeaderHeading>
         <PageHeaderDescription>
-          Build your React landing page effortlessly with the required sections to your project.
+          Experience the Best in Healthcare with our Wide Range of Prescription Medicines and Personal Care Products.
         </PageHeaderDescription>
         <PageActions>
           <Link to="">
