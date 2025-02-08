@@ -167,7 +167,7 @@ export default function LoginPage({
                     Please wait...
                   </div>
                 ) : (
-                  "Login"
+                  <span className="text-white dark:text-black">Login</span>
                 )}
               </RainbowButton>
             </div>

@@ -1,8 +1,9 @@
 import { RouteObject } from "react-router-dom";
 import { LoginPage } from "@/layouts/auth";
+import AdminLayout from "@/layouts/admin";
 import { routes } from "@/config/routes";
 import MainLayout from "@/layouts/main";
-import AdminLayout from "@/layouts/admin";
+import HomePage from "@/page/main/home";
 
 export const reactRouter: RouteObject[] = [
   // AUTHENTICATION PAGES
@@ -26,7 +27,7 @@ export const reactRouter: RouteObject[] = [
       {
         index: true,
         path: routes.home,
-        element: <div>Home's Page</div>,
+        element: <HomePage />,
       },
     ],
   },
