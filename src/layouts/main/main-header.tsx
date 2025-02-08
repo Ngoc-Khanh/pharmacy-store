@@ -66,8 +66,8 @@ export function MainHeader() {
                   )}
                 </div>
               ) : (
-                <Button variant="outline" size="lg" asChild>
-                  <a href={routes.login}>Login / Register</a>
+                <Button variant="ghost" size="default" asChild>
+                  <a href={routes.login}>Login | Register</a>
                 </Button>
               )}
             </nav>

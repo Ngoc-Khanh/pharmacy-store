@@ -17,7 +17,7 @@ export function MainFooter() {
             </a>
             . The source code is available on{" "}
             <a
-              href={siteConfig.links.github}
+              href="https://github.com/Ngoc-Khanh/pharmacy-store"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
