@@ -15,17 +15,16 @@ import AuthLayout from "./auth.layouts";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { routes, siteConfig } from "@/config";
-import { Button } from "@/components/ui/button";
 import { AuthAPI } from "@/services/api/auth.api";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BriefcaseMedical, Loader2 } from "lucide-react";
-import { TextAnimate } from "@/components/ui/text-animate";
-import { RainbowButton } from "@/components/ui/rainbow-button";
+import { TextAnimate } from "@/components/magicui/text-animate";
+import { RainbowButton } from "@/components/magicui/rainbow-button";
 import { PasswordInput } from "@/components/custom/password-input";
 
 const formSchema = z.object({
-  login: z.string()
+  account: z.string()
     .min(1, { message: "Email or username is required!" })
     .refine(
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || value.length >= 3,
@@ -65,7 +64,7 @@ export default function LoginPage({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      login: "admin@pharmacy.com",
+      account: "admin@pharmacy.com",
       password: "123456",
     },
   });
@@ -115,14 +114,14 @@ export default function LoginPage({
               </div>
               <FormField
                 control={form.control}
-                name="login"
+                name="account"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username Or Email</FormLabel>
+                    <FormLabel>Account</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="Enter your username or email"
+                        placeholder="Enter your account"
                         tabIndex={1}
                       />
                     </FormControl>
@@ -162,7 +161,7 @@ export default function LoginPage({
                 tabIndex={3}
               >
                 {isLoading ? (
-                  <div className="flex items-center justify-center gap-2">
+                  <div className="flex items-center justify-center gap-2 text-white dark:text-black">
                     <Loader2 className="animate-spin" />
                     Please wait...
                   </div>
@@ -171,7 +170,7 @@ export default function LoginPage({
                 )}
               </RainbowButton>
             </div>
-            <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+            {/* <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
               <span className="relative z-10 bg-backgroud px-2 text-muted-foreground">
                 Or
               </span>
@@ -195,7 +194,7 @@ export default function LoginPage({
                 </svg>
                 Continue with Google
               </Button>
-            </div>
+            </div> */}
           </form>
           <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
             By clicking continue, you agree to our{" "}

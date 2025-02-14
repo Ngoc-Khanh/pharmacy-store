@@ -19,28 +19,25 @@ export function MainNav() {
       </Link>
       <nav className="flex items-center gap-4 text-sm xl:gap-6">
         <a
+          href="#features"
+          className={cn(
+            "transition-colors hover:text-foreground/80",
+            pathname === "#features" ? "text-foreground" : "text-foreground/80"
+          )}
+        >
+          Features
+        </a>
+        <a
           href="#about"
           className={cn(
             "transition-colors hover:text-foreground/80",
             pathname === "#about" ? "text-foreground" : "text-foreground/80"
           )}
         >
-          About
+          About Us
         </a>
-        <Link
-          to="/docs/components"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/docs/components") &&
-              !pathname?.startsWith("/docs/component/chart")
-              ? "text-foreground"
-              : "text-foreground/80"
-          )}
-        >
-          Products
-        </Link>
-        <Link
-          to="/blocks"
+        <a
+          href=""
           className={cn(
             "transition-colors hover:text-foreground/80",
             pathname?.startsWith("/blocks")
@@ -48,8 +45,8 @@ export function MainNav() {
               : "text-foreground/80"
           )}
         >
-          About us
-        </Link>
+          About
+        </a>
         <Link
           to="/charts"
           className={cn(

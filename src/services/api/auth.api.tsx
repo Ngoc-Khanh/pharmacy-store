@@ -6,12 +6,12 @@ import { SRO } from "@/data/sro";
 
 export const AuthAPI = {
   async fetchLogin(credentials: credentialsDto) {
-    const res = await apiPost<credentialsDto, SRO<Credentials>>("v1/auth/credentials", credentials);
+    const res = await apiPost<credentialsDto, SRO<Credentials>>("v2/auth/credentials", credentials);
     return res.data.data;
   },
 
   async getProfile() {
-    const res = await apiGet<SRO<User>>("v1/auth/profile");
+    const res = await apiGet<SRO<User>>("v2/auth/me");
     return res.data.data;
   }
 }

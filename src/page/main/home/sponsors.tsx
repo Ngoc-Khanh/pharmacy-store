@@ -1,58 +1,56 @@
-import { Radar } from "lucide-react";
+"use client";
 
-interface SponsorProps {
-  icon: JSX.Element;
-  name: string;
-}
-
-const sponsors: SponsorProps[] = [
-  {
-    icon: <Radar size={34} />,
-    name: "Sponsor 1",
-  },
-  {
-    icon: <Radar size={34} />,
-    name: "Sponsor 2",
-  },
-  {
-    icon: <Radar size={34} />,
-    name: "Sponsor 3",
-  },
-  {
-    icon: <Radar size={34} />,
-    name: "Sponsor 4",
-  },
-  {
-    icon: <Radar size={34} />,
-    name: "Sponsor 5",
-  },
-  {
-    icon: <Radar size={34} />,
-    name: "Sponsor 6",
-  },
-];
+import { Carousel, CarouselApi, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { MagicCard } from "@/components/magicui/magic-card";
+import { useTheme } from "@/providers/theme.provider";
+import { Section } from "@/components/custom/section";
+import { useEffect, useState } from "react";
 
 export const Sponsors = () => {
-  return (
-    <section
-      id="sponsors"
-      className="container pt-24 sm:py-32"
-    >
-      <h2 className="text-center text-md lg:text-xl font-bold mb-8 text-primary">
-        Investors and founders
-      </h2>
+  const { theme } = useTheme();
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
 
-      <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8">
-        {sponsors.map(({ icon, name }: SponsorProps) => (
-          <div
-            key={name}
-            className="flex items-center gap-1 text-muted-foreground/60"
-          >
-            <span>{icon}</span>
-            <h3 className="text-xl  font-bold">{name}</h3>
-          </div>
-        ))}
+  useEffect(() => {
+    if (!api) return;
+    setTimeout(() => {
+      if (api.selectedScrollSnap() + 1 === api.scrollSnapList().length) {
+        api.scrollTo(0);
+        setCurrent(0);
+      } else {
+        api.scrollNext();
+        setCurrent(current + 1);
+      }
+    }, 1000)
+  }, [api, current]);
+
+  return (
+    <Section id="sponsors">
+      <div className="grid grid-cols-5 gap-10 items-center">
+        <h3 className="text-xl tracking-tighter lg:max-w-xl font-regular text-left">
+          Trusted by market leaders
+        </h3>
+        <div className="relative w-full col-span-4">
+          <div className="bg-gradient-to-r from-background via-white/0 to-background z-10 absolute left-0 top-0 right-0 bottom-0 w-full h-full" />
+          <Carousel setApi={setApi} className="w-full">
+            <CarouselContent>
+              {Array.from({ length: 25 }).map((_, index) => (
+                <CarouselItem
+                  key={index}
+                  className="basis-1/4 lg:basis-1/6"
+                >
+                  <MagicCard
+                    className="cursor-pointer flex aspect-square bg-muted items-center justify-center p-2"
+                    gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"}
+                  >
+                    <span className="text-sm">Logo {index + 1}</span>
+                  </MagicCard>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
       </div>
-    </section>
+    </Section>
   );
 };

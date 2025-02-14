@@ -1,13 +1,13 @@
 import { PageActions, PageHeader, PageHeaderDescription, PageHeaderHeading } from "@/components/page-header";
-import { AnimatedSubscribeButton } from "@/components/ui/animated-subscribe-button";
-import InteractiveHoverButton from "@/components/ui/interactive-hover-button";
+import { AnimatedSubscribeButton } from "@/components/magicui/animated-subscribe-button";
+import InteractiveHoverButton from "@/components/magicui/interactive-hover-button";
 import { ChevronRightIcon, CheckIcon } from "lucide-react";
 import { Announcement } from "@/components/announcement";
 import { useTheme } from "@/providers/theme.provider";
 import { useEffect, useState } from "react";
 import { HeroCards } from "./hero-cards";
 import { Link } from "react-router-dom";
-import Particles from "@/components/ui/particles";
+import Particles from "@/components/magicui/particles";
 
 export const Hero = () => {
   const { theme } = useTheme();
