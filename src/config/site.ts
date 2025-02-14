@@ -5,8 +5,8 @@ import { LayoutDashboard } from "lucide-react";
 export const siteConfig = {
   // SETTING SITE CONFIG
   name: "Pharmacy Store",
-  url: "https://krug.com",
-  ogImage: "https://ui.shadcn.com/og.jpg",
+  url: "https://pharmacy.ngockhanh.com",
+  ogImage: "https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-1/475498688_1342904003405977_5625967673413894804_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=106&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeEHV4UNTNUD8MNX8uXuf3_wnrKTyNbbYRmespPI1tthGT_wcllAjhLcVg605B9ShyovKu6jAC6n7uL-OIu80CuM&_nc_ohc=tPVK_ifGy9QQ7kNvgHbIj8B&_nc_oc=AdiiyRLUAtD5VtAIjWQoJiLvDiR9TwJwb5T55HdCQCaLHYWGGzxeUZnzFYW88k1iivU&_nc_zt=24&_nc_ht=scontent.fhan17-1.fna&_nc_gid=AVN8DJ60aYSJK4dz_CT-OIb&oh=00_AYAU7u9hHsNn-gbSaq_tdRl1s6fQ3c2fJJ6UEmMJvHeLQA&oe=67B4A92E",
   description:
     "Your trusted pharmacy for quality medications and health care products.",
   // OWNER INFO

@@ -22,9 +22,9 @@ export const Contact = () => {
               <Badge>Contact</Badge>
             </div>
             <div className="flex flex-col gap-2">
-              <h4 className="text-3xl md:text-5xl tracking-tighter max-w-xl text-left font-regular">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tighter max-w-xl text-left">
                 Something new
-              </h4>
+              </h2>
               <p className="text-lg leading-relaxed tracking-tight text-muted-foreground max-w-sm text-left">
                 Managing a small business today is already tough. Avoid
                 further complications by ditching outdated, tedious trade
