@@ -145,7 +145,7 @@ const defaultItemAnimationVariants: Record<
     container: defaultContainerVariants,
     item: {
       hidden: { opacity: 0, filter: "blur(10px)", y: 20 },
-      show: (_delay: number) => ({
+      show: () => ({
         opacity: 1,
         filter: "blur(0px)",
         y: 0,
@@ -171,7 +171,7 @@ const defaultItemAnimationVariants: Record<
     container: defaultContainerVariants,
     item: {
       hidden: { opacity: 0, filter: "blur(10px)", y: -20 },
-      show: (_delay: number) => ({
+      show: () => ({
         opacity: 1,
         filter: "blur(0px)",
         y: 0,
