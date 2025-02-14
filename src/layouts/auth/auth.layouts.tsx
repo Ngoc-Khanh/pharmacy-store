@@ -1,5 +1,5 @@
-import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
-import { Helmet } from "react-helmet";
+import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
+import { Helmet } from "react-helmet-async";
 import { siteConfig } from "@/config";
 import { cn } from "@/lib/utils";
 

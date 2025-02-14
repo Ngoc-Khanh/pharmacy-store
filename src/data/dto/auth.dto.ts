@@ -1,4 +1,4 @@
 export type credentialsDto = {
-  login: string;
+  account: string;
   password: string;
 }
