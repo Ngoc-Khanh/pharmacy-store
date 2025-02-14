@@ -1,6 +1,7 @@
 import { Activity, FilePenLine, FileX2, HeartPulse, Microscope } from "lucide-react";
 import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid"
 import { Section } from "@/components/custom/section";
+import { AuroraText } from "@/components/magicui/aurora-text";
 
 
 const features = [
@@ -54,11 +55,23 @@ const features = [
 export const Features = () => {
   return (
     <Section id="features">
-      <BentoGrid>
-        {features.map((feature, idx) => (
-          <BentoCard key={idx} {...feature} />
-        ))}
-      </BentoGrid>
+      <div className="flex flex-col gap-6">
+        <div className="flex justify-center items-center gap-4 flex-col">
+          <div className="flex gap-2 pb-4 flex-col">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tighter max-w-xl text-center">
+              <AuroraText>Features</AuroraText> Products
+            </h2>
+          </div>
+
+          <div className="w-full mx-auto">
+            <BentoGrid>
+              {features.map((feature, idx) => (
+                <BentoCard key={idx} {...feature} />
+              ))}
+            </BentoGrid>
+          </div>
+        </div>
+      </div>
     </Section>
   )
 }

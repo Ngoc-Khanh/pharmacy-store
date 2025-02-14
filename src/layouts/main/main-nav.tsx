@@ -37,28 +37,23 @@ export function MainNav() {
           About Us
         </a>
         <a
-          href=""
+          href="#faq"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/blocks")
-              ? "text-foreground"
-              : "text-foreground/80"
+            pathname === "#faq" ? "text-foreground" : "text-foreground/80"
           )}
         >
-          About
+          FAQ
         </a>
-        <Link
-          to="/charts"
+        <a
+          href="#product"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/docs/component/chart") ||
-              pathname?.startsWith("/charts")
-              ? "text-foreground"
-              : "text-foreground/80"
+            pathname === "#product" ? "text-foreground" : "text-foreground/80"
           )}
         >
           Charts
-        </Link>
+        </a>
         <Link
           to="/themes"
           className={cn(
