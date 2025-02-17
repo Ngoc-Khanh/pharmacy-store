@@ -10,7 +10,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "./auth.layouts";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ import { BriefcaseMedical, Loader2 } from "lucide-react";
 import { TextAnimate } from "@/components/magicui/text-animate";
 import { RainbowButton } from "@/components/magicui/rainbow-button";
 import { PasswordInput } from "@/components/custom/password-input";
+import capitalizeFirstLetter from "@/lib/uppercase";
 
 const formSchema = z.object({
   account: z.string()
@@ -44,16 +45,17 @@ export default function LoginPage({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const loginMutation = useMutation({
     mutationFn: AuthAPI.fetchLogin,
     onSuccess: (data) => {
       localStorage.setItem(siteConfig.auth.jwt_key, data.access_token);
       setIsLoading(false);
-      toast.success("Login successful!");
+      toast.success(`Welcome back!, ${capitalizeFirstLetter(data.user.username)}`);
       setTimeout(() => {
-        window.location.href = routes.home;
-      }, 500);
+        navigate(routes.home);
+      }, 1000);
     },
     onError: (error) => {
       toast.error("Login failed!", { description: error.message });

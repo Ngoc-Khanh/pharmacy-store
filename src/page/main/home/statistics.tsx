@@ -1,10 +1,12 @@
-export const Statistics = () => {
-  interface statsProps {
-    quantity: string;
-    description: string;
-  }
+import { FC, useMemo } from 'react';
 
-  const stats: statsProps[] = [
+interface StatsProps {
+  quantity: string;
+  description: string;
+}
+
+export const Statistics: FC = () => {
+  const stats: StatsProps[] = useMemo(() => [
     {
       quantity: "2.7K+",
       description: "Users",
@@ -21,12 +23,12 @@ export const Statistics = () => {
       quantity: "4",
       description: "Products",
     },
-  ];
+  ], []);
 
   return (
     <section id="statistics">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-        {stats.map(({ quantity, description }: statsProps) => (
+        {stats.map(({ quantity, description }) => (
           <div
             key={description}
             className="space-y-2 text-center"

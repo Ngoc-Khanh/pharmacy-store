@@ -1,3 +1,3 @@
+export { default as ThemeProvider, useTheme } from "./theme.provider";
 export { default as RouterProvider } from "./router.provider";
-export { default as ThemeProvider } from "./theme.provider";
-export { UserProvider } from "./user.provider";
+export { UserProvider, useStateUser } from "./user.provider";
