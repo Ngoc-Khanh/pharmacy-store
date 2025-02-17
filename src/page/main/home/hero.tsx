@@ -37,30 +37,32 @@ export const Hero = () => {
           Experience the Best in Healthcare with our Wide Range of Prescription Medicines and Personal Care Products.
         </PageHeaderDescription>
         <PageActions>
-          <Link to="">
-            <InteractiveHoverButton
-              text="Buying now!"
-              className="w-[200px] h-full"
-            />
-          </Link>
-          <Link to="">
-            <AnimatedSubscribeButton
-              buttonColor=""
-              buttonTextColor=""
-              subscribeStatus={false}
-              initialText={
-                <span className="mr-10 group inline-flex items-center">
-                  Categories{" "}
-                  <ChevronRightIcon className="ml-1 size-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
-              }
-              changeText={
-                <span className="group inline-flex items-center">
-                  <CheckIcon className="mr-2 size-4" />{" "}
-                </span>
-              }
-            />
-          </Link>
+          <div className="flex flex-1 items-center justify-center md:justify-start gap-4">
+            <Link to="">
+              <InteractiveHoverButton
+                text="Buying now!"
+                className="w-[200px] h-full"
+              />
+            </Link>
+            <Link to="">
+              <AnimatedSubscribeButton
+                buttonColor=""
+                buttonTextColor=""
+                subscribeStatus={false}
+                initialText={
+                  <span className="mr-10 group inline-flex items-center">
+                    Categories{" "}
+                    <ChevronRightIcon className="ml-1 size-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                }
+                changeText={
+                  <span className="group inline-flex items-center">
+                    <CheckIcon className="mr-2 size-4" />{" "}
+                  </span>
+                }
+              />
+            </Link>
+          </div>
         </PageActions>
       </div>
 

@@ -6,10 +6,19 @@ const baseRoutes = {
 
   // MAIN ROUTES
   home: "/",
+  products: "/products",
+  details: (id: string) => `/products/${id}`,
 
   admin: "/admin",
   adminDashboard: "/admin/dashboard",
 
+  // ACCOUNT MAIN ROUTES
+  mainSettings: "/account",
+  mainInvoices: "/account/invoices",
+  mainProfile: "/account/profile",
+  mainChangePwd: "/account/change-password",
+
+  // SETTINGS ADMIN ROUTES
   settingsProfile: "admin/settings/profile",
   settingsPreferences: "admin/settings/preferences",
 

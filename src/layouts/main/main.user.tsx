@@ -1,13 +1,14 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FileText, LogOut, Settings, Shield, User } from "lucide-react";
 import { LogOutDialog } from "@/components/dialogs/logout";
-import { User } from "@/data/interfaces/user.interface";
+import { User as UserInterface } from "@/data/interfaces";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { routes } from "@/config";
 import { useState } from "react";
 
-export function UserNav({ user }: { user: User }) {
+export function MainUser({ user }: { user: UserInterface }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -41,17 +42,34 @@ export function UserNav({ user }: { user: User }) {
           {user.role === "admin" && (
             <DropdownMenuItem asChild>
               <Link to={routes.adminDashboard} target="_blank">
+                <Shield size={18} />
                 Admin Dashboard
               </Link>
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to={routes.mainProfile}>
+              <User size={18} />
+              Account
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to={routes.mainInvoices}>
+              <FileText size={18} />
+              Invoices
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to={routes.mainSettings}>
+              <Settings size={18} />
+              Settings
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={() => setIsOpen(true)}>
           Log out
+          <LogOut size={18} />
         </DropdownMenuItem>
       </DropdownMenuContent>
       <LogOutDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />

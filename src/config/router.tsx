@@ -1,9 +1,8 @@
+import { HomePage, ProductPage, ProfilePage } from "@/page/main";
+import { AdminLayout, MainLayout, AccountLayout } from "@/layouts";
 import { RouteObject } from "react-router-dom";
 import { LoginPage } from "@/layouts/auth";
-import AdminLayout from "@/layouts/admin";
 import { routes } from "@/config/routes";
-import MainLayout from "@/layouts/main";
-import HomePage from "@/page/main/home";
 
 export const reactRouter: RouteObject[] = [
   // AUTHENTICATION PAGES
@@ -28,6 +27,35 @@ export const reactRouter: RouteObject[] = [
         index: true,
         path: routes.home,
         element: <HomePage />,
+      },
+      {
+        path: routes.products,
+        element: <ProductPage />,
+      },
+      {
+        path: routes.details(":id"),
+        element: <div>Product Detail's Page</div>,
+      },
+      {
+        element: <AccountLayout />,
+        children: [
+          {
+            path: routes.mainSettings,
+            element: <div>Main Settings Page's</div>,
+          },
+          {
+            path: routes.mainInvoices,
+            element: <div>Main Invoices Page's</div>,
+          },
+          {
+            path: routes.mainProfile,
+            element: <ProfilePage />,
+          },
+          {
+            path: routes.mainChangePwd,
+            element: <div>Main Change Password Page's</div>,
+          }
+        ],
       },
     ],
   },

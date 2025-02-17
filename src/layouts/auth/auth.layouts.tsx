@@ -1,11 +1,9 @@
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 import { useStateUser } from "@/providers/user.provider";
-import { Helmet } from "react-helmet-async";
 import { routes, siteConfig } from "@/config";
+import { Navigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-
 interface AuthLayoutProps {
   children: React.ReactNode;
   title: string;
@@ -13,11 +11,8 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children, title }: AuthLayoutProps) {
   const { token } = useStateUser();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (token) navigate(routes.home);
-  }, [token, navigate]);
+  if (token) return <Navigate to={routes.home} />;
 
   return (
     <>

@@ -1,5 +1,5 @@
-import { MainFooter } from "./main-footer";
-import { MainHeader } from "./main-header";
+import { MainFooter } from "./main.footer";
+import { MainHeader } from "./main.header";
 import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
