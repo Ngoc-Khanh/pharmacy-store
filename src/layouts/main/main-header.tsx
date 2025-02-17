@@ -4,22 +4,15 @@ import { CommandMenu } from "@/components/command-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { routes, siteConfig } from "@/config";
-import { Badge } from "@/components/ui/badge";
-import { ShoppingCart } from "lucide-react";
 import { Icons } from "@/components/icons";
 import { MobileNav } from "./mobile-nav";
 import { MainNav } from "./main-nav";
 import { UserNav } from "./user-nav";
-import { useState } from "react";
+import { Cart } from "./cart";
 
 export function MainHeader() {
   const { user, token } = useStateUser();
   const isLoggedIn = !!token;
-  const [count, setCount] = useState(4);
-
-  const handleClick = () => {
-    setCount(0);
-  };
 
   return (
     <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -42,20 +35,7 @@ export function MainHeader() {
                   <span className="sr-only">GitHub</span>
                 </a>
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative z-50"
-                onClick={handleClick}
-                aria-label="Carts"
-              >
-                <ShoppingCart size={16} strokeWidth={2} aria-hidden="true" />
-                {count > 0 && (
-                  <Badge className="absolute -top-2 left-full min-w-5 -translate-x-1/2 px-1">
-                    {count > 99 ? "99+" : count}
-                  </Badge>
-                )}
-              </Button>
+              <Cart />
               <ModeSwitcher />
               {isLoggedIn ? (
                 <div className="flex items-center gap-2 pl-2">
