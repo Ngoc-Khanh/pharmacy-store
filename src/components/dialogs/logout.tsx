@@ -1,7 +1,6 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
-import { useNavigate } from "react-router-dom";
+import { routes, siteConfig } from "@/config";
 import { useCallback } from "react";
-import { routes } from "@/config";
 import { toast } from "sonner";
 
 export function LogOutDialog({
@@ -11,25 +10,23 @@ export function LogOutDialog({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const navigate = useNavigate();
 
   const handleLogout = useCallback(() => {
     const promise = () =>
       new Promise((resolve) =>
         setTimeout(() => resolve({ name: "Sonner" }), 1000)
       );
-
-    localStorage.removeItem("token");
+    localStorage.removeItem(siteConfig.auth.jwt_key);
     toast.promise(promise(), {
       loading: "Logging out...",
       success: () => {
         onClose();
-        navigate(routes.login, { replace: true });
+        window.location.href = routes.login;
         return "Logged out successfully";
       },
       error: "Failed to log out",
     });
-  }, [navigate, onClose]);
+  }, [onClose]);
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>

@@ -6,6 +6,8 @@ const baseRoutes = {
 
   // MAIN ROUTES
   home: "/",
+  products: "/products",
+  details: (id: string) => `/products/${id}`,
 
   admin: "/admin",
   adminDashboard: "/admin/dashboard",

@@ -3,7 +3,7 @@ import { LoginPage } from "@/layouts/auth";
 import AdminLayout from "@/layouts/admin";
 import { routes } from "@/config/routes";
 import MainLayout from "@/layouts/main";
-import HomePage from "@/page/main/home";
+import { HomePage, ProductPage } from "@/page/main";
 
 export const reactRouter: RouteObject[] = [
   // AUTHENTICATION PAGES
@@ -29,6 +29,14 @@ export const reactRouter: RouteObject[] = [
         path: routes.home,
         element: <HomePage />,
       },
+      {
+        path: routes.products,
+        element: <ProductPage />,
+      },
+      {
+        path: routes.details(":id"),
+        element: <div>Product Detail's Page</div>,
+      }
     ],
   },
 
