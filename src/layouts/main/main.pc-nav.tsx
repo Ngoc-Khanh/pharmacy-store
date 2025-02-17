@@ -6,7 +6,7 @@ import { Icons } from "@/components/icons"
 import { Link } from "react-router-dom"
 import { routes } from "@/config"
 
-export function MainNav() {
+export function MainPCNav() {
   const pathname = window.location.pathname
 
   return (
@@ -19,10 +19,10 @@ export function MainNav() {
       </Link>
       <nav className="flex items-center gap-4 text-sm xl:gap-6">
         <a
-          href="#features"
+          href="/#features"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname === "#features" ? "text-foreground" : "text-foreground/80"
+            pathname === "/#features" ? "text-foreground" : "text-foreground/80"
           )}
         >
           Features
@@ -45,15 +45,15 @@ export function MainNav() {
         >
           FAQ
         </a>
-        <a
-          href="#product"
+        <Link
+          to="/products"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname === "#product" ? "text-foreground" : "text-foreground/80"
+            pathname === "/products" ? "text-foreground" : "text-foreground/80"
           )}
         >
-          Charts
-        </a>
+          Product
+        </Link>
         <Link
           to="/themes"
           className={cn(

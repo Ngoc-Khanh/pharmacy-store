@@ -3,7 +3,7 @@ import { useMetaColor } from "@/hooks/use-meta-color";
 import { Button } from "@/components/ui/button";
 import { useCallback, useState } from "react";
 
-export function MobileNav() {
+export function MainMobileNav() {
   const [open, setOpen] = useState(false);
   const { setMetaColor, metaColor } = useMetaColor();
 
