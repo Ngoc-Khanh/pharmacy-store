@@ -54,6 +54,13 @@ export const apiPut = async <PutData = unknown, ResponseData = unknown>(
   config?: AxiosRequestConfig
 ) => api.put<ResponseData, AxiosResponse<ResponseData>>(url, data, config);
 
+// PATCH
+export const apiPatch = async <PatchData = unknown, ResponseData = unknown>(
+  url: string,
+  data: PatchData,
+  config?: AxiosRequestConfig
+) => api.patch<ResponseData, AxiosResponse<ResponseData>>(url, data, config);
+
 // DELETE
 export const apiDelete = async <ResponseData = unknown>(
   url: string,
