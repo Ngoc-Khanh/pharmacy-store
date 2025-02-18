@@ -68,8 +68,8 @@ export function MainUser({ user }: { user: UserInterface }) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={() => setIsOpen(true)}>
-          Log out
           <LogOut size={18} />
+          Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
       <LogOutDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />

@@ -1,6 +1,5 @@
-import { Credentials } from "@/data/interfaces/auth.interface";
-import { User } from "@/data/interfaces/user.interface";
-import { credentialsDto } from "@/data/dto/auth.dto";
+import { Credentials, User } from "@/data/interfaces";
+import { credentialsDto } from "@/data/dto";
 import { apiGet, apiPost } from "../api"
 import { SRO } from "@/data/sro";
 
