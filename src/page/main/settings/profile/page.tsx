@@ -43,9 +43,6 @@ export default function ProfilePage() {
     }
   })
 
-  console.log(form.getValues().fullName.split(' ').join(' '));
-
-
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
@@ -97,8 +94,8 @@ export default function ProfilePage() {
         {user ? (
           <Card>
             <CardHeader className="items-center justify-center">
-              <h1 className="text-3xl font-bold">My Profile</h1>
-              <CardDescription className="text-xl">Manage your profile information</CardDescription>
+              <h1 className="text-2xl font-bold">My Profile</h1>
+              <CardDescription>Manage your profile information</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-8">
