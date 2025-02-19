@@ -61,7 +61,7 @@ export function AccountSidebar() {
   const { pathname } = useLocation()
 
   return (
-    <div className="w-64 p-4 space-y-6">
+    <div className="w-64 p-4 space-y-6 border-r">
       {menuItems.map((section, index) => (
         <div key={index} className="space-y-2">
           <h3 className="text-sm font-semibold px-3">{section.title}</h3>
