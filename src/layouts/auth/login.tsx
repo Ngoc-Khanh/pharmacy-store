@@ -6,7 +6,6 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-import { z } from "zod";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -20,24 +19,9 @@ import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BriefcaseMedical, Loader2 } from "lucide-react";
 import { TextAnimate } from "@/components/magicui/text-animate";
-import { RainbowButton } from "@/components/magicui/rainbow-button";
 import { PasswordInput } from "@/components/custom/password-input";
-
-const formSchema = z.object({
-  account: z.string()
-    .min(1, { message: "Email or username is required!" })
-    .refine(
-      (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || value.length >= 3,
-      {
-        message:
-          "Invalid email address or username must be at least 3 characters!",
-      }
-    ),
-  password: z
-    .string()
-    .min(1, { message: "Password is required!" })
-    .min(6, { message: "Password must be at least 6 characters!" }),
-});
+import { RainbowButton } from "@/components/magicui/rainbow-button";
+import { CredentialsData, credentialsFormSchema } from "@/data/zod-schemas";
 
 export default function LoginPage({
   className,
@@ -60,15 +44,15 @@ export default function LoginPage({
     },
   })
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CredentialsData>({
+    resolver: zodResolver(credentialsFormSchema),
     defaultValues: {
       account: "admin@pharmacy.com",
       password: "123456",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: CredentialsData) => {
     setIsLoading(true);
     loginMutation.mutate(data, {
       onSettled: () => {

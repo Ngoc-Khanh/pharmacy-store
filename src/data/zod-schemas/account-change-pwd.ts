@@ -4,20 +4,20 @@ import { z } from "zod";
 
 export const accountChangePwdSchema = z
   .object({
-    currentPassword: z
+    current_password: z
       .string()
       .min(1, { message: "Password is required!" })
       .min(6, { message: "Password must be at least 6 characters!" }),
-    newPassword: z
+    new_password: z
       .string()
       .min(1, { message: "Password is required!" })
       .min(6, { message: "Password must be at least 6 characters!" }),
-    confirmPassword: z
+    new_password_confirmation: z
       .string()
       .nonempty({ message: "Confirm password is required" })
       .max(255),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine((data) => data.new_password === data.new_password_confirmation, {
     message: "Passwords do not match!",
     path: ["confirmPassword"],
   });
