@@ -1,6 +1,7 @@
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, RowData, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { DataTableToolbar } from "./data-table-toolbar";
+import { DataTablePagination } from "@/components/tables/data-table-pagination";
+import { MainInvoicesToolbar } from "./invoices.table-toolbar";
 import { MainInvoices } from "@/data/zod-schemas";
 import { useState } from "react";
 
@@ -43,10 +44,11 @@ export function MainInvoicesTable({ columns, data }: DataTableProps) {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-
+  
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <MainInvoicesToolbar table={table} />
+      <DataTablePagination table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -105,7 +107,6 @@ export function MainInvoicesTable({ columns, data }: DataTableProps) {
           </TableBody>
         </Table>
       </div>
-      {/* <DataTablePagination table={table} /> */}
     </div>
   );
 }

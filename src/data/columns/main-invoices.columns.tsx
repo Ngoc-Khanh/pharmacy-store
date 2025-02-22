@@ -1,14 +1,14 @@
-import { DataTableRowActions } from "@/page/main/account/invoices/data-table-row-actions";
+import { MainInvoicesRowActions } from "@/page/main/account/invoices/invoices.row-actions";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { callTypes, invoiceTypes } from "../zod-schemas/main-invoices.schemas";
 import { CircleCheck, CircleGauge, CircleAlert, Ban } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
+import { dateVNFormat } from "@/lib/date-format";
 import { MainInvoices } from "../zod-schemas";
 import { Badge } from "@/components/ui/badge";
 import LongText from "@/components/long-text";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 
 const paymentStatusIcons = {
   paid: CircleCheck,
@@ -77,7 +77,7 @@ export const mainInvoicesColumns: ColumnDef<MainInvoices>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-fit text-nowrap">
-        {format(new Date(row.getValue("period")), "dd/MM/yyyy")}
+        {dateVNFormat(row.getValue("period"))}
       </div>
     ),
   },
@@ -93,7 +93,7 @@ export const mainInvoicesColumns: ColumnDef<MainInvoices>[] = [
         </div>
       );
     },
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "status",
@@ -148,6 +148,6 @@ export const mainInvoicesColumns: ColumnDef<MainInvoices>[] = [
   },
   {
     id: "actions",
-    cell: DataTableRowActions,
+    cell: MainInvoicesRowActions,
   },
 ]

@@ -1,6 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MainInvoicesDialogs } from "@/components/dialogs/invoices-main.dialog";
 import { Progress } from "@/components/custom/progress";
 import { InvoiceAPI } from "@/services/api/invoice.api";
 import { MainInvoicesTable } from "./invoices.table";
@@ -90,7 +91,7 @@ export default function InvoicesPage() {
             ) : (
               <MainInvoicesTable columns={mainInvoicesColumns} data={invoiceData} />
             )}
-            {/*  */}
+            <MainInvoicesDialogs />
           </div>
         </div>
       </div>
