@@ -1,17 +1,17 @@
 "use client"
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Edit, Ellipsis, Trash } from "lucide-react";
+import { ChevronDown, Edit, Trash } from "lucide-react";
 import { MainInvoices } from "@/data/zod-schemas";
 import { Button } from "@/components/ui/button";
 import { useMainInvoices } from "@/providers";
 import { Row } from "@tanstack/react-table";
 
-interface DataTableRowActionsProps {
+interface MainInvoicesRowActionsProps {
   row: Row<MainInvoices>;
 }
 
-export function DataTableRowActions({ row }: DataTableRowActionsProps) {
+export function MainInvoicesRowActions({ row }: MainInvoicesRowActionsProps) {
   const { setOpen, setCurrentRow } = useMainInvoices();
   return (
     <>
@@ -21,7 +21,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
             variant="ghost"
             className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
           >
-            <Ellipsis className="h-4 w-4" />
+            <ChevronDown size={16} />
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
@@ -32,7 +32,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
               setOpen("view");
             }}
           >
-            Edit
+            Details
             <DropdownMenuShortcut>
               <Edit size={16} />
             </DropdownMenuShortcut>

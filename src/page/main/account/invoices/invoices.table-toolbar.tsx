@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table } from "@tanstack/react-table";
 import { X } from "lucide-react";
+import { DataTableViewOptions } from "@/components/tables/data-table-view-options";
 
-interface DataTableToolbarProps<TData> {
+interface MainInvoicesToolbarProps<TData> {
   table: Table<TData>;
 }
 
-export function DataTableToolbar<TData>({
+export function MainInvoicesToolbar<TData>({
   table,
-}: DataTableToolbarProps<TData>) {
+}: MainInvoicesToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
@@ -60,7 +61,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      {/* <DataTableViewOptions table={table} /> */}
+      <DataTableViewOptions table={table} />
     </div>
   );
 }
