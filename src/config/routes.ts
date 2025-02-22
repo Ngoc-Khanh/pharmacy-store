@@ -14,9 +14,12 @@ const baseRoutes = {
 
   // ACCOUNT MAIN ROUTES
   mainSettings: "/account",
-  mainInvoices: "/account/invoices",
   mainProfile: "/account/profile",
   mainChangePwd: "/account/change-password",
+  mainOrders: "/account/orders",
+  mainOrderDetails: (id: string) => `/account/orders/${id}`,
+  mainInvoices: "/account/invoices",
+  mainInvoicesDetails: (id: string) => `/account/invoices/${id}`,
 
   // SETTINGS ADMIN ROUTES
   settingsProfile: "admin/settings/profile",
