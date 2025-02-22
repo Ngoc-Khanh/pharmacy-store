@@ -43,7 +43,7 @@ export default function ChangePasswordPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 min-h-screen">
       <Helmet>
         <title>Change Password | {siteConfig.name}</title>
       </Helmet>
@@ -93,7 +93,7 @@ export default function ChangePasswordPage() {
                         <FormItem className="space-y-2">
                           <FormLabel>Password Confirmation</FormLabel>
                           <FormControl>
-                            <PasswordInput {...field} placeholder="Confirm yout new password" tabIndex={3} />
+                            <PasswordInput {...field} placeholder="Confirm your new password" tabIndex={3} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

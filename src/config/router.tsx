@@ -1,4 +1,4 @@
-import { ChangePasswordPage, HomePage, ProductPage, ProfilePage } from "@/page/main";
+import { ChangePasswordPage, HomePage, ProductPage, ProfilePage, InvoicesPage } from "@/page/main";
 import { AdminLayout, MainLayout, AccountLayout } from "@/layouts";
 import { RouteObject } from "react-router-dom";
 import { LoginPage } from "@/layouts/auth";
@@ -45,7 +45,11 @@ export const reactRouter: RouteObject[] = [
           },
           {
             path: routes.mainInvoices,
-            element: <div>Main Invoices Page's</div>,
+            element: <InvoicesPage />,
+          },
+          {
+            path: routes.mainInvoicesDetails(":id"),
+            element: <div>Main Invoices Detail's Page</div>,
           },
           {
             path: routes.mainProfile,
@@ -54,7 +58,15 @@ export const reactRouter: RouteObject[] = [
           {
             path: routes.mainChangePwd,
             element: <ChangePasswordPage />,
-          }
+          },
+          {
+            path: routes.mainOrders,
+            element: <div>Main Orders Page's</div>,
+          },
+          {
+            path: routes.mainOrderDetails(":id"),
+            element: <div>Main Order Detail's Page</div>,
+          },
         ],
       },
     ],
