@@ -15,7 +15,13 @@ export default function InvoicesPage() {
     queryKey: ["invoices"],
     queryFn: InvoiceAPI.getUserInvoices,
   })
-  const invoiceData = invoicesList || []
+  const invoiceData = invoicesList.map(invoice => ({
+    ...invoice,
+    user: {
+      ...invoice.user,
+      id: invoice.user.id || "default-id"
+    }
+  })) || []
 
   const statusCounts = invoiceData.reduce(
     (acc, invoice) => {
