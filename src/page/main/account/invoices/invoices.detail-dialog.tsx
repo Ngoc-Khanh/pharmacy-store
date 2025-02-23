@@ -1,6 +1,6 @@
-import { CircleCheck, CircleGauge, CircleAlert, Ban, Building2, Mail, Phone, CreditCard, Calendar, Copy, Download, Edit, Printer, Send } from "lucide-react";
+import { CircleCheck, CircleGauge, CircleAlert, Ban, Building2, Mail, Phone, CreditCard, Calendar, Download, Printer } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { Table, TableHeader, TableRow, TableHead, TableBody } from "@/components/ui/table";
 import { callTypes, invoiceTypes } from "@/data/zod-schemas/main-invoices.schemas";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/custom/badge";
@@ -65,7 +65,7 @@ export function MainInvoicesDetailDialog({ currentRow, open, onOpenChange }: Pro
               <h2 className="text-xl font-semibold mb-2">Client Information</h2>
               <div className="space-y-1">
                 <p className="flex items-center">
-                  <Building2 className="h-4 w-4 mr-2 text-gray-400" /> {currentRow?.user.username}
+                  <Building2 className="h-4 w-4 mr-2 text-gray-400" /> {currentRow?.user.lastname} {currentRow?.user.firstname}
                 </p>
                 <p className="flex items-center">
                   <Mail className="h-4 w-4 mr-2 text-gray-400" /> {currentRow?.user.email}
@@ -110,9 +110,9 @@ export function MainInvoicesDetailDialog({ currentRow, open, onOpenChange }: Pro
         <Table className="p-4">
           <TableHeader>
             <TableRow>
-              <TableHead>Description</TableHead>
+              <TableHead>Products</TableHead>
               <TableHead className="text-right">Quantity</TableHead>
-              <TableHead className="text-right">Rate</TableHead>
+              <TableHead className="text-right">Price</TableHead>
               <TableHead className="text-right">Amount</TableHead>
             </TableRow>
           </TableHeader>
@@ -145,25 +145,13 @@ export function MainInvoicesDetailDialog({ currentRow, open, onOpenChange }: Pro
         </div>
 
         <div className="mt-12 flex flex-wrap gap-4 justify-end">
-          <Button>
-            <Send className="h-4 w-4 mr-2" />
-            Send Invoice
-          </Button>
-          <Button variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Download PDF
-          </Button>
-          <Button variant="outline">
-            <Edit className="h-4 w-4 mr-2" />
-            Edit Invoice
-          </Button>
           <Button variant="outline">
             <Printer className="h-4 w-4 mr-2" />
             Print
           </Button>
-          <Button variant="outline">
-            <Copy className="h-4 w-4 mr-2" />
-            Duplicate
+          <Button variant="outline" className="bg-blue-50 dark:bg-blue-950 hover:bg-blue-100 dark:hover:bg-blue-900 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+            <Download className="h-4 w-4" />
+            Download PDF
           </Button>
         </div>
 

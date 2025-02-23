@@ -26,12 +26,26 @@ const mainInvoicesSchema = z.object({
   amount: z.number(),
   status: mainInvoicesStatusSchema,
   method: mainInvoicesPayments,
+  user: z.object({
+    id: z.string(),
+    username: z.string(),
+    email: z.string(),
+    phone: z.string(),
+    address: z.string(),
+    dob: z.string(),
+    role: z.string(),
+    lastname: z.string(),
+    firstname: z.string(),
+    status: z.string(),
+    avatar: z.string(),
+  }),
+  payment_date: z.string(),
   created_at: z.string(),
 });
 
 export type MainInvoices = z.infer<typeof mainInvoicesSchema>;
 
-export const mainInvoicesListSchema = z.array(mainInvoicesSchema);  
+export const mainInvoicesListSchema = z.array(mainInvoicesSchema);
 
 export const callTypes = new Map<MainInvoicesStatus, string>([
   [
