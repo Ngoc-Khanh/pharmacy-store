@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { getAccessToken, getLocale } from "@/lib";
+import { getAccessToken } from "@/lib/get-token";
+import { getLocale } from "@/lib/get-locales";
 import { routes, siteConfig } from "@/config";
 
 // Create an Axios instance
