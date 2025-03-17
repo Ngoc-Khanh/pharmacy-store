@@ -1,4 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { toCamelCase } from "@/lib/to-camel-case";
+import { toSnakeCase } from "@/lib/to-snake-case";
 import { getAccessToken } from "@/lib/get-token";
 import { getLocale } from "@/lib/get-locales";
 import { routes, siteConfig } from "@/config";
@@ -28,11 +30,28 @@ api.interceptors.response.use(
   (error) => {
     if (error?.response?.status === 401) {
       // Handle 401 Unauthorized errors
-      window.location.href = routes.login;
+      if (!error.config.url?.includes("auth"))
+        window.location.href = routes.login;
     }
     return Promise.reject(error);
   }
 );
+
+// Interceptor để convert response từ snake_case -> camelCase
+api.interceptors.response.use((response) => {
+  if (response.data) {
+    response.data = toCamelCase(response.data);
+  }
+  return response;
+});
+
+// Interceptor để convert request từ camelCase -> snake_case
+api.interceptors.request.use((config) => {
+  if (config.data) {
+    config.data = toSnakeCase(config.data);
+  }
+  return config;
+});
 
 export const apiGet = async <ResponseData = unknown>(
   url: string,
