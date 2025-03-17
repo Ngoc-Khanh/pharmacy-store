@@ -15,4 +15,9 @@ export const reactRouter: RouteObject[] = [
     path: routes.forgotPassword,
     element: <div>Forgot Password Page's</div>,
   },
+
+  {
+    path: routes.home,
+    element: <div>Home Page's</div>,
+  }
 ]
