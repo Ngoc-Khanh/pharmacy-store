@@ -1,5 +1,6 @@
+import { Credential } from "@/data/interfaces";
 import { credentialsDto } from "@/data/dto";
-import { apiPost } from "../api"
+import { apiPost } from "../api";
 import { SRO } from "@/data/sro";
 
 export const AuthAPI = {
