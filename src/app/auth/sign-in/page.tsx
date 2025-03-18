@@ -1,20 +1,22 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BriefcaseMedical, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { CredentialsForm, credentialsSchema } from "@/data/zod-schemas";
 import { RainbowButton } from "@/components/magicui/rainbow-button";
 import { PasswordInput } from "@/components/custom/password-input";
 import { TextAnimate } from "@/components/magicui/text-animate";
-import { BriefcaseMedical, Loader2 } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { AuthAPI } from "@/services/api/auth.api";
 import { Input } from "@/components/ui/input";
-import { routes, siteConfig } from "@/config";
 import { AuthLayout } from "@/layouts/auth";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { toast } from "sonner";
+import { AuthAPI } from "@/services/api/auth.api";
+import { routes, siteConfig } from "@/config";
 import OAuth from "./oauth";
+import { CredentialsForm, credentialsSchema } from "@/data/zod-schemas";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,10 +30,9 @@ export default function LoginPage() {
         window.location.href = routes.home;
       }, 1000);
     },
-    onError: (err) => {
+    onError: (err: AxiosError) => {
       console.log(err);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if ((err as any)?.response?.status === 401) {
+      if (err.response?.status === 401) {
         toast.error("Invalid account or password!", { description: "Please try again..." });
       } else {
         toast.error(err.message, { description: "Login failed!" });
@@ -63,17 +64,16 @@ export default function LoginPage() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
-              <div className="flex flex-col items-center gap-2
-              ">
-                <a
-                  href={routes.home}
+              <div className="flex flex-col items-center gap-2">
+                <Link
+                  to={routes.home}
                   className="flex flex-col items-center gap-2 font-medium"
                 >
                   <div className="flex h-8 w-8 items-center justify-center rounded-md">
                     <BriefcaseMedical className="size-6" />
                   </div>
                   <span className="sr-only">Pharmacity Inc.</span>
-                </a>
+                </Link>
                 <TextAnimate
                   animation="blurInUp"
                   by="character"
@@ -100,7 +100,7 @@ export default function LoginPage() {
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="Enter your account"
+                        placeholder="Username or Email"
                         tabIndex={1}
                       />
                     </FormControl>
@@ -158,5 +158,5 @@ export default function LoginPage() {
         </Form>
       </div>
     </AuthLayout>
-  )
+  );
 }
