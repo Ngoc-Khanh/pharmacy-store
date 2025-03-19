@@ -15,11 +15,16 @@ export interface User {
 }
 
 export interface UserAddress {
+  readonly id: string;
+  name: string;
+  phone: string;
   addressLine1: string;
   addressLine2?: string;
   city: string;
-  state: string;
+  state?: string;
   country: string;
   postalCode: string;
   isDefault: boolean;
+  readonly createdAt: string;
+  readonly updatedAt: string;
 }
