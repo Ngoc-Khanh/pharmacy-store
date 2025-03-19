@@ -9,7 +9,6 @@ import { Camera, MapPin } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 
 export default function MainProfilePage() {
   const { user } = useUser();
