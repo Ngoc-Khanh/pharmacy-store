@@ -19,9 +19,9 @@ export interface UserAddress {
   name: string;
   phone: string;
   addressLine1: string;
-  addressLine2?: string;
+  addressLine2?: string | null | undefined;
   city: string;
-  state?: string;
+  state?: string | null | undefined;
   country: string;
   postalCode: string;
   isDefault: boolean;
