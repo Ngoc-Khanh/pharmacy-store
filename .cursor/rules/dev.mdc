@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+Project Title: Pharmacity Store – Online Pharmacy Platform with Modern UI
+
+Description:
+Pharmacity Store là một nền tảng thương mại điện tử chuyên về dược phẩm, giúp người dùng tìm kiếm, đặt hàng và nhận tư vấn về thuốc một cách dễ dàng. Website được xây dựng với React+Vite và sử dụng shadcn/ui để tạo giao diện người dùng hiện đại, tối giản nhưng đầy đủ chức năng.
+
+Key Features:
++ Trang chủ: Hiển thị danh mục sản phẩm, khuyến mãi và tin tức y tế.
++ Danh mục thuốc: Bộ lọc nâng cao, tìm kiếm theo tên thuốc, công dụng và thương hiệu.
++ Chi tiết sản phẩm: Thông tin thuốc, giá cả, đánh giá và hướng dẫn sử dụng.
++ Giỏ hàng & Thanh toán: Hỗ trợ nhiều phương thức thanh toán và mã giảm giá.
++ Hệ thống tư vấn AI: Chatbot AI sử dụng LLaMA 3.3 + RAG để hỗ trợ khách hàng.
++ Quản lý đơn hàng: Theo dõi trạng thái đơn hàng theo thời gian thực.
++ Hồ sơ người dùng: Quản lý thông tin cá nhân, đơn hàng đã mua và đơn thuốc.
++ Hỗ trợ khách hàng: Chat trực tiếp với dược sĩ hoặc chatbot AI.
+
+Tech Stack:
+React + Vite, shadcn/ui, Tailwind CSS, TanStack Query
+
+Design & UI/UX:
++ Giao diện hiện đại, trực quan với shadcn/ui.
++ Hệ thống theme sáng/tối (dark mode).
++ Trải nghiệm người dùng mượt mà với animations từ Framer Motion.
+
+Target Users:
++ Khách hàng cá nhân mua thuốc trực tuyến.
++ Nhà thuốc muốn bán sản phẩm trên nền tảng.
++ Dược sĩ tư vấn và hỗ trợ khách hàng.

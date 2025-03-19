@@ -59,28 +59,37 @@ export default function AddressesDeleteDialog({ currentAddress, open, onOpenChan
       }
       desc={
         <div className="space-y-4">
-          <p className="mb-2">
-            Are you sure want to delete{" "}
-            <span className="font-bold">{currentAddress.name}</span>
-            <br />
-            This action will remove the address{" "}
-            <span className="font-bold">
-              {currentAddress.name.toUpperCase()}
-            </span>{" "}
-            from your account. This cannot be undone.
-          </p>
+          <div className="mb-4">
+            <p>
+              Are you sure you want to delete{" "}
+              <span className="font-bold">{currentAddress.name}</span>?
+            </p>
+            <p className="mt-2">
+              This action will remove the address{" "}
+              <span className="font-bold">
+                {currentAddress.name.toUpperCase()}
+              </span>{" "}
+              from your account.
+            </p>
+          </div>
 
-          <Label className="my-2">
-            Name:
+          <div className="mt-4">
+            <Label htmlFor="confirm-delete" className="block mb-2">
+              To confirm, type <span className="font-bold">"{currentAddress.name}"</span> in the box below:
+            </Label>
             <Input
+              id="confirm-delete"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Type the address name to confirm."
+              className="w-full"
             />
-          </Label>
+          </div>
 
-          <Alert variant="destructive">
-            <AlertTitle>Warning!</AlertTitle>
+          <Alert variant="destructive" className="mb-4">
+            <AlertTitle className="flex items-center">
+              <TriangleAlert className="mr-2" size={18} />
+              Warning!
+            </AlertTitle>
             <AlertDescription>
               This action cannot be undone. This will permanently delete the
               address.
