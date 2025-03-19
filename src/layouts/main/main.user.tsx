@@ -6,6 +6,7 @@ import { User as IUser } from "@/data/interfaces";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { routes } from "@/config";
 
 export default function MainUser({ user }: { user: IUser }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +42,7 @@ export default function MainUser({ user }: { user: IUser }) {
           {user.role !== "customer" && (
             <>
               <DropdownMenuItem asChild>
-                <Link to={""} target="_blank">
+                <Link to={routes.adminDashboard} target="_blank">
                   <Shield size={18} />
                   Admin Dashboard
                 </Link>
@@ -51,19 +52,19 @@ export default function MainUser({ user }: { user: IUser }) {
 
           )}
           <DropdownMenuItem asChild>
-            <Link to={""}>
+            <Link to={routes.mainProfile}>
               <User size={18} />
               Account
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to={""}>
+            <Link to={routes.mainInvoices}>
               <FileText size={18} />
               Invoices
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to={""}>
+            <Link to={routes.mainSettings}>
               <Settings size={18} />
               Settings
             </Link>
