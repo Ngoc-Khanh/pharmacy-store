@@ -12,7 +12,7 @@ import { routes } from '@/config';
 import { useState } from 'react';
 
 export default function RegisterPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const form = useForm<RegistrationForm>({
     resolver: zodResolver(registrationSchema),
