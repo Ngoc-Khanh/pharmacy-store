@@ -1,9 +1,14 @@
 import { apiDelete, apiGet, apiPatch, apiPost } from "../api";
-import { UserAddress } from "@/data/interfaces";
-import { AddAddressDto } from "@/data/dto";
+import { AddAddressDto, EditProfileDto } from "@/data/dto";
+import { User, UserAddress } from "@/data/interfaces";
 import { SRO } from "@/data/sro";
 
 export const AccountAPI = {
+  async editProfile(data: EditProfileDto) {
+    const res = await apiPatch<EditProfileDto, SRO<User>>("v2/users/update-profile", data);
+    return res.data.data;
+  },
+  
   async getAddresses() {
     const res = await apiGet<SRO<UserAddress[]>>("v2/users/addresses");
     return res.data.data;

@@ -1,48 +1,89 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PhoneInput } from "@/components/custom/phone-input";
 import { routeNames, routes, siteConfig } from "@/config";
+import { AccountAPI } from "@/services/api/account.api";
 import { Separator } from "@/components/ui/separator";
+import { useMutation } from "@tanstack/react-query";
 import { useUser } from "@/providers/user.provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Camera, MapPin } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { EditProfileDto } from "@/data/dto";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function MainProfilePage() {
   const { user } = useUser();
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [formState, setFormState] = useState({
+    avatarUrl: null as string | null,
+    phone: user?.phone || "",
+    isEditMode: false,
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    username: user?.username || "",
+    email: user?.email || ""
+  });
+
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [phone, setPhone] = useState(user?.phone || "");
-  const [isEditMode, setIsEditMode] = useState(false);
+
+  const editProfileMutation = useMutation({
+    mutationFn: AccountAPI.editProfile,
+    onSuccess: () => {
+      toast.success("Profile updated successfully");
+      setFormState(prev => ({ ...prev, isEditMode: false }));
+    },
+    onError: () => {
+      toast.error("Failed to update profile");
+    },
+  });
 
   const handleAvatarClick = () => {
-    fileInputRef.current?.click()
-  }
+    if (formState.isEditMode) {
+      fileInputRef.current?.click();
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file)
-      setAvatarUrl(url)
+      const url = URL.createObjectURL(file);
+      setFormState(prev => ({ ...prev, avatarUrl: url }));
     }
-  }
+  };
 
-  const toggleEditMode = () => {
-    setIsEditMode(!isEditMode);
+  const handleInputChange = (field: keyof typeof formState, value: string) => {
+    setFormState(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = () => {
+    const profileData: EditProfileDto = {
+      firstName: formState.firstName,
+      lastName: formState.lastName,
+      username: formState.username,
+      email: formState.email,
+      phone: formState.phone,
+      profileImage: formState.avatarUrl || undefined
+    };
+    editProfileMutation.mutate(profileData);
   };
 
   const handleCancel = () => {
-    setIsEditMode(false);
-    setPhone(user?.phone || "");
-    setAvatarUrl(null);
+    setFormState({
+      avatarUrl: null,
+      phone: user?.phone || "",
+      isEditMode: false,
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      username: user?.username || "",
+      email: user?.email || ""
+    });
   };
 
   const handleDeleteAccount = () => {
     // Implement the delete account logic here
   };
-  
 
   return (
     <div className="container mx-auto py-6 max-w-4xl min-h-screen">
@@ -59,10 +100,10 @@ export default function MainProfilePage() {
             </div>
             <div
               className="relative cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={isEditMode ? handleAvatarClick : undefined}
+              onClick={handleAvatarClick}
             >
               <Avatar className="h-20 w-20">
-                <AvatarImage src={avatarUrl || `/avatar/${user?.profileImage}`} alt="Profile Picture" />
+                <AvatarImage src={formState.avatarUrl || `/avatar/${user?.profileImage}`} alt="Profile Picture" />
                 <AvatarFallback className="bg-muted">
                   <Camera className="h-6 w-6 text-muted-foreground" />
                 </AvatarFallback>
@@ -88,8 +129,9 @@ export default function MainProfilePage() {
                 <Input
                   type="text"
                   className="w-full"
-                  defaultValue={user?.firstName}
-                  disabled={!isEditMode}
+                  value={formState.firstName}
+                  onChange={(e) => handleInputChange('firstName', e.target.value)}
+                  disabled={!formState.isEditMode}
                 />
               </div>
               <div className="w-full">
@@ -97,8 +139,9 @@ export default function MainProfilePage() {
                 <Input
                   type="text"
                   className="w-full"
-                  defaultValue={user?.lastName}
-                  disabled={!isEditMode}
+                  value={formState.lastName}
+                  onChange={(e) => handleInputChange('lastName', e.target.value)}
+                  disabled={!formState.isEditMode}
                 />
               </div>
             </div>
@@ -121,8 +164,9 @@ export default function MainProfilePage() {
             <Input
               type="text"
               className="w-full max-w-xs"
-              defaultValue={user?.username}
-              disabled={!isEditMode}
+              value={formState.username}
+              onChange={(e) => handleInputChange('username', e.target.value)}
+              disabled={!formState.isEditMode}
             />
           </header>
         </section>
@@ -140,8 +184,9 @@ export default function MainProfilePage() {
             <Input
               type="text"
               className="w-full max-w-xs"
-              defaultValue={user?.email}
-              disabled={!isEditMode}
+              value={formState.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
+              disabled={!formState.isEditMode}
             />
           </header>
         </section>
@@ -158,13 +203,13 @@ export default function MainProfilePage() {
             </div>
             <PhoneInput
               className="w-full max-w-xs"
-              value={phone}
-              onChange={(value) => setPhone(value)}
+              value={formState.phone}
+              onChange={(value) => handleInputChange('phone', value)}
               placeholder="Your phone number"
               defaultCountry="VN"
               type="phone"
               required
-              readOnly={!isEditMode}
+              readOnly={!formState.isEditMode}
             />
           </header>
         </section>
@@ -178,9 +223,6 @@ export default function MainProfilePage() {
             <div className="flex-1 space-y-2">
               <div className="flex items-center gap-3">
                 <h4 className="font-semibold text-base">Addresses</h4>
-                {/* <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-100">
-                  New
-                </Badge> */}
               </div>
               <p className="text-sm text-muted-foreground">
                 You can add your addresses on{" "}
@@ -200,19 +242,20 @@ export default function MainProfilePage() {
         <Separator />
 
         <div className="flex justify-end space-x-4 mt-6">
-          {isEditMode ? (
+          {formState.isEditMode && (
             <Button variant="outline" onClick={handleCancel}>Cancel</Button>
-          ) : null}
-          {isEditMode ? (
-            null
-          ) : (
+          )}
+          {!formState.isEditMode && (
             <Button variant="destructive" onClick={handleDeleteAccount}>Delete Account</Button>
           )}
-          <Button variant="default" onClick={toggleEditMode}>
-            {isEditMode ? "Save Changes" : "Edit Profile"}
+          <Button
+            variant="default"
+            onClick={() => formState.isEditMode ? handleSave() : setFormState(prev => ({ ...prev, isEditMode: true }))}
+          >
+            {formState.isEditMode ? "Save Changes" : "Edit Profile"}
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

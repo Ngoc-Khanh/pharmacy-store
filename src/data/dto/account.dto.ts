@@ -9,3 +9,12 @@ export type AddAddressDto = {
   postalCode: string;
   isDefault: boolean;
 };
+
+export type EditProfileDto = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  phone: string;
+  profileImage?: string;
+};
