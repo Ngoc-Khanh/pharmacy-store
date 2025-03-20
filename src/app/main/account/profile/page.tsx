@@ -42,6 +42,7 @@ export default function MainProfilePage() {
   const handleDeleteAccount = () => {
     // Implement the delete account logic here
   };
+  
 
   return (
     <div className="container mx-auto py-6 max-w-4xl min-h-screen">
