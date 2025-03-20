@@ -82,10 +82,24 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
     },
   });
 
+  const editAddressMutation = useMutation({
+    mutationFn: (data: AddAddressDto & { id: string }) => {
+      return AccountAPI.editAddress(data.id, data);
+    },
+    onSuccess: () => {
+      toast.success("Address updated successfully");
+      form.reset();
+      onOpenChange(false);
+      refetch();
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to update address");
+    },
+  });
 
   const onSubmit = (data: AddAddressDto) => {
     if (isEdit && currentAddress) {
-      toast.error("Edit functionality not implemented yet");
+      editAddressMutation.mutate({ ...data, id: currentAddress.id });
     } else {
       addAddressMutation.mutate(data);
     }
