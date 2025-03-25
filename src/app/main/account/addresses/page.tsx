@@ -9,7 +9,7 @@ import { Helmet } from "react-helmet-async";
 export default function MainAddressesPage() {
   return (
     <AddressesProvider>
-      <div className="container mx-auto py-6 max-w-4xl min-h-screen">
+      <div>
         <Helmet>
           <title>{`${routeNames[routes.account.addresses]} | ${siteConfig.name}`}</title>
         </Helmet>

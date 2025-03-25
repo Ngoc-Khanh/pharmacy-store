@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BriefcaseMedical, Loader2 } from "lucide-react";
+import { BriefcaseMedical, Loader2, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { RainbowButton } from "@/components/magicui/rainbow-button";
+import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/custom/password-input";
 import { TextAnimate } from "@/components/magicui/text-animate";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,7 @@ export default function LoginPage() {
     onSuccess: (res) => {
       localStorage.setItem(siteConfig.auth.jwt_key, res.accessToken);
       setIsLoading(false);
+      toast.success("Login successful!", { description: "Redirecting to dashboard..." });
       setTimeout(() => {
         window.location.href = routes.home;
       }, 1000);
@@ -60,16 +61,16 @@ export default function LoginPage() {
 
   return (
     <AuthLayout title="Login">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 relative z-10">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-3">
                 <Link
                   to={routes.home}
                   className="flex flex-col items-center gap-2 font-medium"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-md">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-100 to-teal-100 dark:from-green-900/60 dark:to-teal-900/60 text-green-600 dark:text-green-400 shadow-md hover:shadow-lg transition-all duration-300">
                     <BriefcaseMedical className="size-6" />
                   </div>
                   <span className="sr-only">Pharmacity Inc.</span>
@@ -77,84 +78,97 @@ export default function LoginPage() {
                 <TextAnimate
                   animation="blurInUp"
                   by="character"
-                  className="text-xl font-bold"
+                  className="text-2xl font-bold bg-clip-text bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-400 dark:to-teal-400"
                 >
-                  Welcome to Pharmacity Store.
+                  Welcome to Pharmacity Store
                 </TextAnimate>
-                <div>
-                  Don&apos;t have an account?{" "}
-                  <Link
-                    to={routes.register}
-                    className="underline underline-offset-4 hover:opacity-75"
-                  >
-                    Sign up
-                  </Link>
+                <div className="text-gray-500 dark:text-gray-400 text-center">
+                  Sign in to access your account and manage your health needs
                 </div>
               </div>
-              <FormField
-                control={form.control}
-                name="account"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Account</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Username or Email"
-                        tabIndex={1}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Password</FormLabel>
-                      <Link
-                        to={routes.forgotPassword}
-                        className="text-sm font-medium text-muted-foreground hover:text-primary"
-                      >
-                        Forgot Password?
-                      </Link>
+              
+              <div className="space-y-5 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800/50 backdrop-blur-sm">
+                <FormField
+                  control={form.control}
+                  name="account"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 dark:text-gray-300 font-medium">Account</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                          <Input
+                            {...field}
+                            placeholder="Username or Email"
+                            tabIndex={1}
+                            className="bg-gray-50/80 dark:bg-gray-900/80 border-gray-200 dark:border-gray-800 focus:border-green-400 dark:focus:border-green-600 rounded-lg pl-10"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <FormLabel className="text-gray-700 dark:text-gray-300 font-medium">Password</FormLabel>
+                        <Link
+                          to={routes.forgotPassword}
+                          className="text-sm font-medium text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
+                        >
+                          Forgot Password?
+                        </Link>
+                      </div>
+                      <FormControl>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                          <PasswordInput
+                            {...field}
+                            placeholder="********"
+                            tabIndex={2}
+                            className="bg-gray-50/80 dark:bg-gray-900/80 border-gray-200 dark:border-gray-800 focus:border-green-400 dark:focus:border-green-600 rounded-lg pl-10"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 font-medium shine-effect py-6"
+                  disabled={isLoading}
+                  tabIndex={3}
+                >
+                  {isLoading ? (
+                    <div className="flex items-center justify-center gap-2 text-white">
+                      <Loader2 className="animate-spin" />
+                      Please wait...
                     </div>
-                    <FormControl>
-                      <PasswordInput
-                        {...field}
-                        placeholder="********"
-                        tabIndex={2}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <RainbowButton
-                type="submit"
-                className="w-full"
-                disabled={isLoading}
-                tabIndex={3}
-              >
-                {isLoading ? (
-                  <div className="flex items-center justify-center gap-2 text-white dark:text-black">
-                    <Loader2 className="animate-spin" />
-                    Please wait...
+                  ) : (
+                    <span className="text-white text-base">Sign In</span>
+                  )}
+                </Button>
+                
+                <div className="flex items-center justify-center gap-2 pt-2">
+                  <div className="text-gray-500 dark:text-gray-400">
+                    Don&apos;t have an account?{" "}
+                    <Link
+                      to={routes.register}
+                      className="text-green-600 dark:text-green-400 hover:underline underline-offset-4 hover:opacity-75 transition-all duration-200 font-medium"
+                    >
+                      Sign up
+                    </Link>
                   </div>
-                ) : (
-                  <span className="text-white dark:text-black">Login</span>
-                )}
-              </RainbowButton>
+                </div>
+              </div>
             </div>
-            <OAuth className="hidden mt-2" />
+            <OAuth className="mt-4 hidden" />
           </form>
-          <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-            By clicking continue, you agree to our{" "}
-            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
-          </div>
         </Form>
       </div>
     </AuthLayout>
