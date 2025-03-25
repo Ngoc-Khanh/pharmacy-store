@@ -20,7 +20,7 @@ export function MainMobileNav() {
       <DrawerTrigger asChild>
         <Button
           variant="ghost"
-          className="-ml-2 mr-2 h-8 w-8 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          className="-ml-2 mr-2 h-8 w-8 px-0 text-base hover:bg-green-50 dark:hover:bg-green-950/50 hover:text-green-600 dark:hover:text-green-400 focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@ export function MainMobileNav() {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="!size-6"
+            className="!size-6 text-gray-700 dark:text-gray-300"
           >
             <path
               strokeLinecap="round"
@@ -39,9 +39,9 @@ export function MainMobileNav() {
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="max-h-[60svh] p-0">
+      <DrawerContent className="max-h-[60svh] p-0 border-t border-green-200 dark:border-green-800/50">
         {/* NOTE: CHƯA LÀM ĐỂ SAU */}
-        <div className="text-center py-2">=====COMMING SOON=====</div>
+        <div className="text-center py-6 text-green-600 dark:text-green-400 font-medium">=====COMING SOON=====</div>
       </DrawerContent>
     </Drawer>
   );

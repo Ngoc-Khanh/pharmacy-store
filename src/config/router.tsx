@@ -3,6 +3,7 @@ import { AccountLayout, MainLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/app/auth";
 import { RouteObject } from "react-router-dom";
 import { routes } from "@/config/routes";
+import HomePage from "@/app/main/home";
 
 export const reactRouter: RouteObject[] = [
   // AUTHENTICATION PAGES
@@ -25,7 +26,7 @@ export const reactRouter: RouteObject[] = [
       {
         index: true,
         path: routes.home,
-        element: <div>Home Page's</div>,
+        element: <HomePage />,
       },
       {
         element: <AccountLayout />,
