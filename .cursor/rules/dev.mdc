@@ -9,7 +9,7 @@ alwaysApply: true
 Project Title: Pharmacity Store – Online Pharmacy Platform with Modern UI
 
 Description:
-Pharmacity Store là một nền tảng thương mại điện tử chuyên về dược phẩm, giúp người dùng tìm kiếm, đặt hàng và nhận tư vấn về thuốc một cách dễ dàng. Website được xây dựng với React+Vite và sử dụng shadcn/ui để tạo giao diện người dùng hiện đại, tối giản nhưng đầy đủ chức năng.
+Pharmacity Store là một nền tảng thương mại điện tử chuyên về dược phẩm, giúp người dùng tìm kiếm, đặt hàng và nhận tư vấn từ AI hoặc dược sĩ. Mục tiêu là tạo ra một giao diện hiện đại, nhanh chóng, dễ sử dụng và tối ưu cho hiệu suất.
 
 Key Features:
 + Trang chủ: Hiển thị danh mục sản phẩm, khuyến mãi và tin tức y tế.
@@ -22,14 +22,37 @@ Key Features:
 + Hỗ trợ khách hàng: Chat trực tiếp với dược sĩ hoặc chatbot AI.
 
 Tech Stack:
-React + Vite, shadcn/ui, Tailwind CSS, TanStack Query
++ React + Vite – Hiệu suất cao, fast refresh.
++ shadcn/ui + Tailwind CSS – Thiết kế nhanh, dễ mở rộng.
++ TanStack Query – Tối ưu caching & data fetching.
++ Framer Motion – Tạo animations mượt mà.
++ Atom - Để quản lý state dễ dàng hơn
 
-Design & UI/UX:
-+ Giao diện hiện đại, trực quan với shadcn/ui.
-+ Hệ thống theme sáng/tối (dark mode).
-+ Trải nghiệm người dùng mượt mà với animations từ Framer Motion.
+⚡ Công việc cụ thể cho Frontend Developer:
+- Cấu trúc project theo best practices:
+  + Tổ chức thư mục: /components, /pages, /hooks, /context, /utils.
+  + Tách component logic thành các custom hooks khi cần.
+- Xây dựng UI components re-usable với shadcn/ui & Tailwind CSS:
+  + Button, Card, Modal, Dropdown, Input Field, Toast Notification.
+  + Responsive theo chuẩn mobile-first.
+- Tích hợp API & state management hiệu quả:
+  + Fetch API với TanStack Query (useQuery, useMutation).
+  + Global state cho giỏ hàng, user profile (dùng Atom hoặc Context API).
+- Tối ưu performance & UX:
+  + Implement lazy loading, code-splitting.
+  + Skeleton loading khi fetch data.
+  + Xử lý dark mode với Tailwind CSS.
+- Cải thiện UI/UX với animations & interactivity:
+  + Framer Motion cho hiệu ứng chuyển cảnh.
+  + Lottie animations cho onboarding/tutorials.
 
 Target Users:
+- 🚀 Một UI hiện đại, tốc độ cao, trải nghiệm mượt mà, dễ mở rộng 🚀
+Frontend developer sẽ có trách nhiệm đảm bảo giao diện hoạt động tốt trên mọi thiết bị, tích hợp API chuẩn, và giữ codebase sạch, dễ maintain.
 + Khách hàng cá nhân mua thuốc trực tuyến.
 + Nhà thuốc muốn bán sản phẩm trên nền tảng.
 + Dược sĩ tư vấn và hỗ trợ khách hàng.
+
+
+
+
