@@ -11,7 +11,7 @@ export default function MainAddressesPage() {
     <AddressesProvider>
       <div className="container mx-auto py-6 max-w-4xl min-h-screen">
         <Helmet>
-          <title>{`${routeNames[routes.mainAddresses]} | ${siteConfig.name}`}</title>
+          <title>{`${routeNames[routes.account.addresses]} | ${siteConfig.name}`}</title>
         </Helmet>
         <AddressHeader />
         <div className="mt-6 space-y-6">

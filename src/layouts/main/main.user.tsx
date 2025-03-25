@@ -52,19 +52,19 @@ export default function MainUser({ user }: { user: IUser }) {
 
           )}
           <DropdownMenuItem asChild>
-            <Link to={routes.mainProfile}>
+            <Link to={routes.account.profile}>
               <User size={18} />
               Account
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to={routes.mainInvoices}>
+            <Link to={routes.account.invoices}>
               <FileText size={18} />
               Invoices
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to={routes.mainSettings}>
+            <Link to={routes.account.settings}>
               <Settings size={18} />
               Settings
             </Link>
