@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useUser } from "@/providers/user.provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Camera, MapPin } from "lucide-react";
+import { Camera, Lock, MapPin } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { EditProfileDto } from "@/data/dto";
 import { useRef, useState } from "react";
@@ -88,7 +88,7 @@ export default function MainProfilePage() {
   return (
     <div className="container mx-auto py-6 max-w-4xl min-h-screen">
       <Helmet>
-        <title>{`${routeNames[routes.mainProfile]} | ${siteConfig.name}`}</title>
+        <title>{`${routeNames[routes.account.profile]} | ${siteConfig.name}`}</title>
       </Helmet>
       <h1 className="text-3xl font-bold">My Profile</h1>
       <div className="mt-6 space-y-6">
@@ -216,23 +216,47 @@ export default function MainProfilePage() {
 
         <Separator />
 
-        <section className="space-y-4">
+        <section className="space-y-2">
+          <div className="flex items-center justify-between gap-3">
+            <Lock className="w-6 h-6" />
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h4 className="font-medium text-sm">Change Password</h4>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                You can change your password on{" "}
+                <Link to={routes.account.changePwd} className="text-primary hover:underline">
+                  Change Password Page
+                </Link>
+              </p>
+            </div>
+            <Button variant="outline" size="default" className="shrink-0">
+              <Link to={routes.account.changePwd}>
+                Change Password
+              </Link>
+            </Button>
+          </div>
+        </section>
+
+        <Separator />
+
+        <section className="space-y-2">
           <h3 className="font-semibold text-lg">Addresses</h3>
-          <div className="flex items-start space-x-6 p-6 rounded-md shadow-md">
+          <div className="flex items-start space-x-2 p-6 rounded-md shadow-md">
             <MapPin className="w-10 h-10" />
-            <div className="flex-1 space-y-2">
+            <div className="flex-1">
               <div className="flex items-center gap-3">
                 <h4 className="font-semibold text-base">Addresses</h4>
               </div>
               <p className="text-sm text-muted-foreground">
                 You can add your addresses on{" "}
-                <Link to={routes.mainAddresses} className="text-primary hover:underline">
+                <Link to={routes.account.addresses} className="text-primary hover:underline">
                   Addresses Page
                 </Link>
               </p>
             </div>
             <Button variant="outline" className="shrink-0">
-              <Link to={routes.mainAddresses}>
+              <Link to={routes.account.addresses}>
                 Go to Addresses
               </Link>
             </Button>
@@ -242,18 +266,21 @@ export default function MainProfilePage() {
         <Separator />
 
         <div className="flex justify-end space-x-4 mt-6">
-          {formState.isEditMode && (
-            <Button variant="outline" onClick={handleCancel}>Cancel</Button>
-          )}
-          {!formState.isEditMode && (
-            <Button variant="destructive" onClick={handleDeleteAccount}>Delete Account</Button>
-          )}
-          <Button
-            variant="default"
-            onClick={() => formState.isEditMode ? handleSave() : setFormState(prev => ({ ...prev, isEditMode: true }))}
-          >
-            {formState.isEditMode ? "Save Changes" : "Edit Profile"}
-          </Button>
+          <div className="flex items-center gap-2">
+            {formState.isEditMode ? (
+              <>
+                <Button variant="outline" onClick={handleCancel}>Cancel</Button>
+                <Button variant="default" onClick={handleSave}>Save Changes</Button>
+              </>
+            ) : (
+              <>
+                <Button variant="destructive" onClick={handleDeleteAccount}>Delete Account</Button>
+                <Button variant="default" onClick={() => setFormState(prev => ({ ...prev, isEditMode: true }))}>
+                  Edit Profile
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

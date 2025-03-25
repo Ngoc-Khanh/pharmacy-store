@@ -8,14 +8,26 @@ const baseRoutes = {
   home: "/",
 
   // ACCOUNT MAIN ROUTES
-  mainSettings: "/account",
-  mainProfile: "/account/profile",
-  mainChangePwd: "/account/change-password",
-  mainOrders: "/account/orders",
-  mainOrderDetails: (id: string) => `/account/orders/${id}`,
-  mainInvoices: "/account/invoices",
-  mainInvoicesDetails: (id: string) => `/account/invoices/${id}`,
-  mainAddresses: "/account/addresses",
+  account: {
+    main: "/account",
+    orders: "/account/orders",
+    profile: "/account/profile",
+    settings: "/account/settings",
+    invoices: "/account/invoices",
+    addresses: "/account/addresses",
+    changePwd: "/account/change-password",
+    orderDetails: (id: string) => `/account/orders/${id}`,
+    invoicesDetails: (id: string) => `/account/invoices/${id}`,
+  },
+
+  // mainSettings: "/account",
+  // mainProfile: "/account/profile",
+  // mainChangePwd: "/account/change-password",
+  // mainOrders: "/account/orders",
+  // mainOrderDetails: (id: string) => `/account/orders/${id}`,
+  // mainInvoices: "/account/invoices",
+  // mainInvoicesDetails: (id: string) => `/account/invoices/${id}`,
+  // mainAddresses: "/account/addresses",
 
   // ADMIN ROUTES
   admin: "/admin",
@@ -31,9 +43,10 @@ const baseRoutes = {
 export const routeNames = {
   // MAIN NAME ROUTES
   [baseRoutes.home]: "Home",
-  [baseRoutes.mainProfile]: "Profile",
-  [baseRoutes.mainAddresses]: "Addresses",
-
+  [baseRoutes.account.profile]: "Profile",
+  [baseRoutes.account.addresses]: "Addresses",
+  [baseRoutes.account.changePwd]: "Change Password",
+  
   // AUTHENTICATION NAME ROUTES
   [baseRoutes.admin]: "Admin",
 };

@@ -1,4 +1,4 @@
-import { MainAddressesPage, MainProfilePage } from "@/app/main/account";
+import { MainAddressesPage, MainChangePwdPage, MainProfilePage } from "@/app/main/account";
 import { AccountLayout, MainLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/app/auth";
 import { RouteObject } from "react-router-dom";
@@ -31,35 +31,35 @@ export const reactRouter: RouteObject[] = [
         element: <AccountLayout />,
         children: [
           {
-            path: routes.mainSettings,
+            path: routes.account.main,
             element: <div>Main Settings Page's</div>,
           },
           {
-            path: routes.mainInvoices,
+            path: routes.account.invoices,
             element: <div>Main Invoices Page's</div>,
           },
           {
-            path: routes.mainInvoicesDetails(":id"),
+            path: routes.account.invoicesDetails(":id"),
             element: <div>Main Invoices Detail's Page</div>,
           },
           {
-            path: routes.mainProfile,
+            path: routes.account.profile,
             element: <MainProfilePage />,
           },
           {
-            path: routes.mainChangePwd,
-            element: <div>Main Change Password Page's</div>,
+            path: routes.account.changePwd,
+            element: <MainChangePwdPage />,
           },
           {
-            path: routes.mainOrders,
+            path: routes.account.orders,
             element: <div>Main Orders Page's</div>,
           },
           {
-            path: routes.mainOrderDetails(":id"),
+            path: routes.account.orderDetails(":id"),
             element: <div>Main Order Detail's Page</div>,
           },
           {
-            path: routes.mainAddresses,
+            path: routes.account.addresses,
             element: <MainAddressesPage />,
           },
         ]

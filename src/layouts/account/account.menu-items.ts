@@ -6,9 +6,9 @@ export const menuItems = [
     title: "Account",
     items: [
       {
-        label: routeNames[routes.mainProfile],
+        label: routeNames[routes.account.profile],
         icon: User,
-        href: routes.mainProfile,
+        href: routes.account.profile,
       },
       {
         label: "Bank & Cards",
@@ -16,9 +16,9 @@ export const menuItems = [
         // href: routes.mainPayment,
       },
       {
-        label: routeNames[routes.mainAddresses],
+        label: routeNames[routes.account.addresses],
         icon: MapPin,
-        href: routes.mainAddresses,
+        href: routes.account.addresses,
       },
       {
         label: "Notifications",
@@ -28,7 +28,7 @@ export const menuItems = [
       {
         label: "Change Password",
         icon: Lock,
-        href: routes.mainChangePwd,
+        href: routes.account.changePwd,
       },
     ],
   },
@@ -38,12 +38,12 @@ export const menuItems = [
       {
         label: "My Orders",
         icon: Package,
-        href: routes.mainOrders,
+        href: routes.account.orders,
       },
       {
         label: "My Invoices",
         icon: Heart,
-        href: routes.mainInvoices,
+        href: routes.account.invoices,
       },
       {
         label: "My Store",
