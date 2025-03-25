@@ -6,8 +6,9 @@ import { routeNames, routes, siteConfig } from "@/config"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Helmet } from "react-helmet-async"
-import { ShieldCheck } from "lucide-react"
+import { ShieldCheck, Save, X, Lock } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -52,48 +53,65 @@ export default function ChangePwdPage() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      toast.success("Your password has been updated.");
+      toast.success("Mật khẩu của bạn đã được cập nhật.");
 
       form.reset();
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while updating your password.");
+      toast.error("Đã xảy ra lỗi khi cập nhật mật khẩu của bạn.");
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="container mx-auto py-6 max-w-4xl min-h-screen">
+    <div>
       <Helmet>
         <title>{`${routeNames[routes.account.changePwd]} | ${siteConfig.name}`}</title>
       </Helmet>
-      <h1 className="text-3xl font-bold">Change Password</h1>
-      <div className="mt-6 space-y-6">
+      
+      <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
+        <div className="space-y-2">
+          <Badge variant="outline" className="border-green-200 dark:border-green-800 bg-green-100 dark:bg-green-900/60 text-green-800 dark:text-green-300 px-3 py-1 text-sm rounded-full">
+            <span className="flex items-center">
+              <Lock className="h-3.5 w-3.5 mr-2 text-green-600 dark:text-green-400" />
+              Bảo mật tài khoản
+            </span>
+          </Badge>
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-400 dark:to-teal-400">
+            Đổi mật khẩu
+          </h1>
+          <p className="max-w-[600px] mx-auto text-gray-500 md:text-xl dark:text-gray-400">
+            Thay đổi mật khẩu định kỳ để bảo vệ tài khoản của bạn
+          </p>
+        </div>
+      </div>
+      
+      <div className="bg-white/90 dark:bg-gray-950/90 shadow-xl dark:shadow-green-900/5 border border-gray-100 dark:border-gray-800/50 backdrop-blur-sm rounded-2xl p-6 space-y-6">
         <section className="space-y-6">
           <header className="flex items-center justify-between gap-4">
             <div className="items-center justify-center">
-              <h3 className="font-medium">Account Security</h3>
-              <p className="text-sm text-muted-foreground">
-                Change your password periodically to protect your account
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Bảo mật tài khoản</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Mật khẩu mạnh giúp bảo vệ thông tin cá nhân của bạn
               </p>
             </div>
-            <div className="h-20 w-20 flex items-center justify-center rounded-full bg-primary/10">
-              <ShieldCheck className="h-10 w-10 text-primary" />
+            <div className="h-20 w-20 flex items-center justify-center rounded-full bg-green-50 dark:bg-green-950">
+              <ShieldCheck className="h-10 w-10 text-green-600 dark:text-green-400" />
             </div>
           </header>
         </section>
 
-        <Separator />
+        <Separator className="bg-gray-100 dark:bg-gray-800" />
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <section className="space-y-6">
               <header className="flex items-center justify-between">
                 <div className="items-center justify-center">
-                  <h3 className="font-medium">Current Password</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Enter your current password to verify
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">Mật khẩu hiện tại</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Nhập mật khẩu hiện tại của bạn để xác minh
                   </p>
                 </div>
                 <div className="w-full max-w-sm">
@@ -104,7 +122,8 @@ export default function ChangePwdPage() {
                       <FormItem>
                         <FormControl>
                           <PasswordInput
-                            placeholder="Enter new password"
+                            placeholder="Nhập mật khẩu hiện tại"
+                            className="bg-gray-50/80 dark:bg-gray-900/80 border-gray-100 dark:border-gray-800 focus:border-green-300 dark:focus:border-green-700"
                             {...field}
                           />
                         </FormControl>
@@ -116,14 +135,14 @@ export default function ChangePwdPage() {
               </header>
             </section>
 
-            <Separator />
+            <Separator className="bg-gray-100 dark:bg-gray-800" />
 
             <section className="space-y-6">
               <header className="flex items-center justify-between">
                 <div className="items-center justify-center">
-                  <h3 className="font-medium">New Password</h3>
-                  <p className="text-sm text-muted-foreground">
-                    New password must meet security requirements
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">Mật khẩu mới</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Mật khẩu mới phải đáp ứng các yêu cầu bảo mật
                   </p>
                 </div>
                 <div className="w-full max-w-sm">
@@ -134,7 +153,8 @@ export default function ChangePwdPage() {
                       <FormItem>
                         <FormControl>
                           <PasswordInput
-                            placeholder="Enter new password"
+                            placeholder="Nhập mật khẩu mới"
+                            className="bg-gray-50/80 dark:bg-gray-900/80 border-gray-100 dark:border-gray-800 focus:border-green-300 dark:focus:border-green-700"
                             {...field}
                           />
                         </FormControl>
@@ -146,14 +166,14 @@ export default function ChangePwdPage() {
               </header>
             </section>
 
-            <Separator />
+            <Separator className="bg-gray-100 dark:bg-gray-800" />
 
             <section className="space-y-6">
               <header className="flex items-center justify-between">
                 <div className="items-center justify-center">
-                  <h3 className="font-medium">Confirm New Password</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Re-enter your new password to confirm
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">Xác nhận mật khẩu mới</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Nhập lại mật khẩu mới của bạn để xác nhận
                   </p>
                 </div>
                 <div className="w-full max-w-sm">
@@ -164,7 +184,8 @@ export default function ChangePwdPage() {
                       <FormItem>
                         <FormControl>
                           <PasswordInput
-                            placeholder="Enter new password"
+                            placeholder="Nhập lại mật khẩu mới"
+                            className="bg-gray-50/80 dark:bg-gray-900/80 border-gray-100 dark:border-gray-800 focus:border-green-300 dark:focus:border-green-700"
                             {...field}
                           />
                         </FormControl>
@@ -176,14 +197,23 @@ export default function ChangePwdPage() {
               </header>
             </section>
 
-            <Separator />
+            <Separator className="bg-gray-100 dark:bg-gray-800" />
 
             <div className="flex justify-end space-x-4">
-              <Button variant="outline" type="button" onClick={() => form.reset()}>
-                Cancel
+              <Button 
+                variant="outline" 
+                type="button" 
+                onClick={() => form.reset()}
+                className="border-red-200 hover:border-red-300 dark:border-red-800/60 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 group">
+                <X className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
+                Hủy
               </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Updating..." : "Update Password"}
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 font-medium shine-effect group">
+                <Save className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
+                {isLoading ? "Đang cập nhật..." : "Cập nhật mật khẩu"}
               </Button>
             </div>
           </form>
