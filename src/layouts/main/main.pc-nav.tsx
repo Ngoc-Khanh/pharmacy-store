@@ -12,8 +12,8 @@ export function MainPCNav() {
   return (
     <div className="mr-4 hidden md:flex">
       <Link to={routes.home} className="mr-4 flex items-center gap-2 lg:mr-6">
-        <Icons.logo className="h-6 w-6" />
-        <span className="hidden font-bold lg:inline-block">
+        <Icons.logo className="h-6 w-6 text-green-600 dark:text-green-400" />
+        <span className="hidden font-bold text-green-600 dark:text-green-400 lg:inline-block">
           {siteConfig.name}
         </span>
       </Link>
@@ -21,8 +21,10 @@ export function MainPCNav() {
         <a
           href="/#features"
           className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname === "/#features" ? "text-foreground" : "text-foreground/80"
+            "transition-colors hover:text-green-600 dark:hover:text-green-400",
+            pathname === "/#features" 
+              ? "text-green-600 dark:text-green-400 font-medium" 
+              : "text-gray-600 dark:text-gray-400"
           )}
         >
           Features
@@ -30,8 +32,10 @@ export function MainPCNav() {
         <a
           href="#about"
           className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname === "#about" ? "text-foreground" : "text-foreground/80"
+            "transition-colors hover:text-green-600 dark:hover:text-green-400",
+            pathname === "#about" 
+              ? "text-green-600 dark:text-green-400 font-medium" 
+              : "text-gray-600 dark:text-gray-400"
           )}
         >
           About Us
@@ -39,8 +43,10 @@ export function MainPCNav() {
         <a
           href="#faq"
           className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname === "#faq" ? "text-foreground" : "text-foreground/80"
+            "transition-colors hover:text-green-600 dark:hover:text-green-400",
+            pathname === "#faq" 
+              ? "text-green-600 dark:text-green-400 font-medium" 
+              : "text-gray-600 dark:text-gray-400"
           )}
         >
           FAQ
@@ -48,8 +54,10 @@ export function MainPCNav() {
         <Link
           to="/products"
           className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname === "/products" ? "text-foreground" : "text-foreground/80"
+            "transition-colors hover:text-green-600 dark:hover:text-green-400",
+            pathname === "/products" 
+              ? "text-green-600 dark:text-green-400 font-medium" 
+              : "text-gray-600 dark:text-gray-400"
           )}
         >
           Product
@@ -57,10 +65,10 @@ export function MainPCNav() {
         <Link
           to="/themes"
           className={cn(
-            "transition-colors hover:text-foreground/80",
+            "transition-colors hover:text-green-600 dark:hover:text-green-400",
             pathname?.startsWith("/themes")
-              ? "text-foreground"
-              : "text-foreground/80"
+              ? "text-green-600 dark:text-green-400 font-medium"
+              : "text-gray-600 dark:text-gray-400"
           )}
         >
           Contact
@@ -68,10 +76,10 @@ export function MainPCNav() {
         <Link
           to="/colors"
           className={cn(
-            "transition-colors hover:text-foreground/80",
+            "transition-colors hover:text-green-600 dark:hover:text-green-400",
             pathname?.startsWith("/colors")
-              ? "text-foreground"
-              : "text-foreground/80"
+              ? "text-green-600 dark:text-green-400 font-medium"
+              : "text-gray-600 dark:text-gray-400"
           )}
         >
           Colors

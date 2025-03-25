@@ -15,21 +15,26 @@ export function MainHeader() {
   const isLoggedIn = !!token;
 
   return (
-    <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="border-grid sticky top-0 z-50 w-full border-b border-green-200 dark:border-green-800/50 bg-white/95 dark:bg-gray-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-950/60 shadow-sm">
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-green-200/0 via-green-200 to-green-200/0 dark:from-green-800/0 dark:via-green-800/30 dark:to-green-800/0" />
       <div className="container-wrapper">
-        <div className="container flex h-14 items-center">
-          <MainPCNav />
-          <MainMobileNav />
-          <div className="flex flex-1 items-center justify-between gap-2 md:justify-end">
-            <div className="w-full flex-1 md:w-auto md:flex-none">
+        <div className="container flex h-16 items-center justify-between">
+          <div className="flex items-center gap-4">
+            <MainMobileNav />
+            <MainPCNav />
+          </div>
+
+          <div className="flex flex-1 items-center justify-end gap-3">
+            <div className="w-full max-w-sm md:w-auto md:flex-none">
               <CommandMenu />
             </div>
-            <nav className="flex items-center gap-0.5">
-              <Button variant="ghost" size="icon">
+            <nav className="flex items-center gap-1.5">
+              <Button variant="ghost" size="icon" className="rounded-full text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/50">
                 <a
                   href={siteConfig.links.github}
                   target="_blank"
                   rel="noreferrer"
+                  className="flex items-center justify-center"
                 >
                   <Icons.gitHub className="h-4 w-4" />
                   <span className="sr-only">GitHub</span>
@@ -42,11 +47,11 @@ export function MainHeader() {
                   {user ? (
                     <MainUser user={user} />
                   ) : (
-                    <Skeleton className="h-8 w-8 rounded-full" />
+                    <Skeleton className="h-9 w-9 rounded-full" />
                   )}
                 </div>
               ) : (
-                <Button variant="ghost" size="default" asChild>
+                <Button variant="ghost" size="default" asChild className="hover:bg-green-50 dark:hover:bg-green-950/50 hover:text-green-600 dark:hover:text-green-400">
                   <a href={routes.login}>Login | Register</a>
                 </Button>
               )}
