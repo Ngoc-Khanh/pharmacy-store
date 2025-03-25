@@ -23,6 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+# Cursor
+.cursor
 .cursor/*
 
 .env.local
