@@ -18,23 +18,23 @@ export function MainPCNav() {
         </span>
       </Link>
       <nav className="flex items-center gap-4 text-sm xl:gap-6">
-        <a
-          href="/#features"
+        <Link
+          to={routes.category}
           className={cn(
             "transition-colors hover:text-green-600 dark:hover:text-green-400",
-            pathname === "/#features" 
-              ? "text-green-600 dark:text-green-400 font-medium" 
+            pathname === routes.category
+              ? "text-green-600 dark:text-green-400 font-medium"
               : "text-gray-600 dark:text-gray-400"
           )}
         >
-          Features
-        </a>
+          Danh mục
+        </Link>
         <a
           href="#about"
           className={cn(
             "transition-colors hover:text-green-600 dark:hover:text-green-400",
-            pathname === "#about" 
-              ? "text-green-600 dark:text-green-400 font-medium" 
+            pathname === "#about"
+              ? "text-green-600 dark:text-green-400 font-medium"
               : "text-gray-600 dark:text-gray-400"
           )}
         >
@@ -44,8 +44,8 @@ export function MainPCNav() {
           href="#faq"
           className={cn(
             "transition-colors hover:text-green-600 dark:hover:text-green-400",
-            pathname === "#faq" 
-              ? "text-green-600 dark:text-green-400 font-medium" 
+            pathname === "#faq"
+              ? "text-green-600 dark:text-green-400 font-medium"
               : "text-gray-600 dark:text-gray-400"
           )}
         >
@@ -55,8 +55,8 @@ export function MainPCNav() {
           to="/products"
           className={cn(
             "transition-colors hover:text-green-600 dark:hover:text-green-400",
-            pathname === "/products" 
-              ? "text-green-600 dark:text-green-400 font-medium" 
+            pathname === "/products"
+              ? "text-green-600 dark:text-green-400 font-medium"
               : "text-gray-600 dark:text-gray-400"
           )}
         >

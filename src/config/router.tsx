@@ -1,6 +1,7 @@
 import { MainAddressesPage, MainChangePwdPage, MainProfilePage } from "@/app/main/account";
 import { AccountLayout, MainLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/app/auth";
+import CategoryPage from "@/app/main/category";
 import { RouteObject } from "react-router-dom";
 import { routes } from "@/config/routes";
 import HomePage from "@/app/main/home";
@@ -27,6 +28,10 @@ export const reactRouter: RouteObject[] = [
         index: true,
         path: routes.home,
         element: <HomePage />,
+      },
+      {
+        path: routes.category,
+        element: <CategoryPage />,
       },
       {
         element: <AccountLayout />,

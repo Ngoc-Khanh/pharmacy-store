@@ -6,7 +6,7 @@ const baseRoutes = {
 
   // MAIN ROUTES
   home: "/",
-
+  category: "/category",
   // ACCOUNT MAIN ROUTES
   account: {
     main: "/account",
