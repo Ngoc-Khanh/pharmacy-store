@@ -41,7 +41,7 @@ export default function AddressesButtonPrimary({ address }: Props) {
         onClick={() => handleAction("edit")}
         className="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/30"
       >
-        <Edit className="h-4 w-4 mr-1" />
+        <Edit className="h-4 w-4" />
         Sửa
       </Button>
       
@@ -53,7 +53,7 @@ export default function AddressesButtonPrimary({ address }: Props) {
             className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/30"
             onClick={() => handleAction("delete")}
           >
-            <Trash className="h-4 w-4 mr-1" />
+            <Trash className="h-4 w-4" />
             Xóa
           </Button>
           
@@ -66,12 +66,12 @@ export default function AddressesButtonPrimary({ address }: Props) {
           >
             {isPending ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Đang đặt...
               </>
             ) : (
               <>
-                <CheckCircle className="h-4 w-4 mr-1" />
+                <CheckCircle className="h-4 w-4" />
                 Đặt làm mặc định
               </>
             )}

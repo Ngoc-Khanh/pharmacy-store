@@ -1,3 +1,5 @@
+import { ProfileImage } from "@/data/interfaces";
+
 export type AddAddressDto = {
   name: string;
   phone: string;
@@ -16,5 +18,5 @@ export type EditProfileDto = {
   username: string;
   email: string;
   phone: string;
-  profileImage?: string;
+  profileImage?: ProfileImage;
 };

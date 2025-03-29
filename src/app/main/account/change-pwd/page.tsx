@@ -5,10 +5,10 @@ import { PasswordInput } from "@/components/custom/password-input"
 import { routeNames, routes, siteConfig } from "@/config"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Separator } from "@/components/ui/separator"
+import { ShieldCheck, Save, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Helmet } from "react-helmet-async"
-import { ShieldCheck, Save, X, Lock } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -69,7 +69,7 @@ export default function ChangePwdPage() {
       <Helmet>
         <title>{`${routeNames[routes.account.changePwd]} | ${siteConfig.name}`}</title>
       </Helmet>
-      
+
       <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
         <div className="space-y-2">
           <Badge variant="outline" className="border-green-200 dark:border-green-800 bg-green-100 dark:bg-green-900/60 text-green-800 dark:text-green-300 px-3 py-1 text-sm rounded-full">
@@ -86,7 +86,7 @@ export default function ChangePwdPage() {
           </p>
         </div>
       </div>
-      
+
       <div className="bg-white/90 dark:bg-gray-950/90 shadow-xl dark:shadow-green-900/5 border border-gray-100 dark:border-gray-800/50 backdrop-blur-sm rounded-2xl p-6 space-y-6">
         <section className="space-y-6">
           <header className="flex items-center justify-between gap-4">
@@ -200,19 +200,11 @@ export default function ChangePwdPage() {
             <Separator className="bg-gray-100 dark:bg-gray-800" />
 
             <div className="flex justify-end space-x-4">
-              <Button 
-                variant="outline" 
-                type="button" 
-                onClick={() => form.reset()}
-                className="border-red-200 hover:border-red-300 dark:border-red-800/60 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 group">
-                <X className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
-                Hủy
-              </Button>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={isLoading}
                 className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 font-medium shine-effect group">
-                <Save className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
+                <Save className="h-4 w-4 transition-transform group-hover:scale-110" />
                 {isLoading ? "Đang cập nhật..." : "Cập nhật mật khẩu"}
               </Button>
             </div>
