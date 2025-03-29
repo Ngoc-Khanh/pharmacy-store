@@ -8,7 +8,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster position="top-center" richColors />
+      <Toaster richColors />
       <HelmetProvider>
         <ThemeProvider defaultTheme="system" storageKey="pharmacy-theme">
           <UserProvider>

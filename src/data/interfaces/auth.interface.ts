@@ -1,4 +1,4 @@
-import { User } from "./user.interface";
+import { User } from "@/data/interfaces";
 
 export interface Credential {
   accessToken: string;

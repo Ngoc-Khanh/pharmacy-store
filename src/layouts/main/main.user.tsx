@@ -5,8 +5,9 @@ import { LogOutDialog } from "@/components/dialogs/logout.dialog";
 import { User as IUser } from "@/data/interfaces";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { routes } from "@/config";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 export default function MainUser({ user }: { user: IUser }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +17,7 @@ export default function MainUser({ user }: { user: IUser }) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar>
-            <AvatarImage src={`/avatar/${user.profileImage}`} alt={user.username} />
+            <AvatarImage src={user.profileImage.url} alt={user.username} />
             <AvatarFallback>
               {user.username
                 .split(" ")
@@ -30,7 +31,19 @@ export default function MainUser({ user }: { user: IUser }) {
         <DropdownMenuLabel className="font-medium">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              Hi, {user.lastName}
+              <div className="flex items-center justify-between gap-2">
+                Hi, {user.lastName}
+
+                {(user.role === "admin" || user.role === "pharmacist") && (
+                  <Badge variant="outline" className={
+                    user.role === "admin" ? "border-red-200 dark:border-red-800 bg-red-100 dark:bg-red-900/60 text-red-800 dark:text-red-300" :
+                      user.role === "pharmacist" ? "border-blue-200 dark:border-blue-800 bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-300" :
+                        ""
+                  }>
+                    {user.role}
+                  </Badge>
+                )}
+              </div>
             </p>
             <p className="text-xs leading-none text-muted-foreground">
               {user.email}

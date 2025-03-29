@@ -1,33 +1,54 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Camera, Lock, Save, X } from "lucide-react";
 import { PhoneInput } from "@/components/custom/phone-input";
 import { routeNames, routes, siteConfig } from "@/config";
 import { AccountAPI } from "@/services/api/account.api";
 import { Separator } from "@/components/ui/separator";
 import { useMutation } from "@tanstack/react-query";
 import { useUser } from "@/providers/user.provider";
+import { useEffect, useRef, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Camera, Lock, MapPin, Save, X, UserCircle } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { EditProfileDto } from "@/data/dto";
-import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { ProfileAddress } from "./profile.address";
+import { ProfileTitle } from "./profile.title";
 
 export default function MainProfilePage() {
   const { user } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
   const [formState, setFormState] = useState({
     avatarUrl: null as string | null,
-    phone: user?.phone || "",
+    phone: "",
     isEditMode: false,
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    username: user?.username || "",
-    email: user?.email || ""
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: ""
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Update form state when user data becomes available
+  useEffect(() => {
+    if (user) {
+      setFormState(prev => ({
+        ...prev,
+        avatarUrl: user.profileImage.url || null,
+        phone: user.phone || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        username: user.username || "",
+        email: user.email || ""
+      }));
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+    }
+  }, [user]);
 
   const editProfileMutation = useMutation({
     mutationFn: AccountAPI.editProfile,
@@ -48,10 +69,42 @@ export default function MainProfilePage() {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setFormState(prev => ({ ...prev, avatarUrl: url }));
-    }
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+    setFormState(prev => ({ ...prev, avatarUrl: url }));
+
+    // Upload the avatar using standard fetch
+    const formData = new FormData();
+    formData.append("profile_image", file);
+
+    const baseUrl = siteConfig.backend.base_api_url;
+    const token = localStorage.getItem(siteConfig.auth.jwt_key);
+
+    fetch(`${baseUrl}/v2/users/upload-image-profile`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Upload failed with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        toast.success("Avatar uploaded successfully");
+        // Use the returned image URL from the server if available
+        if (data.data?.url) {
+          setFormState(prev => ({ ...prev, avatarUrl: data.data.url }));
+        }
+      })
+      .catch(error => {
+        toast.error(`Failed to upload avatar: ${error.message}`);
+        console.error("Upload error:", error);
+      });
   };
 
   const handleInputChange = (field: keyof typeof formState, value: string) => {
@@ -65,14 +118,13 @@ export default function MainProfilePage() {
       username: formState.username,
       email: formState.email,
       phone: formState.phone,
-      profileImage: formState.avatarUrl || undefined
     };
     editProfileMutation.mutate(profileData);
   };
 
   const handleCancel = () => {
     setFormState({
-      avatarUrl: null,
+      avatarUrl: user?.profileImage.url || null,
       phone: user?.phone || "",
       isEditMode: false,
       firstName: user?.firstName || "",
@@ -86,30 +138,52 @@ export default function MainProfilePage() {
     // Implement the delete account logic here
   };
 
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-32 mx-auto" />
+            <Skeleton className="h-10 w-64 mx-auto" />
+            <Skeleton className="h-6 w-[600px] mx-auto" />
+          </div>
+        </div>
+        <div className="bg-white/90 dark:bg-gray-950/90 shadow-xl dark:shadow-green-900/5 border border-gray-100 dark:border-gray-800/50 backdrop-blur-sm rounded-2xl p-6 space-y-6">
+          <section className="space-y-6">
+            <header className="flex items-center justify-between gap-4">
+              <div>
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-4 w-48 mt-2" />
+              </div>
+              <Skeleton className="h-20 w-20 rounded-full" />
+            </header>
+          </section>
+          <Separator className="bg-gray-100 dark:bg-gray-800" />
+          {Array(5).fill(0).map((_, i) => (
+            <div key={i}>
+              <section className="space-y-2">
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-10 w-full" />
+              </section>
+              <Separator className="bg-gray-100 dark:bg-gray-800 mt-6" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <>
       <Helmet>
         <title>{`${routeNames[routes.account.profile]} | ${siteConfig.name}`}</title>
       </Helmet>
-      
-      <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
-        <div className="space-y-2">
-          <Badge variant="outline" className="border-green-200 dark:border-green-800 bg-green-100 dark:bg-green-900/60 text-green-800 dark:text-green-300 px-3 py-1 text-sm rounded-full">
-            <span className="flex items-center">
-              <UserCircle className="h-3.5 w-3.5 mr-2 text-green-600 dark:text-green-400" />
-              Thông tin tài khoản
-            </span>
-          </Badge>
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-400 dark:to-teal-400">
-            Hồ sơ của tôi
-          </h1>
-          <p className="max-w-[600px] mx-auto text-gray-500 md:text-xl dark:text-gray-400">
-            Quản lý thông tin cá nhân và tùy chọn tài khoản của bạn
-          </p>
-        </div>
-      </div>
-      
+
+
       <div className="bg-white/90 dark:bg-gray-950/90 shadow-xl dark:shadow-green-900/5 border border-gray-100 dark:border-gray-800/50 backdrop-blur-sm rounded-2xl p-6 space-y-6">
+        
+        <ProfileTitle />
+
         <section className="space-y-6">
           <header className="flex items-center justify-between gap-4">
             <div className="items-center justify-center">
@@ -121,7 +195,7 @@ export default function MainProfilePage() {
               onClick={handleAvatarClick}
             >
               <Avatar className="h-20 w-20 border-2 border-green-200 dark:border-green-800 shadow-md">
-                <AvatarImage src={formState.avatarUrl || `/avatar/${user?.profileImage}`} alt="Profile Picture" />
+                <AvatarImage src={user?.profileImage?.url || formState.avatarUrl || ""} alt="Profile Picture" />
                 <AvatarFallback className="bg-gradient-to-br from-green-400 to-blue-500">
                   <Camera className="h-6 w-6 text-white" />
                 </AvatarFallback>
@@ -250,9 +324,9 @@ export default function MainProfilePage() {
                 </Link>
               </p>
             </div>
-            <Button 
-              variant="outline" 
-              size="default" 
+            <Button
+              variant="outline"
+              size="default"
               className="shrink-0 border-green-200 hover:border-green-300 dark:border-green-800 dark:hover:border-green-700 hover:bg-green-50 dark:hover:bg-green-950/50">
               <Link to={routes.account.changePwd}>
                 Đổi mật khẩu
@@ -263,32 +337,7 @@ export default function MainProfilePage() {
 
         <Separator className="bg-gray-100 dark:bg-gray-800" />
 
-        <section className="space-y-2">
-          <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">Địa chỉ</h3>
-          <div className="flex items-start space-x-2 p-6 rounded-lg shadow-md bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:border-green-200 dark:hover:border-green-800 transition-colors duration-200">
-            <div className="p-2 w-14 h-14 rounded-full bg-green-50 dark:bg-green-950 flex items-center justify-center">
-              <MapPin className="w-8 h-8 text-green-600 dark:text-green-400" />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <h4 className="font-semibold text-base text-gray-900 dark:text-gray-100">Địa chỉ giao hàng</h4>
-              </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Bạn có thể thêm địa chỉ giao hàng tại{" "}
-                <Link to={routes.account.addresses} className="text-green-600 dark:text-green-400 hover:underline">
-                  Trang quản lý địa chỉ
-                </Link>
-              </p>
-            </div>
-            <Button 
-              variant="outline" 
-              className="shrink-0 border-green-200 hover:border-green-300 dark:border-green-800 dark:hover:border-green-700 hover:bg-green-50 dark:hover:bg-green-950/50">
-              <Link to={routes.account.addresses}>
-                Quản lý địa chỉ
-              </Link>
-            </Button>
-          </div>
-        </section>
+        <ProfileAddress />
 
         <Separator className="bg-gray-100 dark:bg-gray-800" />
 
@@ -296,15 +345,15 @@ export default function MainProfilePage() {
           <div className="flex items-center gap-2">
             {formState.isEditMode ? (
               <>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={handleCancel}
                   className="border-red-200 hover:border-red-300 dark:border-red-800/60 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 group">
                   <X className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
                   Hủy
                 </Button>
-                <Button 
-                  variant="default" 
+                <Button
+                  variant="default"
                   onClick={handleSave}
                   className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 font-medium shine-effect group">
                   <Save className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
@@ -313,14 +362,14 @@ export default function MainProfilePage() {
               </>
             ) : (
               <>
-                <Button 
-                  variant="destructive" 
+                <Button
+                  variant="destructive"
                   onClick={handleDeleteAccount}
                   className="hover:shadow-md transition-all duration-200">
                   Xóa tài khoản
                 </Button>
-                <Button 
-                  variant="default" 
+                <Button
+                  variant="default"
                   onClick={() => setFormState(prev => ({ ...prev, isEditMode: true }))}
                   className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 font-medium shine-effect">
                   Sửa hồ sơ
@@ -330,6 +379,6 @@ export default function MainProfilePage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

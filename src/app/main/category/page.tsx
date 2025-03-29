@@ -5,15 +5,15 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue 
+  SelectValue
 } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
+import {
   Drawer,
   DrawerClose,
   DrawerContent,
@@ -24,9 +24,6 @@ import {
 } from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
-
-// Add this CSS for custom scrollbar
-import "./style.css";
 
 // Định nghĩa theme colors - đồng bộ màu sắc
 const THEME = {
@@ -84,12 +81,14 @@ export default function CategoryPage() {
   const [priceRange, setPriceRange] = useState<[number, number]>([MIN_PRICE, MAX_PRICE]);
   const [minRating, setMinRating] = useState(0);
   const [inStockOnly, setInStockOnly] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
   const [hoveredProductId, setHoveredProductId] = useState<number | null>(null);
-  
+
   // For readable price display
   const [displayPriceRange, setDisplayPriceRange] = useState<[number, number]>([MIN_PRICE, MAX_PRICE]);
+
+  // Filter drawer states
+  const [activeFilter, setActiveFilter] = useState<'categories' | 'brands' | 'price' | 'advanced' | null>(null);
 
   // Update display price with delay to prevent flickering during sliding
   useEffect(() => {
@@ -103,50 +102,50 @@ export default function CategoryPage() {
   const filteredProducts = MOCK_PRODUCTS.filter(product => {
     // Search filter
     if (searchTerm && !product.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
-    
+
     // Category filter
     if (selectedCategories.length > 0 && !selectedCategories.includes(product.category)) return false;
-    
+
     // Brand filter
     if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand)) return false;
-    
+
     // Price range filter
     if (product.price < priceRange[0] || product.price > priceRange[1]) return false;
-    
+
     // Rating filter
     if (minRating > 0 && product.rating < minRating) return false;
-    
+
     // Stock filter
     if (inStockOnly && !product.inStock) return false;
-    
+
     return true;
   }).sort((a, b) => {
     switch (sortBy) {
       case 'price-asc': return a.price - b.price;
-      case 'price-desc': return b.price - a.price; 
+      case 'price-desc': return b.price - a.price;
       case 'rating': return b.rating - a.rating;
       default: return 0;
     }
   });
-  
+
   // Toggle category selection
   const toggleCategory = (category: string) => {
-    setSelectedCategories(prev => 
+    setSelectedCategories(prev =>
       prev.includes(category)
         ? prev.filter(c => c !== category)
         : [...prev, category]
     );
   };
-  
+
   // Toggle brand selection
   const toggleBrand = (brand: string) => {
-    setSelectedBrands(prev => 
+    setSelectedBrands(prev =>
       prev.includes(brand)
         ? prev.filter(b => b !== brand)
         : [...prev, brand]
     );
   };
-  
+
   // Reset all filters
   const resetFilters = () => {
     setSearchTerm('');
@@ -156,6 +155,15 @@ export default function CategoryPage() {
     setMinRating(0);
     setInStockOnly(false);
     setSortBy('relevance');
+  };
+
+  // Toggle filter drawer
+  const toggleFilterDrawer = (filter: 'categories' | 'brands' | 'price' | 'advanced' | null) => {
+    if (activeFilter === filter) {
+      setActiveFilter(null);
+    } else {
+      setActiveFilter(filter);
+    }
   };
 
   return (
@@ -181,15 +189,15 @@ export default function CategoryPage() {
             className="pl-9 bg-background/50 backdrop-blur-sm border-muted"
           />
         </div>
-        
+
         {/* Mobile filter trigger */}
         <div className="flex gap-2 md:hidden">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="flex-1 border-muted"
-            onClick={() => setIsFilterOpen(true)}
+            onClick={() => toggleFilterDrawer('advanced')}
           >
-            <Filter className="mr-2 h-4 w-4" />
+            <Filter className="h-4 w-4" />
             Bộ lọc
           </Button>
           <Select value={sortBy} onValueChange={setSortBy}>
@@ -204,36 +212,54 @@ export default function CategoryPage() {
             </SelectContent>
           </Select>
         </div>
-        
+
         {/* Desktop filter options */}
         <div className="hidden md:flex gap-2">
-          <Button 
-            variant="outline" 
-            onClick={() => setIsFilterOpen(true)} 
-            className={`border-muted hover:border-emerald-500 hover:${THEME.primaryText}`}
+          <Button
+            variant={activeFilter === 'categories' ? 'default' : 'outline'}
+            onClick={() => toggleFilterDrawer('categories')}
+            className={activeFilter === 'categories'
+              ? `${THEME.primaryBg} hover:${THEME.primaryBg}`
+              : `border-muted hover:border-emerald-500 hover:${THEME.primaryText}`
+            }
           >
-            <Filter className="mr-2 h-4 w-4" />
+            <Filter className={`h-4 w-4 ${activeFilter === 'categories' ? 'text-white' : ''}`} />
             Danh mục
+            {selectedCategories.length > 0 && (
+              <Badge className=" bg-white text-emerald-500">{selectedCategories.length}</Badge>
+            )}
           </Button>
-          
-          <Button 
-            variant="outline" 
-            onClick={() => setIsFilterOpen(true)} 
-            className={`border-muted hover:border-emerald-500 hover:${THEME.primaryText}`}
+
+          <Button
+            variant={activeFilter === 'brands' ? 'default' : 'outline'}
+            onClick={() => toggleFilterDrawer('brands')}
+            className={activeFilter === 'brands'
+              ? `${THEME.primaryBg} hover:${THEME.primaryBg}`
+              : `border-muted hover:border-emerald-500 hover:${THEME.primaryText}`
+            }
           >
-            <Filter className="mr-2 h-4 w-4" />
+            <Filter className={`h-4 w-4 ${activeFilter === 'brands' ? 'text-white' : ''}`} />
             Thương hiệu
+            {selectedBrands.length > 0 && (
+              <Badge className=" bg-white text-emerald-500">{selectedBrands.length}</Badge>
+            )}
           </Button>
-          
-          <Button 
-            variant="outline" 
-            onClick={() => setIsFilterOpen(true)} 
-            className={`border-muted hover:border-emerald-500 hover:${THEME.primaryText}`}
+
+          <Button
+            variant={activeFilter === 'price' ? 'default' : 'outline'}
+            onClick={() => toggleFilterDrawer('price')}
+            className={activeFilter === 'price'
+              ? `${THEME.primaryBg} hover:${THEME.primaryBg}`
+              : `border-muted hover:border-emerald-500 hover:${THEME.primaryText}`
+            }
           >
-            <Filter className="mr-2 h-4 w-4" />
+            <Filter className={`h-4 w-4 ${activeFilter === 'price' ? 'text-white' : ''}`} />
             Giá
+            {(priceRange[0] > MIN_PRICE || priceRange[1] < MAX_PRICE) && (
+              <Badge className=" bg-white text-emerald-500">✓</Badge>
+            )}
           </Button>
-          
+
           <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className="w-[180px] border-muted">
               <SelectValue placeholder="Sắp xếp" />
@@ -245,17 +271,138 @@ export default function CategoryPage() {
               <SelectItem value="rating">Đánh giá</SelectItem>
             </SelectContent>
           </Select>
-          
-          <Button 
-            variant="outline" 
-            onClick={() => setIsFilterOpen(true)} 
-            className={`border-muted hover:border-emerald-500 hover:${THEME.primaryText}`}
+
+          <Button
+            variant={activeFilter === 'advanced' ? 'default' : 'outline'}
+            onClick={() => toggleFilterDrawer('advanced')}
+            className={activeFilter === 'advanced'
+              ? `${THEME.primaryBg} hover:${THEME.primaryBg}`
+              : `border-muted hover:border-emerald-500 hover:${THEME.primaryText}`
+            }
           >
-            <Filter className="mr-2 h-4 w-4" />
+            <Filter className={`h-4 w-4 ${activeFilter === 'advanced' ? 'text-white' : ''}`} />
             Bộ lọc nâng cao
           </Button>
         </div>
       </div>
+
+      {/* Filter Panels */}
+      {activeFilter === 'categories' && (
+        <div className="mb-6 p-4 bg-background/80 backdrop-blur-sm border rounded-lg animate-in fade-in-0 zoom-in-95 slide-in-from-top-5 duration-300">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium text-lg text-emerald-500">Danh mục sản phẩm</h3>
+            <X
+              className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+              onClick={() => setActiveFilter(null)}
+            />
+          </div>
+          <div className="flex flex-wrap gap-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+            {CATEGORIES.map((category) => (
+              <div
+                key={category}
+                onClick={() => toggleCategory(category)}
+                className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all
+                  ${selectedCategories.includes(category)
+                    ? 'bg-emerald-500 text-white border-emerald-500'
+                    : 'border-muted hover:border-emerald-500/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/10'
+                  }`}
+              >
+                {category}
+              </div>
+            ))}
+          </div>
+          {selectedCategories.length > 0 && (
+            <div className="mt-3 flex justify-end">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedCategories([])}
+                className="text-xs text-muted-foreground hover:text-emerald-500"
+              >
+                Xóa tất cả
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeFilter === 'brands' && (
+        <div className="mb-6 p-4 bg-background/80 backdrop-blur-sm border rounded-lg animate-in fade-in-0 zoom-in-95 slide-in-from-top-5 duration-300">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium text-lg text-emerald-500">Thương hiệu</h3>
+            <X
+              className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+              onClick={() => setActiveFilter(null)}
+            />
+          </div>
+          <div className="flex flex-wrap gap-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+            {BRANDS.map((brand) => (
+              <div
+                key={brand}
+                onClick={() => toggleBrand(brand)}
+                className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all
+                  ${selectedBrands.includes(brand)
+                    ? 'bg-emerald-500 text-white border-emerald-500'
+                    : 'border-muted hover:border-emerald-500/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/10'
+                  }`}
+              >
+                {brand}
+              </div>
+            ))}
+          </div>
+          {selectedBrands.length > 0 && (
+            <div className="mt-3 flex justify-end">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedBrands([])}
+                className="text-xs text-muted-foreground hover:text-emerald-500"
+              >
+                Xóa tất cả
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeFilter === 'price' && (
+        <div className="mb-6 p-4 bg-background/80 backdrop-blur-sm border rounded-lg animate-in fade-in-0 zoom-in-95 slide-in-from-top-5 duration-300">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium text-lg text-emerald-500">Khoảng giá</h3>
+            <X
+              className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+              onClick={() => setActiveFilter(null)}
+            />
+          </div>
+          <div className="px-4 py-6 mb-2">
+            <div className="text-center mb-4 text-sm font-medium">
+              {displayPriceRange[0].toLocaleString()}₫ - {displayPriceRange[1].toLocaleString()}₫
+            </div>
+            <Slider
+              value={priceRange}
+              min={MIN_PRICE}
+              max={MAX_PRICE}
+              step={10000}
+              onValueChange={(value) => setPriceRange(value as [number, number])}
+              className="[&_.react-aria-Thumb]:border-emerald-500 [&_.react-aria-Thumb]:focus-visible:ring-emerald-500 [&_.react-aria-Range]:bg-emerald-500"
+            />
+            <div className="flex justify-between mt-2">
+              <span className="text-xs text-muted-foreground">{MIN_PRICE.toLocaleString()}₫</span>
+              <span className="text-xs text-muted-foreground">{MAX_PRICE.toLocaleString()}₫</span>
+            </div>
+          </div>
+          <div className="mt-3 flex justify-end">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setPriceRange([MIN_PRICE, MAX_PRICE])}
+              className="text-xs text-muted-foreground hover:text-emerald-500"
+            >
+              Đặt lại
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Active filters display */}
       {(selectedCategories.length > 0 || selectedBrands.length > 0 || minRating > 0 || inStockOnly || priceRange[0] > MIN_PRICE || priceRange[1] < MAX_PRICE) && (
@@ -263,51 +410,51 @@ export default function CategoryPage() {
           {selectedCategories.map(category => (
             <Badge key={category} variant="secondary" className="flex items-center gap-1">
               Danh mục: {category}
-              <X 
-                className="h-3 w-3 cursor-pointer ml-1" 
-                onClick={() => toggleCategory(category)} 
+              <X
+                className="h-3 w-3 cursor-pointer ml-1"
+                onClick={() => toggleCategory(category)}
               />
             </Badge>
           ))}
-          
+
           {selectedBrands.map(brand => (
             <Badge key={brand} variant="secondary" className="flex items-center gap-1">
               Thương hiệu: {brand}
-              <X 
-                className="h-3 w-3 cursor-pointer ml-1" 
-                onClick={() => toggleBrand(brand)} 
+              <X
+                className="h-3 w-3 cursor-pointer ml-1"
+                onClick={() => toggleBrand(brand)}
               />
             </Badge>
           ))}
-          
+
           {minRating > 0 && (
             <Badge variant="secondary" className="flex items-center gap-1">
               Đánh giá: ≥{minRating}⭐
               <X className="h-3 w-3 cursor-pointer ml-1" onClick={() => setMinRating(0)} />
             </Badge>
           )}
-          
+
           {inStockOnly && (
             <Badge variant="secondary" className="flex items-center gap-1">
               Còn hàng
               <X className="h-3 w-3 cursor-pointer ml-1" onClick={() => setInStockOnly(false)} />
             </Badge>
           )}
-          
+
           {(priceRange[0] > MIN_PRICE || priceRange[1] < MAX_PRICE) && (
             <Badge variant="secondary" className="flex items-center gap-1">
               Giá: {displayPriceRange[0].toLocaleString()}₫ - {displayPriceRange[1].toLocaleString()}₫
-              <X 
-                className="h-3 w-3 cursor-pointer ml-1" 
-                onClick={() => setPriceRange([MIN_PRICE, MAX_PRICE])} 
+              <X
+                className="h-3 w-3 cursor-pointer"
+                onClick={() => setPriceRange([MIN_PRICE, MAX_PRICE])}
               />
             </Badge>
           )}
-          
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={resetFilters} 
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={resetFilters}
             className="text-xs hover:text-emerald-500"
           >
             Xóa bộ lọc
@@ -325,35 +472,35 @@ export default function CategoryPage() {
       {/* Product grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
         {filteredProducts.map((product) => (
-          <Card 
-            key={product.id} 
+          <Card
+            key={product.id}
             className="overflow-hidden h-full flex flex-col group bg-background/50 backdrop-blur-sm border-muted hover:border-emerald-500/20 transition-all duration-300 hover:shadow-lg"
             onMouseEnter={() => setHoveredProductId(product.id)}
             onMouseLeave={() => setHoveredProductId(null)}
           >
             <div className="relative pt-[100%] bg-gray-100 dark:bg-gray-800/50 overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center">
-                <img 
-                  src={`https://placehold.co/300x300/e2e8f0/1e293b?text=${encodeURIComponent(product.name)}`} 
+                <img
+                  src={`https://placehold.co/300x300/e2e8f0/1e293b?text=${encodeURIComponent(product.name)}`}
                   alt={product.name}
                   className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
-              
+
               {/* Discount badge */}
               {product.discount > 0 && (
                 <Badge className={`absolute top-2 left-2 ${THEME.primaryBg} text-white hover:bg-emerald-600`}>
                   -{product.discount}%
                 </Badge>
               )}
-              
+
               {/* Stock badge */}
               {!product.inStock && (
                 <Badge variant="destructive" className="absolute top-2 right-2">
                   Hết hàng
                 </Badge>
               )}
-              
+
               {/* Quick action buttons */}
               <div className={`absolute right-2 top-2 transition-all duration-300 flex flex-col gap-2 ${hoveredProductId === product.id ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                 <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white shadow-md">
@@ -364,23 +511,22 @@ export default function CategoryPage() {
                 </Button>
               </div>
             </div>
-            
+
             <CardContent className="flex flex-col flex-grow p-4">
               <div className="mb-1 text-sm text-muted-foreground">{product.brand}</div>
               <h3 className="font-medium line-clamp-2 hover:text-emerald-500 cursor-pointer mb-2 transition-colors group-hover:text-emerald-500">{product.name}</h3>
-              
+
               <div className="flex items-center mt-auto">
                 {Array(5).fill(0).map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-4 w-4 ${
-                      i < product.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
-                    }`}
+                    className={`h-4 w-4 ${i < product.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+                      }`}
                   />
                 ))}
                 <span className="text-xs text-muted-foreground ml-1">({product.rating}.0)</span>
               </div>
-              
+
               <div className="flex items-center justify-between mt-2">
                 <div className="flex flex-col">
                   {product.discount > 0 && (
@@ -401,7 +547,7 @@ export default function CategoryPage() {
                   </div>
                 )}
               </div>
-              
+
               {/* Hover showing button */}
               <div className={`mt-3 transition-all duration-300 ${hoveredProductId === product.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <Button className={`w-full text-sm h-8 bg-gradient-to-r ${THEME.primary} hover:${THEME.primaryHover}`}>
@@ -432,7 +578,7 @@ export default function CategoryPage() {
       )}
 
       {/* Advanced filter drawer */}
-      <Drawer open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+      <Drawer open={activeFilter === 'advanced'} onOpenChange={open => setActiveFilter(open ? 'advanced' : null)}>
         <DrawerContent className="rounded-t-xl">
           <DrawerHeader className="border-b">
             <DrawerTitle className="text-center text-lg font-bold text-emerald-500">
@@ -443,7 +589,7 @@ export default function CategoryPage() {
               Tùy chỉnh tìm kiếm để tìm sản phẩm phù hợp nhất
             </DrawerDescription>
           </DrawerHeader>
-          
+
           <ScrollArea className="p-6 max-h-[70vh]">
             <div className="space-y-6">
               {/* Categories */}
@@ -455,7 +601,7 @@ export default function CategoryPage() {
                 <div className="max-h-[180px] overflow-y-auto pr-2 custom-scrollbar">
                   <div className="flex flex-wrap gap-2">
                     {CATEGORIES.map((category) => (
-                      <div 
+                      <div
                         key={category}
                         onClick={() => toggleCategory(category)}
                         className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all
@@ -470,9 +616,9 @@ export default function CategoryPage() {
                   </div>
                 </div>
               </div>
-              
+
               <Separator className="bg-muted/50" />
-              
+
               {/* Brands */}
               <div>
                 <h4 className="font-medium mb-3 flex items-center justify-between text-emerald-500">
@@ -482,7 +628,7 @@ export default function CategoryPage() {
                 <div className="max-h-[180px] overflow-y-auto pr-2 custom-scrollbar">
                   <div className="flex flex-wrap gap-2">
                     {BRANDS.map((brand) => (
-                      <div 
+                      <div
                         key={brand}
                         onClick={() => toggleBrand(brand)}
                         className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all
@@ -497,9 +643,9 @@ export default function CategoryPage() {
                   </div>
                 </div>
               </div>
-              
+
               <Separator className="bg-muted/50" />
-              
+
               {/* Price range */}
               <div>
                 <h4 className="font-medium mb-3 text-emerald-500 flex justify-between">
@@ -523,15 +669,15 @@ export default function CategoryPage() {
                   </div>
                 </div>
               </div>
-              
+
               <Separator className="bg-muted/50" />
-              
+
               {/* Rating filter */}
               <div>
                 <h4 className="font-medium mb-3 text-emerald-500">Đánh giá</h4>
                 <div className="flex flex-wrap gap-2">
                   <div
-                    onClick={() => setMinRating(0)} 
+                    onClick={() => setMinRating(0)}
                     className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all
                       ${minRating === 0
                         ? 'bg-emerald-500 text-white border-emerald-500'
@@ -541,8 +687,8 @@ export default function CategoryPage() {
                     Tất cả
                   </div>
                   {[5, 4, 3, 2, 1].map((rating) => (
-                    <div 
-                      key={rating} 
+                    <div
+                      key={rating}
                       onClick={() => setMinRating(rating === minRating ? 0 : rating)}
                       className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all flex items-center gap-2
                         ${minRating === rating
@@ -563,13 +709,13 @@ export default function CategoryPage() {
                   ))}
                 </div>
               </div>
-              
+
               <Separator className="bg-muted/50" />
-              
+
               {/* Availability */}
               <div className="flex items-center justify-between">
                 <h4 className="font-medium text-emerald-500">Chỉ hiển thị sản phẩm còn hàng</h4>
-                <Switch 
+                <Switch
                   checked={inStockOnly}
                   onCheckedChange={setInStockOnly}
                   className="data-[state=checked]:bg-emerald-500"
@@ -577,7 +723,7 @@ export default function CategoryPage() {
               </div>
             </div>
           </ScrollArea>
-          
+
           <DrawerFooter className="border-t">
             <Button onClick={resetFilters} variant="outline" className="w-full">
               Xóa tất cả
