@@ -349,14 +349,14 @@ export default function MainProfilePage() {
                   variant="outline"
                   onClick={handleCancel}
                   className="border-red-200 hover:border-red-300 dark:border-red-800/60 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 group">
-                  <X className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
+                  <X className="h-4 w-4 transition-transform group-hover:scale-110" />
                   Hủy
                 </Button>
                 <Button
                   variant="default"
                   onClick={handleSave}
                   className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 font-medium shine-effect group">
-                  <Save className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
+                  <Save className="h-4 w-4 transition-transform group-hover:scale-110" />
                   Lưu thay đổi
                 </Button>
               </>
