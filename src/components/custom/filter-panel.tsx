@@ -9,7 +9,8 @@ interface FilterPanelProps {
   children: React.ReactNode;
 }
 
-export function FilterPanel({ type, title, onClose, children }: FilterPanelProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function FilterPanel({ title, onClose, children }: FilterPanelProps) {
   return (
     <div className="mb-6 p-4 bg-background/80 backdrop-blur-sm border rounded-lg animate-in fade-in-0 zoom-in-95 slide-in-from-top-5 duration-300">
       <div className="flex items-center justify-between mb-3">
