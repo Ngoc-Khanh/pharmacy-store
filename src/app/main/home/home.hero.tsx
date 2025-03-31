@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 
 export default function Hero() {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-green-50 via-teal-50 to-blue-50 dark:from-green-950/30 dark:via-teal-950/30 dark:to-blue-950/30 relative overflow-hidden">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-green-50 via-teal-50 to-blue-50 dark:from-green-950/30 dark:via-teal-950/30 dark:to-blue-950/30 relative">
       {/* Background pattern */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10" />
       {/* Animated circles */}

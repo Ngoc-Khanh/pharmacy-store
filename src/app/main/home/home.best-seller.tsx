@@ -84,8 +84,8 @@ export default function BestSeller() {
                   </div>
                   <h3 className="font-medium mb-1 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200">{product.name}</h3>
                   <div className="flex items-center gap-2">
-                    <div className="font-bold text-lg">{product.variants.price.toLocaleString()}đ</div>
-                    <div className="text-sm text-gray-500 line-through">{product.variants.originalPrice.toLocaleString()}đ</div>
+                    <div className="font-bold text-lg">{product.variants.price.toLocaleString('vi-VN')}</div>
+                    <div className="text-sm text-gray-500 line-through">{product.variants.originalPrice.toLocaleString('vi-VN')}</div>
                   </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0">

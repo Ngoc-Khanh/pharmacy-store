@@ -8,16 +8,15 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "./ui/command";
+} from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { type DialogProps } from "@radix-ui/react-dialog";
 import { useCallback, useEffect, useState } from "react";
 import { File, Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/providers/theme.provider";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { reactRouter } from "@/config/router";
-import { DialogTitle } from "./ui/dialog";
-import { Button } from "./ui/button";
 
 export function CommandMenu({ ...props }: DialogProps) {
   const router = useNavigate();
@@ -67,7 +66,6 @@ export function CommandMenu({ ...props }: DialogProps) {
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <DialogTitle>Command Menu</DialogTitle>
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>

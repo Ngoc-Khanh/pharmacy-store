@@ -46,6 +46,7 @@ export const routeNames = {
   [baseRoutes.account.profile]: "Profile",
   [baseRoutes.account.addresses]: "Addresses",
   [baseRoutes.account.changePwd]: "Change Password",
+  [baseRoutes.category]: "Category",
   
   // AUTHENTICATION NAME ROUTES
   [baseRoutes.admin]: "Admin",
