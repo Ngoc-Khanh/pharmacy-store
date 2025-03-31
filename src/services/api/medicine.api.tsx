@@ -6,5 +6,10 @@ export const MedicineAPI = {
   async getPorpularMedicine() {
     const res = await apiGet<SROList<Medicine>>("v2/medicine/popular-medicine")
     return res.data.data
-  }
+  },
+
+  async getAllMedicine() {
+    const res = await apiGet<SROList<Medicine>>("v2/medicine/medicine-list")
+    return res.data.data
+  },
 }

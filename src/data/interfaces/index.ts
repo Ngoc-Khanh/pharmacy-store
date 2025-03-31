@@ -6,5 +6,5 @@ export type { UserAddress, ProfileImage , User } from "./user.interface";
 export type { Supplier } from "./supplier.interface";
 // CATEGORY INTERFACES
 export type { Category } from "./category.interface"; 
-
+// MEDICINE INTERFACES
 export type { Medicine } from "./medicine.interface";
