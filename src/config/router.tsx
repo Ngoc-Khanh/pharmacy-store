@@ -1,4 +1,5 @@
 import { MainAddressesPage, MainChangePwdPage, MainProfilePage } from "@/app/main/account";
+import { MedicineDetailsPage } from "@/app/main/medicine";
 import { AccountLayout, MainLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/app/auth";
 import CategoryPage from "@/app/main/category";
@@ -32,6 +33,10 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.category,
         element: <CategoryPage />,
+      },
+      {
+        path: routes.medicineDetails(":id"),
+        element: <MedicineDetailsPage />,
       },
       {
         element: <AccountLayout />,

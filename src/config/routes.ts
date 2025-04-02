@@ -7,6 +7,9 @@ const baseRoutes = {
   // MAIN ROUTES
   home: "/",
   category: "/category",
+  medicineDetails: (id: string) => `/medicine/${id}/details`,
+  medicineDetailsBase: "/medicine/details",
+
   // ACCOUNT MAIN ROUTES
   account: {
     main: "/account",
@@ -47,6 +50,7 @@ export const routeNames = {
   [baseRoutes.account.addresses]: "Addresses",
   [baseRoutes.account.changePwd]: "Change Password",
   [baseRoutes.category]: "Category",
+  [baseRoutes.medicineDetailsBase]: "Medicine Details",
   
   // AUTHENTICATION NAME ROUTES
   [baseRoutes.admin]: "Admin",
