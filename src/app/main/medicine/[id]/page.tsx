@@ -1,0 +1,134 @@
+import { MedicineDetailsBreadcrumb } from "./[id].medicine-breadcrumb";
+import { MedicineDetailsSkeleton } from "./[id].medicine-skeleton";
+import { useMedicineDetails } from "@/hooks/use-medicine-details";
+import { MedicineDetailsReviews } from "./[id].medicine-reviews";
+import { MedicineDetailsRelated } from "./[id].medicine-related";
+import { MedicineDetailsImage } from "./[id].medicine-image";
+import { MedicineDetailsInfo } from "./[id].medicine-info";
+import { MedicineDetailsTabs } from "./[id].medicine-tabs";
+import { routeNames, routes, siteConfig } from "@/config";
+import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { useState } from "react";
+
+export default function MedicineDetailsPage() {
+  const { id } = useParams<{ id: string }>();
+  const { data: medicine, isLoading } = useMedicineDetails(id || "");
+  const [quantity, setQuantity] = useState(1);
+  const [activeTab, setActiveTab] = useState("details");
+
+  if (isLoading) {
+    return <MedicineDetailsSkeleton />;
+  }
+
+  return (
+    <div className="container py-8">
+      <Helmet>
+        <title>{`${routeNames[routes.medicineDetailsBase]} | ${siteConfig.name}`}</title>
+      </Helmet>
+
+      {/* Breadcrumb */}
+      <div className="mb-6">
+        <MedicineDetailsBreadcrumb id={id || ""} name={medicine?.name || ""} />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {/* Product Image Section */}
+        <MedicineDetailsImage
+          imageUrl={medicine?.thumbnail.imageUrl || ""}
+          imageAlt={medicine?.thumbnail.imageAlt || ""}
+          discountPercent={medicine?.variants.discountPercent}
+          stockStatus={medicine?.variants.stockStatus || "OUT-OF-STOCK"}
+        />
+
+        {/* Product Info Section */}
+        <MedicineDetailsInfo
+          name={medicine?.name || ""}
+          supplierName={medicine?.supplier?.name}
+          ratings={{
+            star: medicine?.ratings?.star || 0,
+            reviewCount: medicine?.ratings?.reviewCount || 0,
+            liked: medicine?.ratings?.liked || 0
+          }}
+          price={medicine?.variants?.price || 0}
+          discountPercent={medicine?.variants?.discountPercent}
+          description={medicine?.description || ""}
+          quantity={quantity}
+          limitQuantity={medicine?.variants?.limitQuantity}
+          stockStatus={medicine?.variants?.stockStatus || "OUT-OF-STOCK"}
+          onQuantityChange={setQuantity}
+        />
+      </div>
+
+      {/* Product Tabs */}
+      <MedicineDetailsTabs
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        supplierName={medicine?.supplier?.name}
+        categoryName={medicine?.category?.name}
+        updatedAt={medicine?.updatedAt}
+      />
+
+      {/* Reviews Section */}
+      <MedicineDetailsReviews
+        star={medicine?.ratings?.star || 0}
+        reviewCount={medicine?.ratings?.reviewCount || 0}
+        reviews={[
+          {
+            name: "Nguyễn Văn A",
+            avatar: "https://i.pravatar.cc/100?img=1",
+            rating: 5,
+            time: "2 ngày trước",
+            content: "Sản phẩm rất tốt, đóng gói cẩn thận, giao hàng nhanh. Tôi đã dùng và thấy hiệu quả."
+          },
+          {
+            name: "Trần Thị B",
+            avatar: "https://i.pravatar.cc/100?img=2",
+            rating: 4,
+            time: "1 tuần trước",
+            content: "Thuốc uống dễ, không đắng. Giảm đau khá nhanh sau khi uống."
+          }
+        ]}
+      />
+
+      {/* Related Products */}
+      <MedicineDetailsRelated
+        medicines={[
+          {
+            id: "1",
+            name: "Sản phẩm tương tự 1",
+            imageUrl: "https://source.unsplash.com/random/400x400?medicine&1",
+            price: 120000,
+            rating: 4.0,
+            reviewCount: 12
+          },
+          {
+            id: "2",
+            name: "Sản phẩm tương tự 2",
+            imageUrl: "https://source.unsplash.com/random/400x400?medicine&2",
+            price: 135000,
+            rating: 4.5,
+            reviewCount: 8
+          },
+          {
+            id: "3",
+            name: "Sản phẩm tương tự 3",
+            imageUrl: "https://source.unsplash.com/random/400x400?medicine&3",
+            price: 150000,
+            rating: 4.2,
+            reviewCount: 15
+          },
+          {
+            id: "4",
+            name: "Sản phẩm tương tự 4",
+            imageUrl: "https://source.unsplash.com/random/400x400?medicine&4",
+            price: 165000,
+            rating: 4.8,
+            reviewCount: 20
+          }
+        ]}
+      />
+    </div>
+  );
+}
+
