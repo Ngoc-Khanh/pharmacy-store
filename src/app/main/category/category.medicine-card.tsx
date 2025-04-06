@@ -5,6 +5,10 @@ import { Badge } from "@/components/ui/badge"
 import { Medicine } from "@/data/interfaces"
 import { Link } from "react-router-dom"
 import { routes } from "@/config"
+import { useAtom } from "jotai"
+import { addToCartAtom } from "@/stores"
+import { toast } from "sonner"
+import { useState } from "react"
 
 interface MedicineCardProps {
   medicine: Medicine,
@@ -13,6 +17,29 @@ interface MedicineCardProps {
 }
 
 export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineCardProps) {
+  const [, addToCart] = useAtom(addToCartAtom);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (medicine.variants.stockStatus === "OUT-OF-STOCK") {
+      toast.error("Sản phẩm hiện đã hết hàng");
+      return;
+    }
+
+    setIsAddingToCart(true);
+    
+    // Thêm vào giỏ hàng với số lượng mặc định là 1
+    addToCart({ medicine, quantity: 1 });
+    
+    // Hiển thị thông báo thành công
+    toast.success(`Đã thêm ${medicine.name} vào giỏ hàng`);
+    
+    setTimeout(() => setIsAddingToCart(false), 500);
+  };
+
   return (
     <Card
       className="overflow-hidden h-full flex flex-col group bg-background/50 backdrop-blur-sm border-muted hover:border-emerald-500/20 transition-all duration-300 hover:shadow-lg"
@@ -107,15 +134,32 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
         <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white shadow-md">
           <Heart className="h-4 w-4 text-pink-500 fill-pink-500" />
         </Button>
-        <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white shadow-md">
-          <ShoppingCart className="h-4 w-4 text-green-500 fill-green-500" />
+        <Button 
+          size="icon" 
+          variant="secondary" 
+          className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white shadow-md"
+          onClick={handleAddToCart}
+          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK" || isAddingToCart}
+        >
+          <ShoppingCart className={`h-4 w-4 ${isAddingToCart ? 'animate-ping text-green-600' : 'text-green-500 fill-green-500'}`} />
         </Button>
       </div>
 
       {/* Hover showing */}
       <div className={`mt-3 px-4 pb-4 transition-all duration-300 ${hoveredMedicineId === medicine.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-        <Button className="w-full text-sm h-8 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white">
-          Thêm vào giỏ
+        <Button 
+          className="w-full text-sm h-8 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white relative overflow-hidden"
+          onClick={handleAddToCart}
+          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK" || isAddingToCart}
+        >
+          {isAddingToCart && (
+            <span className="absolute inset-0 flex items-center justify-center bg-green-600 animate-pulse">
+              Đã thêm!
+            </span>
+          )}
+          <span className={isAddingToCart ? 'opacity-0' : 'opacity-100'}>
+            Thêm vào giỏ
+          </span>
         </Button>
       </div>
     </Card>
