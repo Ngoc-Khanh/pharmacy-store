@@ -1,7 +1,10 @@
 import { Info, Check, BarChart2 } from "lucide-react";
+import { Details, UsageGuide } from "@/data/interfaces";
 import { motion } from "motion/react";
 
 interface MedicineDetailsTabsProps {
+  details?: Details;
+  usageguide?: UsageGuide;
   activeTab: string;
   onTabChange: (tab: string) => void;
   supplierName?: string;
@@ -9,7 +12,7 @@ interface MedicineDetailsTabsProps {
   updatedAt?: string;
 }
 
-export function MedicineDetailsTabs({ activeTab, onTabChange, supplierName, categoryName, updatedAt }: MedicineDetailsTabsProps) {
+export function MedicineDetailsTabs({ activeTab, onTabChange, supplierName, categoryName, updatedAt, details, usageguide }: MedicineDetailsTabsProps) {
   return (
     <motion.div
       className="mb-12"
@@ -74,7 +77,9 @@ export function MedicineDetailsTabs({ activeTab, onTabChange, supplierName, cate
                     </span>
                     Thành phần
                   </h4>
-                  <p className="text-muted-foreground">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl ac ultricies tincidunt, nisl nisl ultricies nisl, nec ultrices nisl nisl nec.</p>
+                  <p className="text-muted-foreground">
+                    {details?.ingredients}
+                  </p>
                 </motion.div>
 
                 <motion.div
@@ -120,8 +125,8 @@ export function MedicineDetailsTabs({ activeTab, onTabChange, supplierName, cate
                 </h4>
                 <div className="space-y-4">
                   {[
-                    { label: "Xuất xứ", value: "Việt Nam" },
-                    { label: "Quy cách đóng gói", value: "Hộp 10 vỉ x 10 viên" },
+                    { label: "Xuất xứ", value: details?.parameter?.origin },
+                    { label: "Quy cách đóng gói", value: details?.parameter?.packaging },
                     { label: "Nhà sản xuất", value: supplierName || "Nhà cung cấp" },
                     { label: "Danh mục", value: categoryName || "Chưa phân loại" },
                     { label: "Ngày cập nhật", value: updatedAt ? new Date(updatedAt).toLocaleDateString('vi-VN') : "Chưa cập nhật" }
@@ -162,9 +167,9 @@ export function MedicineDetailsTabs({ activeTab, onTabChange, supplierName, cate
                 </div>
                 <div className="p-6">
                   <p className="mb-3 font-medium">Người lớn:</p>
-                  <p className="text-sm text-muted-foreground mb-4">1-2 viên/lần, 3-4 lần/ngày</p>
+                  <p className="text-sm text-muted-foreground mb-4">{usageguide?.dosage.adult}</p>
                   <p className="mb-3 font-medium">Trẻ em:</p>
-                  <p className="text-sm text-muted-foreground">Tham khảo ý kiến bác sĩ</p>
+                  <p className="text-sm text-muted-foreground">{usageguide?.dosage.child}</p>
                 </div>
               </motion.div>
 
@@ -180,16 +185,12 @@ export function MedicineDetailsTabs({ activeTab, onTabChange, supplierName, cate
                   </h4>
                 </div>
                 <div className="p-6">
-                  <ul className="space-y-3">
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-500 mr-3 mt-1" />
-                      <span className="text-sm text-muted-foreground">Uống thuốc sau bữa ăn với một cốc nước đầy.</span>
+                  {usageguide?.directions.map((direction, index) => (
+                    <li key={index} className="flex items-start mb-3 last:mb-0">
+                      <Check className="h-5 w-5 text-emerald-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-muted-foreground">{direction}</span>
                     </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-500 mr-3 mt-1" />
-                      <span className="text-sm text-muted-foreground">Không nên nghiền hoặc nhai viên thuốc.</span>
-                    </li>
-                  </ul>
+                  ))}
                 </div>
               </motion.div>
 
@@ -206,14 +207,10 @@ export function MedicineDetailsTabs({ activeTab, onTabChange, supplierName, cate
                 </div>
                 <div className="p-6">
                   <ul className="space-y-3">
-                    {[
-                      "Không sử dụng khi có tiền sử dị ứng với thành phần của thuốc",
-                      "Không sử dụng cùng với rượu bia",
-                      "Ngưng sử dụng và liên hệ bác sĩ nếu có phản ứng bất thường"
-                    ].map((item, index) => (
+                    {usageguide?.precautions.map((precautions, index) => (
                       <li key={index} className="flex items-start">
-                        <Info className="h-5 w-5 text-amber-500 mr-3 mt-1" />
-                        <span className="text-sm text-muted-foreground">{item}</span>
+                        <Info className="h-5 w-5 text-amber-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-muted-foreground">{precautions}</span>
                       </li>
                     ))}
                   </ul>

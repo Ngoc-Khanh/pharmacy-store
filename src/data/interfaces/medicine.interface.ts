@@ -11,6 +11,8 @@ export interface Medicine {
   ratings: Ratings;
   category: Category;
   supplier: Supplier;
+  details: Details;
+  usageguide: UsageGuide;
   readonly createdAt: string; 
   readonly updatedAt: string;
 }
@@ -37,3 +39,22 @@ interface Ratings {
   reviewCount: number;
 }
 
+export interface Details {
+  ingredients: string;
+  usage: string[];
+  parameter: Parameters;
+}
+
+interface Parameters {
+  origin: string;
+  packaging: string;
+}
+
+export interface UsageGuide {
+  dosage: {
+    adult: string;
+    child: string;
+  };
+  directions: string[];
+  precautions: string[];
+}

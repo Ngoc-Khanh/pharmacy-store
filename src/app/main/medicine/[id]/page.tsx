@@ -64,6 +64,8 @@ export default function MedicineDetailsPage() {
       <MedicineDetailsTabs
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        details={medicine?.details}
+        usageguide={medicine?.usageguide}
         supplierName={medicine?.supplier?.name}
         categoryName={medicine?.category?.name}
         updatedAt={medicine?.updatedAt}
