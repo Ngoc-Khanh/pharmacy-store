@@ -2,38 +2,32 @@ import { Star, Heart, Minus, Plus, ShoppingCart, Truck, Shield, Clock, Info } fr
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { Medicine } from "@/data/interfaces";
+import { addToCartAtom } from "@/stores";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
+import { useAtom } from "jotai";
+import { toast } from "sonner";
 
 interface MedicineDetailsInfoProps {
-  name: string;
-  supplierName?: string;
-  ratings: {
-    star: number;
-    reviewCount: number;
-    liked: number;
-  };
-  price: number;
-  discountPercent?: number;
-  description: string;
+  medicine: Medicine;
   quantity: number;
-  limitQuantity?: number;
-  stockStatus: string;
   onQuantityChange: (quantity: number) => void;
 }
 
 export function MedicineDetailsInfo({
-  name,
-  supplierName,
-  ratings,
-  price,
-  discountPercent,
-  description,
+  medicine,
   quantity,
-  limitQuantity,
-  stockStatus,
   onQuantityChange
 }: MedicineDetailsInfoProps) {
+  const [, addToCart] = useAtom(addToCartAtom);
+
+  const handleAddToCart = () => {
+    if (medicine.variants.stockStatus === "OUT-OF-STOCK") return;
+    addToCart({ medicine, quantity });
+    toast.success(`Đã thêm ${quantity} ${medicine.name} vào giỏ hàng`);
+  };
+  
   return (
     <motion.div
       className="flex flex-col bg-gradient-to-br from-white to-slate-50 dark:from-slate-900/80 dark:to-slate-900/30 rounded-2xl p-6 shadow-lg"
@@ -47,19 +41,19 @@ export function MedicineDetailsInfo({
           className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center"
         >
           <span className="h-2 w-2 rounded-full bg-emerald-500 mr-2"></span>
-          {supplierName || "Nhà cung cấp"}
+          {medicine.supplier.name || "Nhà cung cấp"}
         </Link>
       </div>
 
       <h1 className="text-3xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
-        {name}
+        {medicine.name}
       </h1>
 
       {/* Ratings */}
       <div className="flex items-center mb-5">
         <div className="flex mr-2">
           {[...Array(5)].map((_, i) => {
-            const starValue = ratings.star || 0;
+            const starValue = medicine.ratings.star || 0;
             const isFullStar = i < Math.floor(starValue);
             const isHalfStar = !isFullStar && i === Math.floor(starValue) && starValue % 1 >= 0.5;
             return (
@@ -84,13 +78,13 @@ export function MedicineDetailsInfo({
           })}
         </div>
         <span className="text-sm text-muted-foreground">
-          {ratings.star?.toFixed(1)} ({ratings.reviewCount} đánh giá)
+          {medicine.ratings.star?.toFixed(1)} ({medicine.ratings.reviewCount} đánh giá)
         </span>
         <Separator orientation="vertical" className="mx-3 h-4" />
         <span className="text-sm text-muted-foreground flex items-center">
           <Heart className="h-3.5 w-3.5 mr-1 text-pink-500" />
           <span className="text-sm text-pink-500">
-            {ratings.liked} lượt thích
+            {medicine.ratings.liked} lượt thích
           </span>
         </span>
       </div>
@@ -99,22 +93,22 @@ export function MedicineDetailsInfo({
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
-            {formatCurrency(price)}
+            {formatCurrency(medicine.variants.price)}
           </span>
-          {discountPercent && discountPercent > 0 && (
+          {medicine.variants.isDiscounted && medicine.variants.discountPercent > 0 && (
             <span className="text-lg line-through text-muted-foreground">
-              {formatCurrency(Math.floor(price / (1 - discountPercent / 100)))}
+              {formatCurrency(medicine.variants.originalPrice)}
             </span>
           )}
         </div>
-        {discountPercent && discountPercent > 0 && (
+        {medicine.variants.isDiscounted && medicine.variants.discountPercent > 0 && (
           <motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-sm text-yellow-600 dark:text-yellow-300 flex items-center"
           >
             <span className="h-2 w-2 rounded-full bg-yellow-500 mr-2"></span>
-            Tiết kiệm: {formatCurrency(Math.floor(price / (1 - discountPercent / 100)) - price)}
+            Tiết kiệm: {formatCurrency(medicine.variants.originalPrice - medicine.variants.price)}
           </motion.p>
         )}
       </div>
@@ -123,7 +117,7 @@ export function MedicineDetailsInfo({
 
       {/* Product Description */}
       <p className="text-muted-foreground leading-relaxed mb-6">
-        {description}
+        {medicine.description}
       </p>
 
       {/* Quantity Selector */}
@@ -147,13 +141,13 @@ export function MedicineDetailsInfo({
             size="icon"
             className="h-12 w-12 rounded-none border-l hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
             onClick={() => onQuantityChange(quantity + 1)}
-            disabled={limitQuantity !== undefined && limitQuantity <= quantity}
+            disabled={medicine.variants.limitQuantity !== undefined && medicine.variants.limitQuantity <= quantity}
           >
             <Plus className="h-4 w-4" />
           </Button>
         </div>
         <span className="text-sm text-muted-foreground ml-4">
-          {limitQuantity} sản phẩm có sẵn
+          {medicine.variants.limitQuantity} sản phẩm có sẵn
         </span>
       </div>
 
@@ -162,10 +156,8 @@ export function MedicineDetailsInfo({
         <Button
           size="lg"
           className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg hover:shadow-emerald-500/25 transition-all duration-300"
-          disabled={stockStatus === "OUT-OF-STOCK"}
-          onClick={() => {
-            // Add to cart logic would go here
-          }}
+          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK"}
+          onClick={handleAddToCart}
         >
           <ShoppingCart className="mr-2 h-5 w-5" /> Thêm vào giỏ
         </Button>
