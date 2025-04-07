@@ -7,11 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { useAtom } from "jotai";
 import { cartAtom, cartItemCountAtom, cartTotalPriceAtom, removeFromCartAtom, updateCartItemQuantityAtom, clearCartAtom } from "@/stores";
 import { formatCurrency } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { routes } from "@/config";
 
 export function Cart() {
+  const navigate = useNavigate();
   const [cart] = useAtom(cartAtom);
   const [itemCount] = useAtom(cartItemCountAtom);
   const [totalPrice] = useAtom(cartTotalPriceAtom);
@@ -20,7 +22,8 @@ export function Cart() {
   const [, clearCart] = useAtom(clearCartAtom);
 
   const handleCheckout = () => {
-    // Đây là nơi xử lý thanh toán sau này
+    // Navigate to checkout page
+    navigate(routes.checkout);
     toast.success("Đang chuyển đến trang thanh toán...");
   };
 
