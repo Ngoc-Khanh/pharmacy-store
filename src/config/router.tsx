@@ -6,6 +6,7 @@ import CategoryPage from "@/app/main/category";
 import { RouteObject } from "react-router-dom";
 import { routes } from "@/config/routes";
 import HomePage from "@/app/main/home";
+import { CheckoutPage, CheckoutSuccessPage } from "@/app/main/checkout";
 
 export const reactRouter: RouteObject[] = [
   // AUTHENTICATION PAGES
@@ -37,6 +38,14 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.medicineDetails(":id"),
         element: <MedicineDetailsPage />,
+      },
+      {
+        path: routes.checkout,
+        element: <CheckoutPage />,
+      },
+      {
+        path: routes.checkoutSuccess,
+        element: <CheckoutSuccessPage />,
       },
       {
         element: <AccountLayout />,
