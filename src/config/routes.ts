@@ -9,6 +9,8 @@ const baseRoutes = {
   category: "/category",
   medicineDetails: (id: string) => `/medicine/${id}/details`,
   medicineDetailsBase: "/medicine/details",
+  checkout: "/checkout",
+  checkoutSuccess: "/checkout/success",
 
   // ACCOUNT MAIN ROUTES
   account: {
@@ -51,6 +53,8 @@ export const routeNames = {
   [baseRoutes.account.changePwd]: "Change Password",
   [baseRoutes.category]: "Category",
   [baseRoutes.medicineDetailsBase]: "Medicine Details",
+  [baseRoutes.checkout]: "Checkout",
+  [baseRoutes.checkoutSuccess]: "Order Confirmation",
   
   // AUTHENTICATION NAME ROUTES
   [baseRoutes.admin]: "Admin",
