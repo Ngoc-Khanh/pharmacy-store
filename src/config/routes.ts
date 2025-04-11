@@ -25,6 +25,11 @@ const baseRoutes = {
     invoicesDetails: (id: string) => `/account/invoices/${id}`,
   },
 
+  // ADMIN ROUTES
+  admin: {
+    dashboard: "/admin/dashboard",
+  },
+
   // mainSettings: "/account",
   // mainProfile: "/account/profile",
   // mainChangePwd: "/account/change-password",
@@ -33,10 +38,6 @@ const baseRoutes = {
   // mainInvoices: "/account/invoices",
   // mainInvoicesDetails: (id: string) => `/account/invoices/${id}`,
   // mainAddresses: "/account/addresses",
-
-  // ADMIN ROUTES
-  admin: "/admin",
-  adminDashboard: "/admin/dashboard",
 
   // ERROR ROUTES
   generalError: "/500",
@@ -57,7 +58,7 @@ export const routeNames = {
   [baseRoutes.checkoutSuccess]: "Order Confirmation",
   
   // AUTHENTICATION NAME ROUTES
-  [baseRoutes.admin]: "Admin",
+  [baseRoutes.admin.dashboard]: "Dashboard",
 };
 
 export const routes = {

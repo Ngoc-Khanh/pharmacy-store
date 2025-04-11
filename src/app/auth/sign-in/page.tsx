@@ -45,8 +45,8 @@ export default function LoginPage() {
   const form = useForm<CredentialsForm>({
     resolver: zodResolver(credentialsSchema),
     defaultValues: {
-      account: "admin@pharmacity.com",
-      password: "123456",
+      account: import.meta.env.DEV ? "admin@pharmacity.com" : "",
+      password: import.meta.env.DEV ? "123456" : "",
     },
   });
 
