@@ -1,15 +1,15 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { CreditCard, LogOut, MoreVerticalIcon, Settings, Sparkles, User } from "lucide-react";
+import { CreditCard, LogOut, MoreVerticalIcon, Settings, Sparkles, UserCircleIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOutDialog } from "@/components/dialogs/logout.dialog";
-import { User as IUser } from "@/data/interfaces";
+import { User } from "@/data/interfaces";
 import { Link } from "react-router-dom";
 import { routes } from "@/config";
 import { useState } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 
-export function AdminUser({ user }: { user: IUser }) {
+export function AdminUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -76,7 +76,7 @@ export function AdminUser({ user }: { user: IUser }) {
               <Link to={""}>
                 <DropdownMenuItem asChild>
                   <div className="flex items-center">
-                    <User />
+                    <UserCircleIcon />
                     Profile
                   </div>
                 </DropdownMenuItem>

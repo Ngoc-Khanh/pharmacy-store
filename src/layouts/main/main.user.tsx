@@ -55,7 +55,7 @@ export default function MainUser({ user }: { user: IUser }) {
           {user.role !== "customer" && (
             <>
               <DropdownMenuItem asChild>
-                <Link to={routes.adminDashboard} target="_blank">
+                <Link to={routes.admin.dashboard} target="_blank">
                   <Shield size={18} />
                   Admin Dashboard
                 </Link>
