@@ -5,6 +5,7 @@ import { MedicineDetailsPage } from "@/app/main/medicine";
 import { LoginPage, RegisterPage } from "@/app/auth";
 import CategoryPage from "@/app/main/category";
 import { RouteObject } from "react-router-dom";
+import { AdminUsersPage } from "@/app/admin";
 import { routes } from "@/config/routes";
 import HomePage from "@/app/main/home";
 
@@ -94,6 +95,14 @@ export const reactRouter: RouteObject[] = [
         index: true,
         path: routes.admin.dashboard,
         element: <div>Admin Dashboard Page's</div>,
+      },
+      {
+        path: routes.admin.users,
+        element: <AdminUsersPage />,
+      },
+      {
+        path: routes.admin.settings,
+        element: <div>Admin Settings Page's</div>,
       }
     ]
   }

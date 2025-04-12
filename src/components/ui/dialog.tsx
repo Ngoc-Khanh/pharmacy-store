@@ -42,7 +42,7 @@ const DialogContent = React.forwardRef<
       >
         <motion.div
           className={cn(
-            "w-full max-w-lg gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
+            "relative w-full max-w-lg gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
             className
           )}
           initial={{ opacity: 0, scale: 0.95 }}

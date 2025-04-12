@@ -9,3 +9,9 @@ export {
   type AddressSchema,
   addressesListSchema,
 } from "./user.schema";
+export {
+  userSchema,
+  type Users,
+  type UserStatus
+} from "./users.schema";
+

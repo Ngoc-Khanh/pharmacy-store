@@ -28,6 +28,8 @@ const baseRoutes = {
   // ADMIN ROUTES
   admin: {
     dashboard: "/admin/dashboard",
+    users: "/admin/users",
+    settings: "/admin/settings",
   },
 
   // mainSettings: "/account",
@@ -59,6 +61,8 @@ export const routeNames = {
   
   // AUTHENTICATION NAME ROUTES
   [baseRoutes.admin.dashboard]: "Dashboard",
+  [baseRoutes.admin.users]: "Users",
+  [baseRoutes.admin.settings]: "Settings",
 };
 
 export const routes = {

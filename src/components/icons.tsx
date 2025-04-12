@@ -2,30 +2,19 @@ type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const Icons = {
   logo: (props: IconProps) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" {...props}>
-      <rect width="256" height="256" fill="none" />
-      <line
-        x1="208"
-        y1="128"
-        x2="128"
-        y2="208"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="32"
-      />
-      <line
-        x1="192"
-        y1="40"
-        x2="40"
-        y2="192"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="32"
-      />
+    <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <defs>
+        <filter id="cyber-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#4ade80" />
+          <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#4ade80" />
+        </filter>
+      </defs>
+      <path d="M10 10 H60 V0 H140 V10 H190 V60 H200 V140 H190 V190 H140 V200 H60 V190 H10 V140 H0 V60 H10 Z"
+        stroke="#4ade80" stroke-width="2" fill="none" filter="url(#cyber-glow)" />
+      <path d="M90 40 H110 V90 H160 V110 H110 V160 H90 V110 H40 V90 H90 Z"
+        fill="#4ade80" filter="url(#cyber-glow)" />
+      <path d="M20 100 H35 M165 100 H180 M100 20 V35 M100 165 V180"
+        stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" filter="url(#cyber-glow)" />
     </svg>
   ),
   twitter: (props: IconProps) => (
