@@ -7,4 +7,4 @@ export type { Supplier } from "./supplier.interface";
 // CATEGORY INTERFACES
 export type { Category } from "./category.interface"; 
 // MEDICINE INTERFACES
-export type { Medicine } from "./medicine.interface";
+export type { Medicine, Details, UsageGuide } from "./medicine.interface";

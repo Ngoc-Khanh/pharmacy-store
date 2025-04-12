@@ -9,6 +9,8 @@ const baseRoutes = {
   category: "/category",
   medicineDetails: (id: string) => `/medicine/${id}/details`,
   medicineDetailsBase: "/medicine/details",
+  checkout: "/checkout",
+  checkoutSuccess: "/checkout/success",
 
   // ACCOUNT MAIN ROUTES
   account: {
@@ -23,6 +25,13 @@ const baseRoutes = {
     invoicesDetails: (id: string) => `/account/invoices/${id}`,
   },
 
+  // ADMIN ROUTES
+  admin: {
+    dashboard: "/admin/dashboard",
+    users: "/admin/users",
+    settings: "/admin/settings",
+  },
+
   // mainSettings: "/account",
   // mainProfile: "/account/profile",
   // mainChangePwd: "/account/change-password",
@@ -31,10 +40,6 @@ const baseRoutes = {
   // mainInvoices: "/account/invoices",
   // mainInvoicesDetails: (id: string) => `/account/invoices/${id}`,
   // mainAddresses: "/account/addresses",
-
-  // ADMIN ROUTES
-  admin: "/admin",
-  adminDashboard: "/admin/dashboard",
 
   // ERROR ROUTES
   generalError: "/500",
@@ -51,9 +56,13 @@ export const routeNames = {
   [baseRoutes.account.changePwd]: "Change Password",
   [baseRoutes.category]: "Category",
   [baseRoutes.medicineDetailsBase]: "Medicine Details",
+  [baseRoutes.checkout]: "Checkout",
+  [baseRoutes.checkoutSuccess]: "Order Confirmation",
   
   // AUTHENTICATION NAME ROUTES
-  [baseRoutes.admin]: "Admin",
+  [baseRoutes.admin.dashboard]: "Dashboard",
+  [baseRoutes.admin.users]: "Users",
+  [baseRoutes.admin.settings]: "Settings",
 };
 
 export const routes = {

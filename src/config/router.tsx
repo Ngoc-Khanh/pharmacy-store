@@ -1,9 +1,11 @@
 import { MainAddressesPage, MainChangePwdPage, MainProfilePage } from "@/app/main/account";
+import { CheckoutPage, CheckoutSuccessPage } from "@/app/main/checkout";
+import { AccountLayout, AdminLayout, MainLayout } from "@/layouts";
 import { MedicineDetailsPage } from "@/app/main/medicine";
-import { AccountLayout, MainLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/app/auth";
 import CategoryPage from "@/app/main/category";
 import { RouteObject } from "react-router-dom";
+import { AdminUsersPage } from "@/app/admin";
 import { routes } from "@/config/routes";
 import HomePage from "@/app/main/home";
 
@@ -37,6 +39,14 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.medicineDetails(":id"),
         element: <MedicineDetailsPage />,
+      },
+      {
+        path: routes.checkout,
+        element: <CheckoutPage />,
+      },
+      {
+        path: routes.checkoutSuccess,
+        element: <CheckoutSuccessPage />,
       },
       {
         element: <AccountLayout />,
@@ -74,6 +84,25 @@ export const reactRouter: RouteObject[] = [
             element: <MainAddressesPage />,
           },
         ]
+      }
+    ]
+  },
+
+  {
+    element: <AdminLayout />,
+    children: [
+      {
+        index: true,
+        path: routes.admin.dashboard,
+        element: <div>Admin Dashboard Page's</div>,
+      },
+      {
+        path: routes.admin.users,
+        element: <AdminUsersPage />,
+      },
+      {
+        path: routes.admin.settings,
+        element: <div>Admin Settings Page's</div>,
       }
     ]
   }

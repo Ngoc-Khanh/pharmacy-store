@@ -1,3 +1,6 @@
+import { LayoutDashboardIcon, ListIcon, BarChartIcon, FolderIcon, UsersIcon, SettingsIcon, HelpCircleIcon, SearchIcon } from "lucide-react";
+import { routeNames, routes } from "./routes";
+
 export const siteConfig = {
   // SETTING SITE CONFIG
   name: "Pharmacity Store",
@@ -39,3 +42,51 @@ export const META_THEME_COLORS = {
   light: "#ffffff",
   dark: "#09090b",
 };
+
+
+export const sidebarItem = {
+  navMain: [
+    {
+      title: routeNames[routes.admin.dashboard],
+      url: routes.admin.dashboard,
+      icon: LayoutDashboardIcon,
+    },
+    {
+      title: routeNames[routes.admin.users],
+      url: routes.admin.users,
+      icon: UsersIcon,
+    },
+    {
+      title: "Lifecycle",
+      url: "#",
+      icon: ListIcon,
+    },
+    {
+      title: "Analytics",
+      url: "#",
+      icon: BarChartIcon,
+    },
+    {
+      title: "Projects",
+      url: "#",
+      icon: FolderIcon,
+    },
+  ],
+  navSecondary: [
+    {
+      title: routeNames[routes.admin.settings],
+      url: routes.admin.settings,
+      icon: SettingsIcon,
+    },
+    {
+      title: "Get Help",
+      url: "#",
+      icon: HelpCircleIcon,
+    },
+    {
+      title: "Search",
+      url: "#",
+      icon: SearchIcon,
+    },
+  ],
+}

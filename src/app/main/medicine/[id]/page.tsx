@@ -43,19 +43,8 @@ export default function MedicineDetailsPage() {
 
         {/* Product Info Section */}
         <MedicineDetailsInfo
-          name={medicine?.name || ""}
-          supplierName={medicine?.supplier?.name}
-          ratings={{
-            star: medicine?.ratings?.star || 0,
-            reviewCount: medicine?.ratings?.reviewCount || 0,
-            liked: medicine?.ratings?.liked || 0
-          }}
-          price={medicine?.variants?.price || 0}
-          discountPercent={medicine?.variants?.discountPercent}
-          description={medicine?.description || ""}
+          medicine={medicine!}
           quantity={quantity}
-          limitQuantity={medicine?.variants?.limitQuantity}
-          stockStatus={medicine?.variants?.stockStatus || "OUT-OF-STOCK"}
           onQuantityChange={setQuantity}
         />
       </div>
@@ -64,6 +53,8 @@ export default function MedicineDetailsPage() {
       <MedicineDetailsTabs
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        details={medicine?.details}
+        usageguide={medicine?.usageguide}
         supplierName={medicine?.supplier?.name}
         categoryName={medicine?.category?.name}
         updatedAt={medicine?.updatedAt}

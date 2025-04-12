@@ -1,168 +1,241 @@
 "use client";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ShoppingCart, X, Minus, Plus, Trash2, ShoppingBag, ArrowRight, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart } from "lucide-react";
-import { useState } from "react";
-
-const initialCart = [
-  {
-    id: 1,
-    image: "/avatar/1.jpg",
-    user: "Chris Tompson",
-    action: "requested review on",
-    target: "PR #42: Feature implementation",
-    timestamp: "15 minutes ago",
-    unread: true,
-  },
-  {
-    id: 2,
-    image: "/avatar/2.jpg",
-    user: "Emma Davis",
-    action: "shared",
-    target: "New component library",
-    timestamp: "45 minutes ago",
-    unread: true,
-  },
-  {
-    id: 3,
-    image: "/avatar/3.jpg",
-    user: "James Wilson",
-    action: "assigned you to",
-    target: "API integration task",
-    timestamp: "4 hours ago",
-    unread: false,
-  },
-  {
-    id: 4,
-    image: "/avatar/4.jpg",
-    user: "Alex Morgan",
-    action: "replied to your comment in",
-    target: "Authentication flow",
-    timestamp: "12 hours ago",
-    unread: false,
-  },
-  {
-    id: 5,
-    image: "/avatar/5.jpg",
-    user: "Sarah Chen",
-    action: "commented on",
-    target: "Dashboard redesign",
-    timestamp: "2 days ago",
-    unread: false,
-  },
-  {
-    id: 6,
-    image: "/avatar/6.jpg",
-    user: "Miky Derya",
-    action: "mentioned you in",
-    target: "Origin UI open graph image",
-    timestamp: "2 weeks ago",
-    unread: false,
-  },
-];
-
-function Dot({ className }: { className?: string }) {
-  return (
-    <svg
-      width="6"
-      height="6"
-      fill="currentColor"
-      viewBox="0 0 6 6"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      <circle cx="3" cy="3" r="3" />
-    </svg>
-  )
-}
+import { useAtom } from "jotai";
+import { cartAtom, cartItemCountAtom, cartTotalPriceAtom, removeFromCartAtom, updateCartItemQuantityAtom, clearCartAtom } from "@/stores";
+import { formatCurrency } from "@/lib/utils";
+import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { routes } from "@/config";
 
 export function Cart() {
-  const [carts, setCarts] = useState(initialCart);
-  const unreadCount = carts.filter((item) => item.unread).length;
+  const navigate = useNavigate();
+  const [cart] = useAtom(cartAtom);
+  const [itemCount] = useAtom(cartItemCountAtom);
+  const [totalPrice] = useAtom(cartTotalPriceAtom);
+  const [, updateItemQuantity] = useAtom(updateCartItemQuantityAtom);
+  const [, removeItem] = useAtom(removeFromCartAtom);
+  const [, clearCart] = useAtom(clearCartAtom);
 
-  const handleMarkAllAsRead = () => {
-    setCarts(carts.map((cart) => ({
-      ...cart,
-      unread: false,
-    })))
-  }
-
-  const handleCartClick = (id: number) => {
-    setCarts(
-      carts.map((cart) =>
-        cart.id === id ? { ...cart, unread: false } : cart,
-      ),
-    );
+  const handleCheckout = () => {
+    // Navigate to checkout page
+    navigate(routes.checkout);
+    toast.success("Đang chuyển đến trang thanh toán...");
   };
 
+  const handleClearCart = () => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?")) {
+      clearCart();
+      toast.success("Đã xóa tất cả sản phẩm khỏi giỏ hàng");
+    }
+  };
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="icon" variant="ghost" className="relative text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/50" aria-label="Open notifications">
-          <ShoppingCart size={16} strokeWidth={2} aria-hidden="true" />
-          {unreadCount > 0 && (
-            <Badge className="absolute -top-2 left-full min-w-5 -translate-x-1/2 px-1 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600">
-              {unreadCount > 99 ? "99+" : unreadCount}
-            </Badge>
-          )}
+        <Button
+          size="icon"
+          variant="ghost"
+          className="relative group text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/50"
+          aria-label="Mở giỏ hàng"
+        >
+          <ShoppingCart size={18} strokeWidth={2} className="transition-transform group-hover:scale-110" aria-hidden="true" />
+          <AnimatePresence>
+            {itemCount > 0 && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                className="absolute -top-2 -right-2"
+              >
+                <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white min-w-5 h-5 flex items-center justify-center shadow-md">
+                  {itemCount > 99 ? "99+" : itemCount}
+                </Badge>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-1 border-green-200 dark:border-green-800/50 shadow-md" align="end" side="bottom">
-        <div className="flex items-baseline justify-between gap-4 px-3 py-2">
-          <div className="text-sm font-semibold">Shopping Cart</div>
-          {unreadCount > 0 && (
-            <button className="text-xs font-medium text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:underline" onClick={handleMarkAllAsRead}>
-              Mark all as read
-            </button>
-          )}
-        </div>
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          className="-mx-1 my-1 h-px bg-green-100 dark:bg-green-900/50"
-        />
-        {carts.map((cart) => (
-          <div
-            key={cart.id}
-            className="rounded-md px-3 py-2 text-sm transition-colors hover:bg-green-50 dark:hover:bg-green-950/50"
-          >
-            <div className="relative flex items-start gap-3 pe-3">
-              <img
-                className="size-9 rounded-md"
-                src={cart.image}
-                width={32}
-                height={32}
-                alt={cart.user}
-              />
-              <div className="flex-1 space-y-1">
-                <button
-                  className="text-left text-gray-700 dark:text-gray-300 after:absolute after:inset-0"
-                  onClick={() => handleCartClick(cart.id)}
-                >
-                  <span className="font-medium text-gray-900 dark:text-gray-100 hover:text-green-600 dark:hover:text-green-400 hover:underline">
-                    {cart.user}
-                  </span>{" "}
-                  {cart.action}{" "}
-                  <span className="font-medium text-gray-900 dark:text-gray-100 hover:text-green-600 dark:hover:text-green-400 hover:underline">
-                    {cart.target}
-                  </span>
-                  .
-                </button>
-                <div className="text-xs text-gray-500 dark:text-gray-400">{cart.timestamp}</div>
-              </div>
-              {cart.unread && (
-                <div className="absolute end-0 self-center">
-                  <Dot className="text-green-600 dark:text-green-400" />
-                </div>
-              )}
+      <PopoverContent
+        className="w-96 p-0 border border-green-200 dark:border-green-800/50 shadow-lg rounded-xl overflow-hidden"
+        align="end"
+        side="bottom"
+        sideOffset={8}
+      >
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ShoppingBag size={18} />
+              <h3 className="font-medium">Giỏ hàng của bạn</h3>
+            </div>
+            <div className="text-sm">
+              {itemCount} sản phẩm
             </div>
           </div>
-        ))}
+        </div>
+
+        <AnimatePresence>
+          {cart.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="p-6 text-center"
+            >
+              <div className="flex flex-col items-center justify-center space-y-3">
+                <div className="rounded-full bg-gray-100 dark:bg-gray-800 p-3">
+                  <ShoppingCart size={32} className="text-gray-400" />
+                </div>
+                <h3 className="font-medium text-gray-900 dark:text-gray-100">Giỏ hàng trống</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 max-w-[250px]">
+                  Hãy thêm sản phẩm vào giỏ hàng để tiến hành mua sắm
+                </p>
+                <Button asChild variant="outline" className="mt-2">
+                  <Link to="/san-pham" className="flex items-center gap-1">
+                    Khám phá sản phẩm <ArrowRight size={14} />
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
+          ) : (
+            <>
+              <div className="max-h-[400px] overflow-y-auto p-1">
+                <AnimatePresence>
+                  {cart.map((item) => (
+                    <motion.div
+                      key={item.medicine.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0, overflow: 'hidden' }}
+                      transition={{ duration: 0.2 }}
+                      className="relative flex items-start gap-3 p-3 hover:bg-green-50 dark:hover:bg-green-950/30 rounded-lg my-1 border border-transparent hover:border-green-100 dark:hover:border-green-900/30 transition-colors"
+                    >
+                      <div className="relative h-20 w-20 overflow-hidden rounded-md border border-gray-200 dark:border-gray-800 group">
+                        <img
+                          src={item.medicine.thumbnail.imageUrl}
+                          alt={item.medicine.thumbnail.imageAlt}
+                          className="h-full w-full object-cover transition-transform group-hover:scale-110"
+                        />
+                        {item.medicine.variants.isDiscounted && (
+                          <div className="absolute top-0 left-0 bg-yellow-500 text-white text-xs px-1 rounded-br">
+                            -{item.medicine.variants.discountPercent}%
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-1 flex-col">
+                        <div className="flex justify-between">
+                          <Link
+                            to={`/medicine/${item.medicine.id}`}
+                            className="text-sm font-medium line-clamp-2 hover:text-green-600 hover:underline"
+                          >
+                            {item.medicine.name}
+                          </Link>
+                          <button
+                            className="text-gray-400 hover:text-red-500 p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                            onClick={() => {
+                              removeItem(item.medicine.id);
+                              toast.success(`Đã xóa ${item.medicine.name} khỏi giỏ hàng`);
+                            }}
+                            title="Xóa sản phẩm"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                        <div className="mt-1 mb-2">
+                          {item.medicine.supplier && (
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                              {item.medicine.supplier.name}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="font-medium text-green-600">
+                            {formatCurrency(item.medicine.variants.price)}
+                            {item.medicine.variants.isDiscounted && (
+                              <span className="text-xs text-gray-500 line-through ml-1">
+                                {formatCurrency(item.medicine.variants.originalPrice)}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center border rounded-full overflow-hidden shadow-sm">
+                            <button
+                              className="px-2 py-0.5 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300"
+                              onClick={() => {
+                                if (item.quantity > 1) {
+                                  updateItemQuantity({ medicineId: item.medicine.id, quantity: item.quantity - 1 });
+                                }
+                              }}
+                              disabled={item.quantity <= 1}
+                            >
+                              <Minus size={12} />
+                            </button>
+                            <span className="w-8 text-center text-xs font-medium bg-white dark:bg-gray-800">
+                              {item.quantity}
+                            </span>
+                            <button
+                              className="px-2 py-0.5 hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-300"
+                              onClick={() => {
+                                const newQuantity = item.quantity + 1;
+                                if (newQuantity <= item.medicine.variants.limitQuantity) {
+                                  updateItemQuantity({ medicineId: item.medicine.id, quantity: newQuantity });
+                                } else {
+                                  toast.error(`Số lượng tối đa cho phép là ${item.medicine.variants.limitQuantity}`);
+                                }
+                              }}
+                              disabled={item.quantity >= item.medicine.variants.limitQuantity}
+                            >
+                              <Plus size={12} />
+                            </button>
+                          </div>
+                        </div>
+                        {item.quantity >= item.medicine.variants.limitQuantity && (
+                          <div className="mt-1 text-xs flex items-center text-amber-600 dark:text-amber-500">
+                            <AlertCircle size={10} className="mr-1" />
+                            Đã đạt số lượng tối đa
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+
+              <div className="p-4 bg-gray-50 dark:bg-gray-900/30 border-t border-gray-100 dark:border-gray-800">
+                <div className="mb-3">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-600 dark:text-gray-400">Tạm tính:</span>
+                    <span>{formatCurrency(totalPrice)}</span>
+                  </div>
+                  <div className="flex justify-between text-base font-semibold">
+                    <span>Tổng cộng:</span>
+                    <span className="text-green-600 dark:text-green-500">{formatCurrency(totalPrice)}</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Button
+                    onClick={handleCheckout}
+                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 h-10 text-white flex items-center justify-center gap-2"
+                  >
+                    Thanh toán ngay <ArrowRight size={14} />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleClearCart}
+                    className="w-full text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-200 dark:border-red-900/30"
+                  >
+                    <Trash2 size={14} className="mr-1" /> Xóa giỏ hàng
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </AnimatePresence>
       </PopoverContent>
-    </Popover >
-  )
+    </Popover>
+  );
 }
