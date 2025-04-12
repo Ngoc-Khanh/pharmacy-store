@@ -1,7 +1,5 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ViewUsersDialog, UsersActionDialog, UsersDeleteDialog } from "@/components/dialogs/users";
 import { useUsers } from "@/providers/users.provider";
-import { User } from "lucide-react";
 
 export function UsersDialogs() {
   const { open, setOpen, currentUser, setCurrentUser } = useUsers();
