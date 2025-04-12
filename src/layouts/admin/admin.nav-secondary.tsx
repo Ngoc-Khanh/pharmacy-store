@@ -1,5 +1,6 @@
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { LucideIcon } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export function AdminSecondaryNav({
   items,
@@ -18,10 +19,13 @@ export function AdminSecondaryNav({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
+                <Link 
+                  to={item.url}
+                  className="flex w-full items-center gap-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                >
+                  <item.icon className="size-4 shrink-0" />
+                  <span className="truncate">{item.title}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
