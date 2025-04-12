@@ -33,20 +33,21 @@ export const addressSchema = z.array(
 export type Addresses = z.infer<typeof addressSchema>;
 
 export const userSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   firstName: z.string(),
   lastName: z.string(),
+  username: z.string(),
   email: z.string(),
   phone: z.string(),
   profileImage: z.object({
     publicId: z.string(),
     url: z.string(),
-  }),
-  role: userRoleSchema,
-  status: userStatusSchema,
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  addresses: addressSchema,
+  }).optional(),
+  role: userRoleSchema.optional(),
+  status: userStatusSchema.optional(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+  addresses: addressSchema.optional(),
 })
 
 export type Users = z.infer<typeof userSchema>;

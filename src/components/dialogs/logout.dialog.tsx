@@ -39,7 +39,7 @@ export function LogOutDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={handleLogout}>Log out</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
