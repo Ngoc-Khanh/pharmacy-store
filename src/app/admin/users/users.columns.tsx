@@ -138,7 +138,7 @@ export const columns: ColumnDef<Users>[] = [
     ),
     cell: ({ row }) => {
       const { status } = row.original;
-      const badgeColor = statusTypes.get(status);
+      const badgeColor = statusTypes.get(status as "active" | "inactive" | "banned");
       return (
         <Badge 
           variant="outline" 
