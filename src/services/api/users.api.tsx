@@ -1,4 +1,4 @@
-import { apiDelete, apiGet, apiPost } from "@/services/api";
+import { apiDelete, apiGet, apiPatch, apiPost } from "@/services/api";
 import { Users } from "@/data/zod-schemas";
 import { SRO, SROList } from "@/data/sro";
 import { AddUserDto } from "@/data/dto";
@@ -11,6 +11,11 @@ export const UsersAPI = {
 
   async addNewUsers(data: AddUserDto) {
     const res = await apiPost<AddUserDto, SRO<Users>>("v2/users/admin/add-users", data)
+    return res.data.data
+  },
+
+  async updateUsers(id: string, data: AddUserDto) {
+    const res = await apiPatch<AddUserDto, SRO<Users>>(`v2/users/admin/update-user/${id}`, data)
     return res.data.data
   },
 

@@ -17,6 +17,20 @@ export function UsersDialogs() {
 
       {currentUser && (
         <>
+          <UsersActionDialog
+            key={`user-edit-${currentUser.id}`}
+            open={open === "edit"}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                setOpen(null);
+                setTimeout(() => {
+                  setCurrentUser(null);
+                }, 300);
+              }
+            }}
+            currentUser={currentUser}
+          />
+
           <ViewUsersDialog
             key={`user-view-${currentUser.id}`}
             open={open === "view"}

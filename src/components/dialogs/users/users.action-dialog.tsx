@@ -123,24 +123,27 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
     }
   })
 
-  const onSubmit = useCallback((values: UserForm) => {
-    if (!isEdit) {
-      addUserMutation.mutate(values);
-    } else {
-      // For edit case, we'll keep the placeholder until edit mutation is implemented
-      const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: values.username }), 1000));
-      
-      toast.promise(promise(), {
-        loading: "Updating user...",
-        success: (data) => {
-          onOpenChange(false);
-          form.reset();
-          return `User ${(data as { name: string }).name} was updated successfully`;
-        },
-        error: "An error occurred",
-      });
+  const editUserMutation = useMutation({
+    mutationFn: (values: UserForm) => {
+      if (!currentUser?.id) throw new Error("User ID is required");
+      return UsersAPI.updateUsers(currentUser.id, values);
+    },
+    onSuccess: () => {
+      toast.success("User updated successfully");
+      form.reset();
+      onOpenChange(false);
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      toast.error("Failed to update user");
     }
-  }, [isEdit, onOpenChange, form, addUserMutation]);
+  })
+
+  const onSubmit = useCallback((values: UserForm) => {
+    if (!isEdit) addUserMutation.mutate(values);
+    else editUserMutation.mutate(values);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit, onOpenChange, form, addUserMutation, editUserMutation]);
 
   return (
     <Dialog
