@@ -81,7 +81,7 @@ export const columns: ColumnDef<Users>[] = [
       return (
         <div className="group">
           <div className="font-medium group-hover:text-primary transition-colors">{fullName}</div>
-          <div className="text-xs text-muted-foreground truncate max-w-[180px]">{row.original.email}</div>
+          <div className="text-xs text-muted-foreground truncate max-w-[180px]">{row.original.username}</div>
         </div>
       );
     },
