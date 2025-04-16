@@ -22,6 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.prompt.md
+
+# Github
+.github/*
 
 # Cursor
 .cursor

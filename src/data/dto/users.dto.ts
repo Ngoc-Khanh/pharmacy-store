@@ -9,3 +9,6 @@ export type AddUserDto = {
   status: "active" | "inactive" | "banned";
 }
 
+export type ChangeStatusUserDto = {
+  status: "banned" | "active";
+}
