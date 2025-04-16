@@ -1,9 +1,9 @@
 import { UsersPrimaryButtons } from "./users.primary-buttons";
+import { UsersDialogs } from "@/components/dialogs/users";
 import { UsersAPI } from "@/services/api/users.api";
 import { UsersDataTable } from "./users.data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import { UsersDialogs } from "./users.dialogs";
 import { UsersProvider } from "@/providers";
 import { columns } from "./users.columns";
 

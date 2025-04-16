@@ -1,13 +1,13 @@
 "use client"
 
+import { Link, useLocation } from "react-router-dom"
 import { siteConfig } from "@/config/site"
 import { Icons } from "@/components/icons"
-import { Link } from "react-router-dom"
 import { routes } from "@/config"
 import { cn } from "@/lib/utils"
 
 export function MainPCNav() {
-  const pathname = window.location.pathname
+  const { pathname } = useLocation();
 
   return (
     <div className="mr-4 hidden md:flex">
@@ -22,14 +22,14 @@ export function MainPCNav() {
           to={routes.category}
           className={cn(
             "transition-colors hover:text-green-600 dark:hover:text-green-400",
-            pathname === routes.category
+            (pathname === routes.category || pathname.startsWith(`${routes.category}/`))
               ? "text-green-600 dark:text-green-400 font-medium"
               : "text-gray-600 dark:text-gray-400"
           )}
         >
-          Danh mục
+          Sản phẩm
         </Link>
-        <a
+        {/* <a
           href="#about"
           className={cn(
             "transition-colors hover:text-green-600 dark:hover:text-green-400",
@@ -83,7 +83,7 @@ export function MainPCNav() {
           )}
         >
           Colors
-        </Link>
+        </Link> */}
       </nav>
     </div>
   )
