@@ -14,4 +14,7 @@ export {
   type Users,
   type UserStatus
 } from "./users.schema";
-
+export {
+  medicineSchema,
+  type Medicines,
+} from "./medicine.schema";
