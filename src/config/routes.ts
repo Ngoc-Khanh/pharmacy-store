@@ -1,13 +1,20 @@
 const baseRoutes = {
   // AUTHENTICATION ROUTES
-  login: "/sign-in",
-  register: "/sign-up",
-  forgotPassword: "/forgot-password",
+  auth: {
+    login: "/sign-in",
+    register: "/sign-up",
+    forgotPassword: "/forgot-password",
+  },
 
   // MAIN ROUTES
-  home: "/",
+  store: {
+    root: "/",
+  },
 
-  admin: "/admin",
+  admin: {
+    root: "/admin",
+    dashboard: "/admin/dashboard",
+  },
 
   // ERROR ROUTES
   generalError: "/500",
@@ -18,10 +25,11 @@ const baseRoutes = {
 
 export const routeNames = {
   // MAIN NAME ROUTES
-  [baseRoutes.home]: "Home",
+  [baseRoutes.store.root]: "Home",
 
   // AUTHENTICATION NAME ROUTES
-  [baseRoutes.admin]: "Admin",
+  [baseRoutes.admin.root]: "Admin",
+  [baseRoutes.admin.dashboard]: "Dashboard",
 };
 
 export const routes = {
