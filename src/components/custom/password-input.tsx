@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 import { Eye, EyeOff } from "lucide-react";
 
 type PasswordInputProps = Omit<
@@ -17,21 +16,21 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
       <div className={cn("relative rounded-md", className)}>
         <input
           type={showPassword ? "text" : "password"}
-          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-full w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           ref={ref}
           disabled={disabled}
           {...props}
         />
-        <Button
-          type="button"
-          size="icon"
-          variant="ghost"
-          disabled={disabled}
-          className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-md text-muted-foreground"
+        <div 
+          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-300"
           onClick={() => setShowPassword((prev) => !prev)}
         >
-          {showPassword ? <Eye size={18} strokeWidth={2} /> : <EyeOff size={18} strokeWidth={2} />}
-        </Button>
+          {showPassword ? (
+            <Eye className="h-5 w-5" />
+          ) : (
+            <EyeOff className="h-5 w-5" />
+          )}
+        </div>
       </div>
     );
   }
