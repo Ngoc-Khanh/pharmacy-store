@@ -1,18 +1,19 @@
 import { RouteObject } from "react-router-dom";
 import { routes } from "@/config/routes";
+import { LoginPage, RegisterPage } from "@/page/auth";
 
 export const reactRouter: RouteObject[] = [
   // AUTHENTICATION PAGES
   {
-    path: routes.login,
-    element: <div>Login Page's</div>,
+    path: routes.auth.login,
+    element: <LoginPage />,
   },
   {
-    path: routes.register,
-    element: <div>Register Page's</div>,
+    path: routes.auth.register,
+    element: <RegisterPage />,
   },
   {
-    path: routes.forgotPassword,
+    path: routes.auth.forgotPassword,
     element: <div>Forgot Password Page's</div>,
   },
 ]
