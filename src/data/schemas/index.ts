@@ -1,2 +1,2 @@
-export type { CredentialsForm } from "./auth.schema";
-export { credentialsSchema } from "./auth.schema";
+export type { CredentialsForm, RegistrationForm } from "./auth.schema";
+export { credentialsSchema, registrationSchema } from "./auth.schema";

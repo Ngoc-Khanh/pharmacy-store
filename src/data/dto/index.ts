@@ -1,1 +1,1 @@
-export type { credentialsDto } from "./auth.dto";
+export type { credentialsDto, registrationDto } from "./auth.dto";

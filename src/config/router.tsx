@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import { routes } from "@/config/routes";
-import { LoginPage } from "@/page/auth";
+import { LoginPage, RegisterPage } from "@/page/auth";
 
 export const reactRouter: RouteObject[] = [
   // AUTHENTICATION PAGES
@@ -10,7 +10,7 @@ export const reactRouter: RouteObject[] = [
   },
   {
     path: routes.auth.register,
-    element: <div>Register Page's</div>,
+    element: <RegisterPage />,
   },
   {
     path: routes.auth.forgotPassword,
