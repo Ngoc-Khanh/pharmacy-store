@@ -1,18 +1,32 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { CreditCard, LogOut, MoreVerticalIcon, Settings, Sparkles, UserCircleIcon } from "lucide-react";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LogOutDialog } from "@/components/dialogs/logout.dialog";
 import { ModeToggle } from "@/components/mode-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { User } from "@/data/interfaces";
+
+import { CreditCard, LogOut, MoreVerticalIcon, Settings, Sparkles, UserCircleIcon } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export function AdminNavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar()
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleLogoutClick = () => {
+    setIsLogoutOpen(true);
+  };
+
+  const handleLogoutClose = () => {
+    setIsLogoutOpen(false);
+  };
+  
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
@@ -100,10 +114,10 @@ export function AdminNavUser({ user }: { user: User }) {
             <DropdownMenuSeparator className="bg-primary/10" />
             <DropdownMenuItem
               onSelect={() => {
-                // setIsDropdownOpen(false);
-                // setTimeout(() => {
-                //   handleLogoutClick();
-                // }, 100);
+                setIsDropdownOpen(false);
+                setTimeout(() => {
+                  handleLogoutClick();
+                }, 100);
               }}
               className="focus:bg-red-500/10 focus:text-red-500 gap-2 cursor-pointer"
             >
@@ -115,6 +129,7 @@ export function AdminNavUser({ user }: { user: User }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+      <LogOutDialog isOpen={isLogoutOpen} onClose={handleLogoutClose} />
     </SidebarMenu>
   );
 }

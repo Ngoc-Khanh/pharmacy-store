@@ -1,8 +1,16 @@
+import { isAuthenticatedAtom } from "@/atoms/auth.atom";
 import { AdminHeader, AdminSidebar } from "@/components/layouts/admin";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { Outlet } from "react-router-dom";
+import { routes } from "@/config";
+
+import { useAtomValue } from "jotai";
+import { Navigate, Outlet } from "react-router-dom";
 
 export default function AdminLayout() {
+  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
+
+  if (!isAuthenticated) return <Navigate to={routes.auth.login} />;
+
   return (
     <SidebarProvider>
       <AdminSidebar variant="inset" />
