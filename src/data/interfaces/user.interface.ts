@@ -5,7 +5,7 @@ export interface User {
   username: string;
   email: string;
   phone: string;
-  profileImage: ProfileImage | string;
+  profileImage: ProfileImage;
   role: "admin" | "pharmacist" | "customer";
   status: "active" | "suspended" | "pending";
   addresses: UserAddress[];
@@ -15,8 +15,9 @@ export interface User {
 }
 
 export interface ProfileImage {
-  public_id: string;
+  publicId: string;
   url: string;
+  alt: string;
 }
 
 export interface UserAddress {
