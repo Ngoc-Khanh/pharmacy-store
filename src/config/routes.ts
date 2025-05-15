@@ -14,6 +14,9 @@ const baseRoutes = {
   admin: {
     root: "/admin",
     dashboard: "/admin/dashboard",
+    settings: {
+      root: "/admin/settings",
+    }
   },
 
   // ERROR ROUTES
@@ -27,9 +30,10 @@ export const routeNames = {
   // MAIN NAME ROUTES
   [baseRoutes.store.root]: "Home",
 
-  // AUTHENTICATION NAME ROUTES
+  // ADMIN NAME ROUTES
   [baseRoutes.admin.root]: "Admin",
   [baseRoutes.admin.dashboard]: "Dashboard",
+  [baseRoutes.admin.settings.root]: "Settings",
 };
 
 export const routes = {
