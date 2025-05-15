@@ -1,6 +1,7 @@
 import { useAddresses } from "@/atoms/addresses.atom";
 
 import { AddressesActionDialog } from "./addresses.action.dialog";
+import { AddressesDeleteDialog } from "./addresses.delete-dialog";
 
 export default function AddressesDialog() {
   const { open, setOpen, currentAddress, setCurrentAddress } = useAddresses();
@@ -41,7 +42,7 @@ export default function AddressesDialog() {
             }}
             currentAddress={currentAddress}
           />
-          {/* <AddressesDeleteDialog
+          <AddressesDeleteDialog
             key={`address-delete-${currentAddress.id}`}
             open={open === "delete"}
             onOpenChange={(isOpen) => {
@@ -53,7 +54,7 @@ export default function AddressesDialog() {
               }
             }}
             currentAddress={currentAddress}
-          /> */}
+          />
         </>
       )}
     </>
