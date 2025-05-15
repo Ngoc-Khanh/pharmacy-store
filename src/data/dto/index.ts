@@ -1,2 +1,2 @@
+export type { AddAddressDto, ChangePasswordDto, UpdateProfileDto } from "./account.dto";
 export type { credentialsDto, registrationDto } from "./auth.dto";
-export type { UpdateProfileDto, AddAddressDto } from "./account.dto";
