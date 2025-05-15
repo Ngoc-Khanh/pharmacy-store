@@ -20,3 +20,9 @@ export type UpdateProfileDto = {
   phone: string;
   profileImage?: ProfileImage;
 }
+
+export type ChangePasswordDto = {
+  currentPassword: string;
+  newPassword: string;
+  newPasswordConfirmation: string;
+}

@@ -1,4 +1,4 @@
-import { AddAddressDto, UpdateProfileDto } from "@/data/dto";
+import { AddAddressDto, ChangePasswordDto, UpdateProfileDto } from "@/data/dto";
 import { User, UserAddress } from "@/data/interfaces";
 import { SRO } from "@/data/sro";
 import { apiDelete, apiGet, apiPatch, apiPost } from "../api";
@@ -33,4 +33,9 @@ export const AccountAPI = {
     const res = await apiPost<null, SRO<UserAddress>>(`v1/store/account/addresses/set-default-address/${id}`, null);
     return res.data.data;
   },
+
+  async changePassword(data: ChangePasswordDto) {
+    const res = await apiPatch<ChangePasswordDto, SRO<User>>("v1/store/account/profile/change-password", data);
+    return res.data.data;
+  }
 }
