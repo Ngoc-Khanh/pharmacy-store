@@ -8,7 +8,7 @@ const baseRoutes = {
 
   // MAIN ROUTES
   store: {
-    root: "/",
+    root: "/store",
   },
 
   admin: {
