@@ -6,10 +6,7 @@ import { sidebarItem } from "@/config/site";
 import { useAtomValue } from "jotai";
 import { BriefcaseMedical } from "lucide-react";
 import { Link } from "react-router-dom";
-import { AdminNavMain } from "./admin.nav-main";
-import { AdminNavSecondary } from "./admin.nav-secondary";
-import { AdminNavUser } from "./admin.nav-user";
-import { AdminUserSkeleton } from "./admin.user-skeleton";
+import { AdminNavMain, AdminNavSecondary, AdminNavUser, AdminUserSkeleton } from "./index";
 
 export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = useAtomValue(userAtom);
