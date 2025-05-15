@@ -102,7 +102,7 @@ export function BestSeller() {
                     <div className="relative">
                       <div className="aspect-square bg-gradient-to-br from-gray-50/50 to-gray-100/50 dark:from-gray-800/50 dark:to-gray-900/50 flex items-center justify-center overflow-hidden">
                         <img
-                          src={product.thumbnail.url}
+                          src={product.thumbnail.url || ""}
                           alt={product.thumbnail.alt}
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 ease-out"
                         />
@@ -131,7 +131,7 @@ export function BestSeller() {
                       <h3 className="font-medium text-lg mb-2 line-clamp-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200">{product.name}</h3>
                       <div className="flex items-baseline gap-2">
                         <div className="font-bold text-xl bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent dark:from-green-400 dark:to-emerald-400">{product.variants.price.toLocaleString('vi-VN')}đ</div>
-                        <div className="text-sm text-gray-500 line-through">{product.variants.originalPrice.toLocaleString('vi-VN')}đ</div>
+                        <div className="text-sm text-gray-500 line-through">{product.variants.originalPrice?.toLocaleString('vi-VN')}đ</div>
                       </div>
                     </CardContent>
                   </Link>
