@@ -5,6 +5,7 @@ import { RootPage } from "@/page/store";
 import { AddressesPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
 import CategoriesPage from "@/page/store/categories/page";
 import MedicinesPage from "@/page/store/medicines";
+import MedicineDetailsPage from "@/page/store/medicines/[id]";
 
 import { Navigate, RouteObject } from "react-router-dom";
 
@@ -42,6 +43,10 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.store.medicines,
         element: <MedicinesPage />,
+      },
+      {
+        path: routes.store.medicineDetails(":id"),
+        element: <MedicineDetailsPage />,
       },
       {
         element: <AccountLayout />,
