@@ -4,7 +4,7 @@ export interface Medicine {
   readonly id: string;
   name: string;
   slug: string;
-  priority: number;
+  priority?: number;
   thumbnail: Thumbnail;
   description: string;
   variants: Variant;
@@ -13,36 +13,46 @@ export interface Medicine {
   // supplier: Supplier;
   details: Details;
   usageguide: UsageGuide;
-  readonly createdAt: string; 
-  readonly updatedAt: string;
+  readonly createdAt?: string; 
+  readonly updatedAt?: string;
+  readonly created_at?: string;
+  readonly updated_at?: string;
 }
 
 interface Thumbnail {
-  publicId: string;
-  url: string;
+  publicId?: string;
+  url: string | null;
   alt: string;
 }
 
 interface Ratings {
   star: number;
   liked: number;
-  reviewCount: number;
+  reviewCount?: number;
+  review_count?: number;
 }
 
 interface Variant {
   price: number;
-  limitQuantity: number;
-  stockStatus: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
-  originalPrice: number;
-  discountPercent: number;
-  isFeatured: boolean;
-  isActive: boolean; 
+  limitQuantity?: number;
+  limit_quantity?: number;
+  stockStatus?: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
+  stock_status?: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
+  originalPrice?: number;
+  original_price?: string | number;
+  discountPercent?: number;
+  discount_percent?: number;
+  isFeatured?: boolean;
+  is_featured?: boolean;
+  isActive?: boolean;
+  is_active?: boolean;
 }
 
 export interface Details {
   ingredients: string;
   usage: string[];
-  parameter: Parameters;
+  parameter?: Parameters;
+  paramaters?: Parameters;
 }
 
 interface Parameters {

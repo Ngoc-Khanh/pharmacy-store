@@ -3,6 +3,8 @@ import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import { RootPage } from "@/page/store";
 import { AddressesPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
+import CategoriesPage from "@/page/store/categories/page";
+import MedicinesPage from "@/page/store/medicines";
 
 import { Navigate, RouteObject } from "react-router-dom";
 
@@ -32,6 +34,14 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.store.root,
         element: <RootPage />,
+      },
+      {
+        path: routes.store.categories,
+        element: <CategoriesPage />,
+      },
+      {
+        path: routes.store.medicines,
+        element: <MedicinesPage />,
       },
       {
         element: <AccountLayout />,

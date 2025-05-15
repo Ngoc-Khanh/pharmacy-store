@@ -11,6 +11,7 @@ const baseRoutes = {
     root: "/store",
     categories: "/store/categories",
     medicines: "/store/medicines",
+    medicineDetails: (id: string) => `/store/medicines/${id}/details`,
     account: {
       root: "/store/account",
       addresses: "/store/account/addresses",
