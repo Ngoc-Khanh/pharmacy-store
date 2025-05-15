@@ -7,8 +7,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { routes, siteConfig } from "@/config";
 import { useAtomValue } from "jotai";
 import { SquareTerminal } from "lucide-react";
-import StoreNavPC from "./store.nav-pc";
 import StoreNavMobile from "./store.nav-mobile";
+import StoreNavPC from "./store.nav-pc";
+import StoreNavUser from "./store.nav-user";
 
 
 export default function StoreHeader() {
@@ -57,8 +58,7 @@ export default function StoreHeader() {
               {isAuthenticated ? (
                 <div className="flex items-center gap-2 pl-2">
                   {user ? (
-                    <div>test</div>
-                    // <MainUser user={user} />
+                    <StoreNavUser user={user} />
                   ) : (
                     <Skeleton className="h-9 w-9 rounded-full" />
                   )}
