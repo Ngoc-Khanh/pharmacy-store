@@ -6,10 +6,22 @@ export type SRO<T = unknown> = {
   error: string | null;
 };
 
-export type SROList<T = unknown> = {
+export interface PaginatedResponse<T> {
+  current_page: number;
   data: T[];
-  message: string;
-  status: number;
-  locale: string;
-  error: string | null;
-};
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: {
+    url: string | null;
+    label: string;
+    active: boolean;
+  }[];
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
