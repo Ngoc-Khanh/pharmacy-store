@@ -1,7 +1,7 @@
-import { LoginPage, RegisterPage } from "@/page/auth";
-import { AdminLayout, StoreLayout } from "@/layouts";
-import { RouteObject } from "react-router-dom";
 import { routes } from "@/config/routes";
+import { AdminLayout, StoreLayout } from "@/layouts";
+import { LoginPage, RegisterPage } from "@/page/auth";
+import { RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
   // AUTHENTICATION PAGES
@@ -35,6 +35,10 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.admin.dashboard,
         element: <div>Dashboard Page's</div>,
+      },
+      {
+        path: routes.admin.settings.root,
+        element: <div>Settings Page's</div>,
       }
     ]
   }

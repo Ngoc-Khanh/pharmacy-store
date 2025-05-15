@@ -1,11 +1,15 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { AdminUserSkeleton } from "./admin.user-skeleton";
-import { BriefcaseMedical } from "lucide-react";
-import { AdminNavUser } from "./admin.nav-user";
 import { userAtom } from "@/atoms/auth.atom";
-import { Link } from "react-router-dom";
-import { useAtomValue } from "jotai";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { routes } from "@/config";
+
+import { sidebarItem } from "@/config/site";
+import { useAtomValue } from "jotai";
+import { BriefcaseMedical } from "lucide-react";
+import { Link } from "react-router-dom";
+import { AdminNavMain } from "./admin.nav-main";
+import { AdminNavSecondary } from "./admin.nav-secondary";
+import { AdminNavUser } from "./admin.nav-user";
+import { AdminUserSkeleton } from "./admin.user-skeleton";
 
 export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = useAtomValue(userAtom);
@@ -28,8 +32,8 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {/*  */}
-        {/*  */}
+        <AdminNavMain items={sidebarItem.navMain} />
+        <AdminNavSecondary items={sidebarItem.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         {user ? (

@@ -30,6 +30,4 @@ export const fetchUserProfileAtom = atom(null, async (get, set) => {
 });
 
 // Atom kiểm tra trạng thái đăng nhập
-export const isAuthenticatedAtom = atom(
-  (get) => !!get(userAtom) && !!get(tokenAtom)
-)
+export const isAuthenticatedAtom = atom((get) => !!get(tokenAtom));
