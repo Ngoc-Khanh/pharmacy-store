@@ -2,7 +2,8 @@ import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import { RootPage } from "@/page/store";
-import RootAccountPage from "@/page/store/account";
+import { AddressesPage, RootAccountPage } from "@/page/store/account";
+
 import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
@@ -41,7 +42,7 @@ export const reactRouter: RouteObject[] = [
           },
           {
             path: routes.store.account.addresses,
-            element: <div>Addresses Page's</div>,
+            element: <AddressesPage />,
           },
           {
             path: routes.store.account.changePwd,
