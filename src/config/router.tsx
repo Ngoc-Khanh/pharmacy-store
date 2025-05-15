@@ -1,6 +1,7 @@
 import { routes } from "@/config/routes";
 import { AdminLayout, StoreLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/page/auth";
+import { RootPage } from "@/page/store";
 import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
@@ -28,7 +29,7 @@ export const reactRouter: RouteObject[] = [
     children: [
       {
         path: routes.store.root,
-        element: <div>Store Page's</div>,
+        element: <RootPage />,
       }
     ]
   },
