@@ -18,6 +18,11 @@ export const StoreAPI = {
     return res.data;
   },
 
+  async MedicineDetails(id: string) {
+    const res = await apiGet<SRO<Medicine>>(`v1/store/medicines/${id}/details`);
+    return res.data.data;
+  },
+
   async CategoriesRoot() {
     const res = await apiGet<SRO<Category[]>>("v1/store/categories");
     return res.data.data;
