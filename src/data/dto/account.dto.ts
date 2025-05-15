@@ -1,5 +1,17 @@
 import { ProfileImage } from "@/data/interfaces/user.interface";
 
+export type AddAddressDto = {
+  name: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string | null;
+  city: string;
+  state?: string | null;
+  country: string;
+  postalCode: string;
+  isDefault: boolean;
+};
+
 export type UpdateProfileDto = {
   firstname: string;
   lastname: string;
