@@ -1,7 +1,8 @@
 import { routes } from "@/config/routes";
-import { AdminLayout, StoreLayout } from "@/layouts";
+import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import { RootPage } from "@/page/store";
+import RootAccountPage from "@/page/store/account";
 import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
@@ -23,13 +24,30 @@ export const reactRouter: RouteObject[] = [
     path: routes.auth.forgotPassword,
     element: <div>Forgot Password Page's</div>,
   },
-  
+
   {
     element: <StoreLayout />,
     children: [
       {
         path: routes.store.root,
         element: <RootPage />,
+      },
+      {
+        element: <AccountLayout />,
+        children: [
+          {
+            path: routes.store.account.root,
+            element: <RootAccountPage />,
+          },
+          {
+            path: routes.store.account.addresses,
+            element: <div>Addresses Page's</div>,
+          },
+          {
+            path: routes.store.account.changePwd,
+            element: <div>Change Password Page's</div>,
+          }
+        ]
       }
     ]
   },

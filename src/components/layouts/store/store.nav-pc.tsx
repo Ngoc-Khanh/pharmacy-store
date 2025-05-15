@@ -1,5 +1,6 @@
-import { routes, siteConfig } from "@/config";
+import { routes, siteConfig, routeNames } from "@/config";
 import { cn } from "@/lib/utils";
+
 import { Pill } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -8,11 +9,9 @@ export default function StoreNavPC() {
 
   // Define main navigation items
   const navItems = [
-    { name: "Trang chủ", path: routes.store.root },
-    { name: "Dược phẩm", path: "/pharmacy" },
-    { name: "Chăm sóc sức khỏe", path: "/healthcare" },
-    { name: "Thực phẩm chức năng", path: "/supplements" },
-    { name: "Liên hệ", path: "/contact" },
+    { name: routeNames[routes.store.root], path: routes.store.root },
+    { name: routeNames[routes.store.categories], path: routes.store.categories },
+    { name: routeNames[routes.store.medicines], path: routes.store.medicines },
   ];
 
   const isActive = (path: string) => {

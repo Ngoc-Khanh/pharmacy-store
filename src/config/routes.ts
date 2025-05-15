@@ -9,6 +9,13 @@ const baseRoutes = {
   // MAIN ROUTES
   store: {
     root: "/store",
+    categories: "/store/categories",
+    medicines: "/store/medicines",
+    account: {
+      root: "/store/account",
+      addresses: "/store/account/addresses",
+      changePwd: "/store/account/change-password",
+    },
   },
 
   admin: {
@@ -28,12 +35,19 @@ const baseRoutes = {
 
 export const routeNames = {
   // MAIN NAME ROUTES
-  [baseRoutes.store.root]: "Home",
+  [baseRoutes.store.root]: "Trang chủ",
+  [baseRoutes.store.categories]: "Danh mục",
+  [baseRoutes.store.medicines]: "Dược phẩm",
 
   // ADMIN NAME ROUTES
   [baseRoutes.admin.root]: "Admin",
   [baseRoutes.admin.dashboard]: "Dashboard",
   [baseRoutes.admin.settings.root]: "Settings",
+
+  // STORE NAME ROUTES
+  [baseRoutes.store.account.root]: "Tài khoản",
+  [baseRoutes.store.account.addresses]: "Địa chỉ",
+  [baseRoutes.store.account.changePwd]: "Đổi mật khẩu",
 };
 
 export const routes = {

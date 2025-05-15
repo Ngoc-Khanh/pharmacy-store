@@ -107,7 +107,7 @@ export default function StoreNavUser({ user }: { user: IUser }) {
 
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer rounded-md">
-                  <Link to={routes.store.root} className="flex items-center gap-2.5 w-full">
+                  <Link to={routes.store.account.root} className="flex items-center gap-2.5 w-full">
                     <div className="flex items-center justify-center w-8 h-8 rounded-md bg-blue-100 dark:bg-blue-900/30">
                       <User size={16} className="text-blue-600 dark:text-blue-400" />
                     </div>
