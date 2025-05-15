@@ -33,14 +33,14 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
   });
 
   const formSchema = z.object({
-    name: z.string().min(1, "Name is required"),
-    phone: z.string().min(1, "Phone is required"),
-    addressLine1: z.string().min(1, "Address is required"),
+    name: z.string().min(1, "Tên là bắt buộc"),
+    phone: z.string().min(1, "Số điện thoại là bắt buộc"),
+    addressLine1: z.string().min(1, "Địa chỉ là bắt buộc"),
     addressLine2: z.string().nullable().optional(),
-    city: z.string().min(1, "City is required"),
+    city: z.string().min(1, "Thành phố là bắt buộc"),
     state: z.string().nullable().optional(),
-    country: z.string().min(1, "Country is required"),
-    postalCode: z.string().min(1, "Postal code is required"),
+    country: z.string().min(1, "Quốc gia là bắt buộc"),
+    postalCode: z.string().min(1, "Mã bưu điện là bắt buộc"),
     isDefault: z.boolean(),
   });
 
@@ -74,18 +74,15 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
   const addAddressMutation = useMutation({
     mutationFn: AccountAPI.addAddress,
     onSuccess: () => {
-      toast.success("Address added successfully");
-      // First refetch data, then close the dialog
+      toast.success("Địa chỉ đã được thêm thành công");
       refetch();
-      // Use a timeout to ensure the state is updated properly
       setTimeout(() => {
         onOpenChange(false);
-        // Reset form after dialog is closed
         setTimeout(() => form.reset(), 100);
       }, 100);
     },
     onError: (error) => {
-      toast.error(error.message || "Failed to add address");
+      toast.error(error.message || "Thêm địa chỉ thất bại");
     },
   });
 
@@ -94,18 +91,15 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
       return AccountAPI.editAddress(data.id, data);
     },
     onSuccess: () => {
-      toast.success("Address updated successfully");
-      // First refetch data, then close the dialog
+      toast.success("Địa chỉ đã được cập nhật thành công");
       refetch();
-      // Use a timeout to ensure the state is updated properly
       setTimeout(() => {
         onOpenChange(false);
-        // Reset form after dialog is closed
         setTimeout(() => form.reset(), 100);
       }, 100);
     },
     onError: (error) => {
-      toast.error(error.message || "Failed to update address");
+      toast.error(error.message || "Cập nhật địa chỉ thất bại");
     },
   });
 
@@ -117,9 +111,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
     }
   }
 
-  // Handle dialog close properly
   const handleCloseDialog = () => {
-    // Use timeout to ensure it doesn't interfere with any ongoing actions
     setTimeout(() => {
       onOpenChange(false);
     }, 0);
@@ -130,7 +122,6 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
       open={open}
       onOpenChange={(state) => {
         if (!state) {
-          // Only handle closing the dialog here, not opening
           handleCloseDialog();
         } else {
           onOpenChange(state);
@@ -141,17 +132,17 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
         <button
           onClick={handleCloseDialog}
           className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-          aria-label="Close"
+          aria-label="Đóng"
         >
           <X className="h-4 w-4" />
         </button>
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl font-bold">
-            {isEdit ? "Edit Address" : "Add New Address"}
+            {isEdit ? "Chỉnh sửa địa chỉ" : "Thêm địa chỉ mới"}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            {isEdit ? "Update the address here. " : "Create new address here. "}
-            Click save when you&apos;re done.
+            {isEdit ? "Cập nhật địa chỉ tại đây. " : "Tạo địa chỉ mới tại đây. "}
+            Nhấn lưu khi bạn hoàn tất.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[calc(90vh-200px)] md:h-[500px] w-full pr-4 -mr-4 py-2">
@@ -161,11 +152,10 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6 p-1"
             >
-              {/* Personal Information */}
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold text-muted-foreground flex items-center gap-2 pb-1 border-b">
                   <span className="h-4 w-1 bg-primary rounded-full"></span>
-                  Personal Information
+                  Thông tin cá nhân
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
@@ -174,7 +164,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-medium">
-                          Name <span className="text-destructive">*</span>
+                          Tên <span className="text-destructive">*</span>
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -195,7 +185,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-medium">
-                          Phone Number <span className="text-destructive">*</span>
+                          Số điện thoại <span className="text-destructive">*</span>
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -213,11 +203,10 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                 </div>
               </div>
 
-              {/* Address Information */}
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold text-muted-foreground flex items-center gap-2 pb-1 border-b">
                   <span className="h-4 w-1 bg-primary rounded-full"></span>
-                  Address Details
+                  Chi tiết địa chỉ
                 </h3>
                 <FormField
                   control={form.control}
@@ -225,7 +214,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-medium">
-                        Address Line 1 <span className="text-destructive">*</span>
+                        Địa chỉ dòng 1 <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -245,7 +234,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                   name="addressLine2"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-medium">Address Line 2</FormLabel>
+                      <FormLabel className="font-medium">Địa chỉ dòng 2</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Apt 1"
@@ -266,7 +255,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-medium">
-                          City <span className="text-destructive">*</span>
+                          Thành phố <span className="text-destructive">*</span>
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -286,7 +275,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                     name="state"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">State <span className="text-destructive">*</span></FormLabel>
+                        <FormLabel className="font-medium">Tỉnh <span className="text-destructive">*</span></FormLabel>
                         <FormControl>
                           <Input
                             placeholder="HN"
@@ -303,11 +292,10 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                 </div>
               </div>
 
-              {/* Additional Information */}
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold text-muted-foreground flex items-center gap-2 pb-1 border-b">
                   <span className="h-4 w-1 bg-primary rounded-full"></span>
-                  Additional Details
+                  Chi tiết bổ sung
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
@@ -315,7 +303,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                     name="postalCode"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">Postal Code <span className="text-destructive">*</span></FormLabel>
+                        <FormLabel className="font-medium">Mã bưu điện <span className="text-destructive">*</span></FormLabel>
                         <FormControl>
                           <Input
                             placeholder="10001"
@@ -334,7 +322,7 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                     name="country"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">Country <span className="text-destructive">*</span></FormLabel>
+                        <FormLabel className="font-medium">Quốc gia <span className="text-destructive">*</span></FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Việt Nam"
@@ -355,9 +343,9 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm hover:border-primary transition-colors">
                       <div className="space-y-1">
-                        <FormLabel className="font-medium">Default Address</FormLabel>
+                        <FormLabel className="font-medium">Địa chỉ mặc định</FormLabel>
                         <FormDescription className="text-xs">
-                          Make this your primary address for shipping
+                          Đặt làm địa chỉ chính cho việc giao hàng
                         </FormDescription>
                       </div>
                       <FormControl>
@@ -382,14 +370,14 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
             onClick={handleCloseDialog}
             className="sm:order-1 w-full sm:w-auto"
           >
-            Cancel
+            Hủy
           </Button>
           <Button
             type="submit"
             form={`address-form-${isEdit ? "edit" : "add"}`}
             className="w-full sm:w-auto bg-primary hover:bg-primary/90"
           >
-            {isEdit ? "Update" : "Save"} Address
+            {isEdit ? "Cập nhật" : "Lưu"} địa chỉ
           </Button>
         </DialogFooter>
       </DialogContent>
