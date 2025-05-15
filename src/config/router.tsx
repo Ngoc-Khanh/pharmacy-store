@@ -1,9 +1,14 @@
 import { routes } from "@/config/routes";
 import { AdminLayout, StoreLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/page/auth";
-import { RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
+  {
+    path: "/",
+    element: <Navigate to={routes.store.root} />,
+  },
+
   // AUTHENTICATION PAGES
   {
     path: routes.auth.login,
