@@ -15,13 +15,11 @@ export interface Medicine {
   usageguide: UsageGuide;
   readonly createdAt?: string; 
   readonly updatedAt?: string;
-  readonly created_at?: string;
-  readonly updated_at?: string;
 }
 
 interface Thumbnail {
   publicId?: string;
-  url: string | null;
+  url: string;
   alt: string;
 }
 
@@ -35,17 +33,11 @@ interface Ratings {
 interface Variant {
   price: number;
   limitQuantity?: number;
-  limit_quantity?: number;
   stockStatus?: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
-  stock_status?: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
   originalPrice?: number;
-  original_price?: string | number;
   discountPercent?: number;
-  discount_percent?: number;
   isFeatured?: boolean;
-  is_featured?: boolean;
   isActive?: boolean;
-  is_active?: boolean;
 }
 
 export interface Details {

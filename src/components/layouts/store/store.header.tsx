@@ -5,8 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { routes, siteConfig } from "@/config";
+
 import { useAtomValue } from "jotai";
 import { SquareTerminal } from "lucide-react";
+import StoreCart from "./store.cart";
 import StoreNavMobile from "./store.nav-mobile";
 import StoreNavPC from "./store.nav-pc";
 import StoreNavUser from "./store.nav-user";
@@ -53,7 +55,7 @@ export default function StoreHeader() {
                   <span className="sr-only">GitHub</span>
                 </a>
               </Button>
-              {/* <Cart /> */}
+              <StoreCart />
               <ModeSwitcher />
               {isAuthenticated ? (
                 <div className="flex items-center gap-2 pl-2">
