@@ -75,7 +75,7 @@ export default function MedicinesPage() {
       const price = medicine.variants.price;
       if (price < priceRange[0] || price > priceRange[1]) return false;
 
-      const stockStatus = medicine.variants.stock_status || medicine.variants.stockStatus;
+      const stockStatus = medicine.variants.stockStatus;
       if (status && status !== stockStatus) return false;
       return true;
     }).sort((a, b) => {
