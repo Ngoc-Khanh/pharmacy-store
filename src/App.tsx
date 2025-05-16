@@ -10,7 +10,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Toaster richColors />
       <HelmetProvider>
-        <ThemeProvider defaultTheme="system" storageKey="pharmacy-theme">
+        <ThemeProvider defaultTheme="light" storageKey="pharmacy-theme">
           <AuthProvider>
             <RouterProvider />
           </AuthProvider>

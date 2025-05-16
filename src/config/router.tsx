@@ -49,6 +49,10 @@ export const reactRouter: RouteObject[] = [
         element: <MedicineDetailsPage />,
       },
       {
+        path: routes.store.checkout,
+        element: <div>Checkout Page's</div>,
+      },
+      {
         element: <AccountLayout />,
         children: [
           {

@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { routes } from "@/config"
 import { Medicine } from "@/data/interfaces"
+import { addToCartAtom, cartAtom } from "@/atoms/cart.atom"
 
+import { useAtom } from "jotai"
 import { Heart, PhoneCall, ShoppingCart, Star, Truck } from "lucide-react"
-import { Link } from "react-router-dom"
-// import { addToCartAtom } from "@/stores"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
 interface MedicineCardProps {
@@ -17,7 +18,8 @@ interface MedicineCardProps {
 }
 
 export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineCardProps) {
-  // const [, addToCart] = useAtom(addToCartAtom);
+  const [, addToCart] = useAtom(addToCartAtom);
+  const [cart] = useAtom(cartAtom);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -29,16 +31,35 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
       return;
     }
 
+    // Kiểm tra số lượng giới hạn
+    const limitQuantity = medicine.variants.limitQuantity || Infinity;
+    
+    // Tìm số lượng sản phẩm này đã có trong giỏ hàng
+    const existingItem = cart.find(item => item.medicine.id === medicine.id);
+    const currentQuantity = existingItem ? existingItem.quantity : 0;
+    
+    // Kiểm tra nếu thêm 1 sản phẩm có vượt quá giới hạn không
+    if (currentQuantity + 1 > limitQuantity) {
+      toast.error(`Không thể thêm vào giỏ hàng. Đã đạt số lượng tối đa (${limitQuantity})`);
+      return;
+    }
+
     setIsAddingToCart(true);
 
     // Thêm vào giỏ hàng với số lượng mặc định là 1
-    // addToCart({ medicine, quantity: 1 });
+    addToCart({ medicine, quantity: 1 });
 
     // Hiển thị thông báo thành công
     toast.success(`Đã thêm ${medicine.name} vào giỏ hàng`);
 
     setTimeout(() => setIsAddingToCart(false), 500);
   };
+
+  // Kiểm tra xem có thể thêm tiếp vào giỏ hàng không
+  const existingItem = cart.find(item => item.medicine.id === medicine.id);
+  const currentQuantity = existingItem ? existingItem.quantity : 0;
+  const limitQuantity = medicine.variants.limitQuantity || Infinity;
+  const isMaxQuantityReached = currentQuantity >= limitQuantity;
 
   return (
     <Card
@@ -69,10 +90,16 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
               Hết hàng
             </Badge>
           )}
+          
+          {/* Limit Quantity badge */}
+          {medicine.variants.stockStatus !== "OUT-OF-STOCK" && isMaxQuantityReached && (
+            <Badge variant="secondary" className="absolute top-2 right-2 bg-amber-100 text-amber-800 border-amber-200">
+              Đã đạt giới hạn
+            </Badge>
+          )}
         </div>
 
         <CardContent className="flex flex-col flex-grow p-4">
-          {/* <div className="mb-1 text-sm text-muted-foreground">{medicine.supplier?.name}</div> */}
           <h3 className="font-medium line-clamp-2 hover:text-emerald-500 cursor-pointer mb-2 transition-colors group-hover:text-emerald-500">{medicine.name}</h3>
 
           <div className="flex items-center mt-auto">
@@ -139,7 +166,7 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
           variant="secondary"
           className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white shadow-md"
           onClick={handleAddToCart}
-          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK" || isAddingToCart}
+          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK" || isAddingToCart || isMaxQuantityReached}
         >
           <ShoppingCart className={`h-4 w-4 ${isAddingToCart ? 'animate-ping text-green-600' : 'text-green-500 fill-green-500'}`} />
         </Button>
@@ -150,7 +177,7 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
         <Button
           className="w-full text-sm h-8 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white relative overflow-hidden"
           onClick={handleAddToCart}
-          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK" || isAddingToCart}
+          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK" || isAddingToCart || isMaxQuantityReached}
         >
           {isAddingToCart && (
             <span className="absolute inset-0 flex items-center justify-center bg-green-600 animate-pulse">
@@ -158,7 +185,7 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
             </span>
           )}
           <span className={isAddingToCart ? 'opacity-0' : 'opacity-100'}>
-            Thêm vào giỏ
+            {isMaxQuantityReached ? 'Đã đạt giới hạn' : 'Thêm vào giỏ'}
           </span>
         </Button>
       </div>

@@ -1,9 +1,10 @@
+import { addToCartAtom, cartAtom } from "@/atoms/cart.atom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Medicine } from "@/data/interfaces";
 import { formatCurrency } from "@/lib/utils";
 
-// import { useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Clock, Heart, Info, Minus, Plus, Shield, ShoppingCart, Star, Truck } from "lucide-react";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
@@ -20,12 +21,37 @@ export function MedicineDetailsInfo({
   quantity,
   onQuantityChange
 }: MedicineDetailsInfoProps) {
-  // const [, addToCart] = useAtom(addToCartAtom);
+  const [, addToCart] = useAtom(addToCartAtom);
+  const [cart] = useAtom(cartAtom);
+
+  // Kiểm tra số lượng trong giỏ hàng hiện tại
+  const existingItem = cart.find(item => item.medicine.id === medicine.id);
+  const currentQuantity = existingItem ? existingItem.quantity : 0;
+  const limitQuantity = medicine.variants.limitQuantity ?? Infinity;
+  
+  // Số lượng còn có thể thêm vào giỏ
+  const remainingQuantity = limitQuantity - currentQuantity;
 
   const handleAddToCart = () => {
-    if (medicine.variants.stockStatus === "OUT-OF-STOCK") return;
-    // addToCart({ medicine, quantity });
-    toast.success(`Đã thêm ${quantity} ${medicine.name} vào giỏ hàng`);
+    if (medicine.variants.stockStatus === "OUT-OF-STOCK") {
+      toast.error("Sản phẩm hiện đã hết hàng");
+      return;
+    }
+    
+    // Kiểm tra nếu thêm số lượng vượt quá giới hạn
+    if (quantity > remainingQuantity) {
+      if (remainingQuantity <= 0) {
+        toast.error(`Không thể thêm vào giỏ hàng. Đã đạt số lượng tối đa (${limitQuantity})`);
+        return;
+      }
+      // Thêm số lượng còn lại
+      addToCart({ medicine, quantity: remainingQuantity });
+      toast.success(`Đã thêm ${remainingQuantity} ${medicine.name} vào giỏ hàng (đạt giới hạn tối đa)`);
+    } else {
+      // Thêm bình thường
+      addToCart({ medicine, quantity });
+      toast.success(`Đã thêm ${quantity} ${medicine.name} vào giỏ hàng`);
+    }
   };
   
   return (
@@ -140,14 +166,21 @@ export function MedicineDetailsInfo({
             size="icon"
             className="h-12 w-12 rounded-none border-l hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
             onClick={() => onQuantityChange(quantity + 1)}
-            disabled={medicine.variants.limitQuantity !== undefined && medicine.variants.limitQuantity <= quantity}
+            disabled={quantity >= Math.min(limitQuantity - currentQuantity, limitQuantity)}
           >
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        <span className="text-sm text-muted-foreground ml-4">
-          {medicine.variants.limitQuantity} sản phẩm có sẵn
-        </span>
+        <div className="ml-4 flex flex-col">
+          <span className="text-sm text-muted-foreground">
+            {medicine.variants.limitQuantity ? `${medicine.variants.limitQuantity} sản phẩm có sẵn` : "Không giới hạn số lượng"}
+          </span>
+          {currentQuantity > 0 && (
+            <span className="text-xs text-amber-600">
+              (Đã có {currentQuantity} trong giỏ hàng, còn thêm được {remainingQuantity})
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Action Buttons */}
@@ -155,10 +188,10 @@ export function MedicineDetailsInfo({
         <Button
           size="lg"
           className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg hover:shadow-emerald-500/25 transition-all duration-300"
-          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK"}
+          disabled={medicine.variants.stockStatus === "OUT-OF-STOCK" || remainingQuantity <= 0}
           onClick={handleAddToCart}
         >
-          <ShoppingCart className="mr-2 h-5 w-5" /> Thêm vào giỏ
+          <ShoppingCart className="mr-2 h-5 w-5" /> {remainingQuantity <= 0 ? "Đã đạt giới hạn" : "Thêm vào giỏ"}
         </Button>
         <Button
           variant="ghost"
