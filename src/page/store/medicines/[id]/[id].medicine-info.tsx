@@ -1,4 +1,4 @@
-import { addToCartAtom, cartAtom } from "@/atoms/cart.atom";
+import { addToCartAtom, cartAtom, initCartAtom } from "@/atoms/cart.atom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Medicine } from "@/data/interfaces";
@@ -6,9 +6,10 @@ import { formatCurrency } from "@/lib/utils";
 
 import { useAtom } from "jotai";
 import { Clock, Heart, Info, Minus, Plus, Shield, ShoppingCart, Star, Truck } from "lucide-react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 interface MedicineDetailsInfoProps {
   medicine: Medicine;
@@ -23,16 +24,42 @@ export function MedicineDetailsInfo({
 }: MedicineDetailsInfoProps) {
   const [, addToCart] = useAtom(addToCartAtom);
   const [cart] = useAtom(cartAtom);
+  const [, initCart] = useAtom(initCartAtom);
+
+  // Khởi tạo giỏ hàng khi component mount
+  useEffect(() => {
+    const loadCart = async () => {
+      await initCart();
+    };
+    loadCart();
+  }, [initCart]);
+
+  // Kiểm tra nếu medicine thiếu thuộc tính cần thiết
+  if (!medicine?.id || !medicine?.variants) {
+    console.error('Đối tượng sản phẩm không hợp lệ', medicine);
+    return (
+      <div className="p-6 text-center">
+        <div className="text-red-500">
+          Thông tin sản phẩm không hợp lệ
+        </div>
+      </div>
+    );
+  }
 
   // Kiểm tra số lượng trong giỏ hàng hiện tại
-  const existingItem = cart.find(item => item.medicine.id === medicine.id);
-  const currentQuantity = existingItem ? existingItem.quantity : 0;
+  const existingItem = cart.find(item => item?.medicine?.id === medicine.id);
+  const currentQuantity = existingItem?.quantity || 0;
   const limitQuantity = medicine.variants.limitQuantity ?? Infinity;
   
   // Số lượng còn có thể thêm vào giỏ
   const remainingQuantity = limitQuantity - currentQuantity;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    if (!medicine.id) {
+      toast.error("Không thể thêm vào giỏ hàng. Dữ liệu sản phẩm không hợp lệ");
+      return;
+    }
+    
     if (medicine.variants.stockStatus === "OUT-OF-STOCK") {
       toast.error("Sản phẩm hiện đã hết hàng");
       return;
@@ -45,11 +72,11 @@ export function MedicineDetailsInfo({
         return;
       }
       // Thêm số lượng còn lại
-      addToCart({ medicine, quantity: remainingQuantity });
+      await addToCart({ medicine, quantity: remainingQuantity });
       toast.success(`Đã thêm ${remainingQuantity} ${medicine.name} vào giỏ hàng (đạt giới hạn tối đa)`);
     } else {
       // Thêm bình thường
-      addToCart({ medicine, quantity });
+      await addToCart({ medicine, quantity });
       toast.success(`Đã thêm ${quantity} ${medicine.name} vào giỏ hàng`);
     }
   };
@@ -78,7 +105,7 @@ export function MedicineDetailsInfo({
       <div className="flex items-center mb-5">
         <div className="flex mr-2">
           {[...Array(5)].map((_, i) => {
-            const starValue = medicine.ratings.star || 0;
+            const starValue = medicine.ratings?.star || 0;
             const isFullStar = i < Math.floor(starValue);
             const isHalfStar = !isFullStar && i === Math.floor(starValue) && starValue % 1 >= 0.5;
             return (
@@ -103,13 +130,13 @@ export function MedicineDetailsInfo({
           })}
         </div>
         <span className="text-sm text-muted-foreground">
-          {medicine.ratings.star?.toFixed(1)} ({medicine.ratings.reviewCount} đánh giá)
+          {medicine.ratings?.star?.toFixed(1) || "0.0"} ({medicine.ratings?.reviewCount || 0} đánh giá)
         </span>
         <Separator orientation="vertical" className="mx-3 h-4" />
         <span className="text-sm text-muted-foreground flex items-center">
           <Heart className="h-3.5 w-3.5 mr-1 text-pink-500" />
           <span className="text-sm text-pink-500">
-            {medicine.ratings.liked} lượt thích
+            {medicine.ratings?.liked || 0} lượt thích
           </span>
         </span>
       </div>
@@ -118,7 +145,7 @@ export function MedicineDetailsInfo({
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
-            {formatCurrency(medicine.variants.price)}
+            {formatCurrency(medicine.variants.price || 0)}
           </span>
           {medicine.variants.discountPercent && medicine.variants.discountPercent > 0 && (
             <span className="text-lg line-through text-muted-foreground">
@@ -142,7 +169,7 @@ export function MedicineDetailsInfo({
 
       {/* Product Description */}
       <p className="text-muted-foreground leading-relaxed mb-6">
-        {medicine.description}
+        {medicine.description || "Không có mô tả"}
       </p>
 
       {/* Quantity Selector */}

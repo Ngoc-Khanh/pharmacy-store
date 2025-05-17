@@ -1,8 +1,9 @@
 import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/page/auth";
-import { RootPage } from "@/page/store";
+import { OrdersPage, RootPage } from "@/page/store";
 import { AddressesPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
+import { CartPage } from "@/page/store/cart";
 import CategoriesPage from "@/page/store/categories/page";
 import MedicinesPage from "@/page/store/medicines";
 import MedicineDetailsPage from "@/page/store/medicines/[id]";
@@ -13,6 +14,11 @@ export const reactRouter: RouteObject[] = [
   {
     path: "/",
     element: <Navigate to={routes.store.root} />,
+  },
+
+  {
+    path: routes.admin.root,
+    element: <Navigate to={routes.admin.dashboard} />,
   },
 
   // AUTHENTICATION PAGES
@@ -49,8 +55,16 @@ export const reactRouter: RouteObject[] = [
         element: <MedicineDetailsPage />,
       },
       {
+        path: routes.store.cart,
+        element: <CartPage />,
+      },
+      {
         path: routes.store.checkout,
         element: <div>Checkout Page's</div>,
+      },
+      {
+        path: routes.store.orders,
+        element: <OrdersPage />,
       },
       {
         element: <AccountLayout />,
@@ -85,5 +99,19 @@ export const reactRouter: RouteObject[] = [
         element: <div>Settings Page's</div>,
       }
     ]
+  },
+
+  // ERROR ROUTER
+  { path: routes.generalError, element: <div>General Error Page's</div> },
+  { path: routes.notfoundError, element: <div>Not Found Error Page's</div> },
+  { path: routes.maintenanceError, element: <div>Maintenance Error Page's</div> },
+  { path: routes.unauthorizedError, element: <div>Unanthorized Error Page's</div> },
+
+  // FALLBACK 404 ROUTER
+  { path: "*", element: <div>Not Found Error Page's</div> },
+
+  {
+    path: "/test",
+    element: <CartPage />,
   }
 ]

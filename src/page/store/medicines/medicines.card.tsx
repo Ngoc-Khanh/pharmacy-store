@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { routes } from "@/config"
 import { Medicine } from "@/data/interfaces"
-import { addToCartAtom, cartAtom } from "@/atoms/cart.atom"
+import { addToCartAtom, cartAtom, initCartAtom } from "@/atoms/cart.atom"
 
 import { useAtom } from "jotai"
 import { Heart, PhoneCall, ShoppingCart, Star, Truck } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
@@ -20,9 +20,23 @@ interface MedicineCardProps {
 export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineCardProps) {
   const [, addToCart] = useAtom(addToCartAtom);
   const [cart] = useAtom(cartAtom);
+  const [, initCart] = useAtom(initCartAtom);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  // Khởi tạo giỏ hàng khi component mount
+  useEffect(() => {
+    const loadCart = async () => {
+      await initCart();
+    };
+    loadCart();
+  }, [initCart]);
+
+  // Kiểm tra nếu medicine thiếu thuộc tính cần thiết
+  if (!medicine?.id || !medicine?.variants) {
+    return null; // Không hiển thị thẻ sản phẩm không hợp lệ
+  }
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -33,31 +47,38 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
 
     // Kiểm tra số lượng giới hạn
     const limitQuantity = medicine.variants.limitQuantity || Infinity;
-    
+
     // Tìm số lượng sản phẩm này đã có trong giỏ hàng
-    const existingItem = cart.find(item => item.medicine.id === medicine.id);
-    const currentQuantity = existingItem ? existingItem.quantity : 0;
-    
+    const existingItem = cart.find(item => item?.medicine?.id === medicine.id);
+    const currentQuantity = existingItem?.quantity || 0;
+
     // Kiểm tra nếu thêm 1 sản phẩm có vượt quá giới hạn không
     if (currentQuantity + 1 > limitQuantity) {
       toast.error(`Không thể thêm vào giỏ hàng. Đã đạt số lượng tối đa (${limitQuantity})`);
       return;
     }
 
+    // Hiện hiệu ứng đã thêm vào giỏ hàng
     setIsAddingToCart(true);
 
-    // Thêm vào giỏ hàng với số lượng mặc định là 1
-    addToCart({ medicine, quantity: 1 });
+    try {
+      // Thêm vào giỏ hàng với số lượng mặc định là 1
+      await addToCart({ medicine, quantity: 1 });
 
-    // Hiển thị thông báo thành công
-    toast.success(`Đã thêm ${medicine.name} vào giỏ hàng`);
-
-    setTimeout(() => setIsAddingToCart(false), 500);
+      // Hiển thị thông báo thành công
+      toast.success(`Đã thêm ${medicine.name} vào giỏ hàng`);
+    } catch (error) {
+      // Lỗi đã được xử lý trong atom, chỉ cần đảm bảo reset trạng thái UI
+      console.error(error);
+    } finally {
+      // Tự động ẩn hiệu ứng sau 500ms
+      setTimeout(() => setIsAddingToCart(false), 500);
+    }
   };
 
   // Kiểm tra xem có thể thêm tiếp vào giỏ hàng không
-  const existingItem = cart.find(item => item.medicine.id === medicine.id);
-  const currentQuantity = existingItem ? existingItem.quantity : 0;
+  const existingItem = cart.find(item => item?.medicine?.id === medicine.id);
+  const currentQuantity = existingItem?.quantity || 0;
   const limitQuantity = medicine.variants.limitQuantity || Infinity;
   const isMaxQuantityReached = currentQuantity >= limitQuantity;
 
@@ -71,8 +92,8 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
         <div className="relative pt-[100%] bg-gray-100 dark:bg-gray-800/50 overflow-hidden">
           <div className="absolute inset-0 flex items-center justify-center">
             <img
-              src={medicine.thumbnail.url || ""}
-              alt={medicine.thumbnail.alt}
+              src={medicine.thumbnail?.url || ""}
+              alt={medicine.thumbnail?.alt || "Product Image"}
               className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
             />
           </div>
@@ -90,7 +111,7 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
               Hết hàng
             </Badge>
           )}
-          
+
           {/* Limit Quantity badge */}
           {medicine.variants.stockStatus !== "OUT-OF-STOCK" && isMaxQuantityReached && (
             <Badge variant="secondary" className="absolute top-2 right-2 bg-amber-100 text-amber-800 border-amber-200">
@@ -104,7 +125,7 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
 
           <div className="flex items-center mt-auto">
             {[...Array(5)].map((_, i) => {
-              const starValue = medicine.ratings.star;
+              const starValue = medicine.ratings?.star || 0;
               const isFullStar = i < Math.floor(starValue);
               const isHalfStar = !isFullStar && i === Math.floor(starValue) && starValue % 1 >= 0.5;
 
@@ -128,7 +149,7 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
               );
             })}
             <span className="text-xs text-muted-foreground ml-1">
-              ({medicine.ratings.star.toFixed(1)})
+              ({(medicine.ratings?.star || 0).toFixed(1)})
             </span>
           </div>
 
@@ -136,10 +157,10 @@ export function MedicineCard({ medicine, hoveredMedicineId, onHover }: MedicineC
             <div className="flex flex-col">
               {medicine.variants.discountPercent && medicine.variants.discountPercent > 0 && (
                 <span className="text-sm line-through text-muted-foreground">
-                  {Math.floor(medicine.variants.price / (1 - medicine.variants.discountPercent / 100)).toLocaleString()}₫
+                  {Math.floor((medicine.variants.price || 0) / (1 - medicine.variants.discountPercent / 100)).toLocaleString()}₫
                 </span>
               )}
-              <span className="font-bold text-emerald-500">{medicine.variants.price.toLocaleString()}₫</span>
+              <span className="font-bold text-emerald-500">{(medicine.variants.price || 0).toLocaleString()}₫</span>
             </div>
             {medicine.variants.stockStatus === "IN-STOCK" ? (
               <div className="flex items-center text-xs text-emerald-500">
