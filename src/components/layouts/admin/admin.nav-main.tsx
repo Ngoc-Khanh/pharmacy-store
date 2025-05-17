@@ -31,29 +31,29 @@ export function AdminNavMain({
                   asChild
                   isActive={isActive}
                   className={`group transition-all duration-200 ${isActive
-                      ? "bg-primary/15 text-primary hover:bg-primary/20"
-                      : "hover:bg-primary/10 text-muted-foreground hover:text-foreground"
+                      ? "bg-teal-100 text-teal-700 hover:bg-teal-200 dark:bg-teal-900/30 dark:text-teal-300 dark:hover:bg-teal-900/40"
+                      : "hover:bg-blue-50 text-slate-600 hover:text-slate-900 dark:hover:bg-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
                     }`}
                 >
                   <Link to={item.url} className="flex items-center gap-3">
                     {isActive && (
                       <motion.div
                         layoutId="activeIndicator"
-                        className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"
+                        className="absolute left-0 top-0 bottom-0 w-0.5 bg-teal-600 dark:bg-teal-400"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.2 }}
                       />
                     )}
                     {item.icon && (
-                      <div className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                      <div className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${isActive ? "text-teal-700 dark:text-teal-300" : "text-slate-500 group-hover:text-slate-800 dark:text-slate-400 dark:group-hover:text-slate-200"
                         }`}>
                         <item.icon className="h-4 w-4" />
                       </div>
                     )}
-                    <span className={`font-medium ${isActive ? "text-primary" : ""}`}>{item.title}</span>
+                    <span className={`font-medium ${isActive ? "text-teal-700 dark:text-teal-300" : ""}`}>{item.title}</span>
                     {item.badge && (
-                      <span className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${isActive ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"
+                      <span className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${isActive ? "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
                         }`}>
                         {item.badge}
                       </span>
