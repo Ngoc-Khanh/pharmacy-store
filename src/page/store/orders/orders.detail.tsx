@@ -1,14 +1,25 @@
 import { useState, useEffect } from "react";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { ArrowLeft, CheckCircle, Clock, FileText, MapPin, ShoppingBag, Truck } from "lucide-react";
+import { ArrowLeft, CheckCircle, Clock, FileText, MapPin, ShoppingBag, Truck, CreditCard, CalendarDays, InfoIcon, RefreshCcw } from "lucide-react";
 import { Order, OrderDetailProps, OrderTimelineEvent } from "./orders.types";
+import { motion } from "framer-motion";
+import {
+  Timeline,
+  TimelineContent,
+  TimelineDate,
+  TimelineHeader,
+  TimelineIndicator,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineTitle,
+} from "@/components/ui/timeline";
+import { cn } from "@/lib/utils";
 
 // Mock data - in a real app this would come from an API call
 const mockOrdersData: Record<string, Order> = {
@@ -34,24 +45,24 @@ const mockOrdersData: Record<string, Order> = {
       estimatedDelivery: "2023-11-15"
     },
     items: [
-      { 
-        id: "MED-101", 
-        name: "Paracetamol 500mg", 
-        quantity: 1, 
+      {
+        id: "MED-101",
+        name: "Paracetamol 500mg",
+        quantity: 1,
         price: 35000,
         thumbnail: "https://placehold.co/80x80/22c55e/FFFFFF/png?text=P"
       },
-      { 
-        id: "MED-203", 
-        name: "Vitamin C 1000mg", 
-        quantity: 2, 
+      {
+        id: "MED-203",
+        name: "Vitamin C 1000mg",
+        quantity: 2,
         price: 165000,
         thumbnail: "https://placehold.co/80x80/0ea5e9/FFFFFF/png?text=VC"
       },
-      { 
-        id: "MED-305", 
-        name: "Probiotics 30 viên", 
-        quantity: 1, 
+      {
+        id: "MED-305",
+        name: "Probiotics 30 viên",
+        quantity: 1,
         price: 195000,
         thumbnail: "https://placehold.co/80x80/a855f7/FFFFFF/png?text=PRO"
       }
@@ -84,17 +95,17 @@ const mockOrdersData: Record<string, Order> = {
       estimatedDelivery: "2023-11-14"
     },
     items: [
-      { 
-        id: "MED-405", 
-        name: "Dầu gió xanh", 
-        quantity: 1, 
+      {
+        id: "MED-405",
+        name: "Dầu gió xanh",
+        quantity: 1,
         price: 45000,
         thumbnail: "https://placehold.co/80x80/ec4899/FFFFFF/png?text=DG"
       },
-      { 
-        id: "MED-501", 
-        name: "Thuốc bổ gan", 
-        quantity: 1, 
+      {
+        id: "MED-501",
+        name: "Thuốc bổ gan",
+        quantity: 1,
         price: 305000,
         thumbnail: "https://placehold.co/80x80/f97316/FFFFFF/png?text=TBG"
       }
@@ -133,24 +144,24 @@ const mockOrdersData: Record<string, Order> = {
       deliveredAt: "2023-10-28T14:35:00"
     },
     items: [
-      { 
-        id: "MED-201", 
-        name: "Thuốc trị đau dạ dày", 
-        quantity: 1, 
+      {
+        id: "MED-201",
+        name: "Thuốc trị đau dạ dày",
+        quantity: 1,
         price: 210000,
         thumbnail: "https://placehold.co/80x80/f43f5e/FFFFFF/png?text=DDG"
       },
-      { 
-        id: "MED-305", 
-        name: "Dầu gội dược liệu", 
-        quantity: 1, 
+      {
+        id: "MED-305",
+        name: "Dầu gội dược liệu",
+        quantity: 1,
         price: 190000,
         thumbnail: "https://placehold.co/80x80/84cc16/FFFFFF/png?text=DG"
       },
-      { 
-        id: "MED-402", 
-        name: "Thuốc nhỏ mắt", 
-        quantity: 2, 
+      {
+        id: "MED-402",
+        name: "Thuốc nhỏ mắt",
+        quantity: 2,
         price: 190000,
         thumbnail: "https://placehold.co/80x80/06b6d4/FFFFFF/png?text=TM"
       }
@@ -184,17 +195,17 @@ const mockOrdersData: Record<string, Order> = {
       method: "Standard Delivery"
     },
     items: [
-      { 
-        id: "MED-601", 
-        name: "Thuốc kháng sinh", 
-        quantity: 1, 
+      {
+        id: "MED-601",
+        name: "Thuốc kháng sinh",
+        quantity: 1,
         price: 350000,
         thumbnail: "https://placehold.co/80x80/8b5cf6/FFFFFF/png?text=KS"
       },
-      { 
-        id: "MED-702", 
-        name: "Siro ho trẻ em", 
-        quantity: 1, 
+      {
+        id: "MED-702",
+        name: "Siro ho trẻ em",
+        quantity: 1,
         price: 100000,
         thumbnail: "https://placehold.co/80x80/fb7185/FFFFFF/png?text=SIRO"
       }
@@ -238,17 +249,17 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'placed':
-        return <Badge className="bg-gray-100 text-gray-800 border-gray-200">Đã đặt hàng</Badge>;
+        return <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800/30">Đã đặt hàng</Badge>;
       case 'confirmed':
-        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Đã xác nhận</Badge>;
+        return <Badge className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800/30">Đã xác nhận</Badge>;
       case 'processing':
-        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Đang xử lý</Badge>;
+        return <Badge className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800/30">Đang xử lý</Badge>;
       case 'shipping':
-        return <Badge className="bg-amber-100 text-amber-800 border-amber-200">Đang giao hàng</Badge>;
+        return <Badge className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800/30">Đang giao hàng</Badge>;
       case 'delivered':
-        return <Badge className="bg-green-100 text-green-800 border-green-200">Đã giao hàng</Badge>;
+        return <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800/30">Đã giao hàng</Badge>;
       case 'cancelled':
-        return <Badge className="bg-red-100 text-red-800 border-red-200">Đã hủy</Badge>;
+        return <Badge className="bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/20 dark:text-rose-400 dark:border-rose-800/30">Đã hủy</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -258,11 +269,11 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
   const getPaymentStatusBadge = (status: string) => {
     switch (status) {
       case 'paid':
-        return <Badge className="bg-green-100 text-green-800 border-green-200">Đã thanh toán</Badge>;
+        return <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800/30">Đã thanh toán</Badge>;
       case 'pending':
-        return <Badge className="bg-amber-100 text-amber-800 border-amber-200">Chờ thanh toán</Badge>;
+        return <Badge className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800/30">Chờ thanh toán</Badge>;
       case 'refunded':
-        return <Badge className="bg-purple-100 text-purple-800 border-purple-200">Đã hoàn tiền</Badge>;
+        return <Badge className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800/30">Đã hoàn tiền</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -272,47 +283,63 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
   const getStepIcon = (status: string) => {
     switch (status) {
       case 'placed':
-        return <ShoppingBag className="h-5 w-5" />;
+        return <ShoppingBag className="h-4 w-4 text-white" />;
       case 'confirmed':
-        return <FileText className="h-5 w-5" />;
+        return <FileText className="h-4 w-4 text-white" />;
       case 'processing':
-        return <Clock className="h-5 w-5" />;
+        return <Clock className="h-4 w-4 text-white" />;
       case 'shipping':
-        return <Truck className="h-5 w-5" />;
+        return <Truck className="h-4 w-4 text-white" />;
       case 'delivered':
-        return <CheckCircle className="h-5 w-5" />;
+        return <CheckCircle className="h-4 w-4 text-white" />;
       case 'cancelled':
-        return <CheckCircle className="h-5 w-5" />;
+        return <InfoIcon className="h-4 w-4 text-white" />;
       default:
-        return <Clock className="h-5 w-5" />;
+        return <Clock className="h-4 w-4 text-white" />;
     }
   };
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center space-x-4">
-          <Skeleton className="h-10 w-10 rounded-full" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-[250px]" />
-            <Skeleton className="h-4 w-[200px]" />
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="space-y-8"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
           </div>
+          <Skeleton className="h-10 w-32" />
         </div>
+        
+        <Skeleton className="h-[200px] rounded-xl" />
         
         <div className="grid gap-6 md:grid-cols-2">
-          <Skeleton className="h-[200px] rounded-xl" />
-          <Skeleton className="h-[200px] rounded-xl" />
+          <Skeleton className="h-[300px] rounded-xl" />
+          <Skeleton className="h-[300px] rounded-xl" />
         </div>
         
-        <Skeleton className="h-[300px] rounded-xl" />
-      </div>
+        <div className="flex justify-end gap-4">
+          <Skeleton className="h-10 w-24" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+      </motion.div>
     );
   }
 
   if (!order) {
     return (
-      <Alert variant="destructive">
-        <AlertTitle>Không tìm thấy đơn hàng</AlertTitle>
+      <Alert variant="destructive" className="border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20">
+        <AlertTitle className="flex items-center gap-2">
+          <InfoIcon className="h-5 w-5" />
+          Không tìm thấy đơn hàng
+        </AlertTitle>
         <AlertDescription>
           Không thể tìm thấy thông tin cho đơn hàng {orderId}. Vui lòng kiểm tra lại.
         </AlertDescription>
@@ -320,37 +347,62 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
     );
   }
 
+  // Get the current active step index
+  const getActiveStep = () => {
+    if (!order || !order.timeline) return 1;
+    return order.timeline.length;
+  };
+
   return (
-    <div className="space-y-6">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="space-y-8 max-w-6xl mx-auto"
+    >
       {/* Header with back button */}
       <div className="flex items-center justify-between">
         <Button 
           variant="ghost" 
           size="sm" 
           onClick={onBack}
-          className="flex items-center gap-1"
+          className="flex items-center gap-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Quay lại đơn hàng
         </Button>
         {order.status === 'cancelled' && (
-          <Badge variant="destructive">Đơn hàng đã bị hủy</Badge>
+          <Badge className="bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/20 dark:text-rose-400 dark:border-rose-800/30 py-1.5 shadow-sm">
+            <InfoIcon className="h-4 w-4 mr-1" />
+            Đơn hàng đã bị hủy
+          </Badge>
         )}
       </div>
 
       {/* Order info header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold">
-            Đơn hàng #{order.id}
-          </h2>
-          <p className="text-muted-foreground">
-            Đặt hàng ngày {formatDate(order.date)}
-          </p>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-emerald-50 via-emerald-50/70 to-teal-50/50 dark:from-emerald-950/30 dark:via-emerald-950/20 dark:to-teal-950/10 p-6 rounded-xl border border-emerald-100 dark:border-emerald-800/30 shadow-sm"
+      >
+        <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md">
+            <ShoppingBag className="h-6 w-6" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-emerald-800 dark:text-emerald-300">
+              Đơn hàng #{order.id}
+            </h2>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <CalendarDays className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <span>Đặt hàng ngày {formatDate(order.date)}</span>
+            </div>
+          </div>
         </div>
 
         {order.status === 'shipping' && order.trackingInfo && (
-          <Button variant="outline">
+          <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md transition-all hover:shadow-lg">
             <a 
               href={order.trackingInfo.trackingUrl} 
               target="_blank" 
@@ -362,130 +414,180 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
             </a>
           </Button>
         )}
-      </div>
+      </motion.div>
       
       {/* Order status timeline */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-green-600" />
-            Trạng thái đơn hàng
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ol className="relative border-l border-gray-200 dark:border-gray-700">
-            {order.timeline.map((event: OrderTimelineEvent, index) => (
-              <li key={index} className="mb-8 ml-6 last:mb-0">
-                <span className={cn(
-                  "absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full ring-8 ring-white dark:ring-gray-900",
-                  index === order.timeline.length - 1 ? "bg-green-500" : "bg-gray-200 dark:bg-gray-700"
-                )}>
-                  {getStepIcon(event.status)}
-                </span>
-                <div className="flex flex-col gap-1">
-                  <h3 className="flex items-center gap-2 font-medium text-sm">
-                    {event.title}
-                    {getStatusBadge(event.status)}
-                  </h3>
-                  <time className="text-xs text-gray-500 dark:text-gray-400">
-                    {formatDate(event.date)}
-                  </time>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <Card className="border-emerald-100 dark:border-emerald-800/30 shadow-md overflow-hidden rounded-xl">
+          <CardHeader className="bg-gradient-to-r from-emerald-50 via-emerald-50/70 to-teal-50/50 dark:from-emerald-950/30 dark:via-emerald-950/20 dark:to-teal-950/10 border-b border-emerald-100 dark:border-emerald-800/30 py-5">
+            <CardTitle className="flex items-center gap-2 text-xl text-emerald-800 dark:text-emerald-300">
+              <Clock className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              Trạng thái đơn hàng
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 bg-gradient-to-b from-white to-emerald-50/20 dark:from-gray-900 dark:to-emerald-950/5">
+            <Timeline 
+              defaultValue={getActiveStep()} 
+              orientation="horizontal"
+              className="px-2"
+            >
+              {order.timeline.map((event: OrderTimelineEvent, index) => (
+                <TimelineItem 
+                  key={index} 
+                  step={index + 1}
+                  className="transition-all"
+                >
+                  <TimelineHeader>
+                    <TimelineSeparator />
+                    <TimelineDate className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mb-1.5">
+                      <CalendarDays className="h-3.5 w-3.5 flex-shrink-0 text-emerald-500 dark:text-emerald-400" />
+                      {formatDate(event.date)}
+                    </TimelineDate>
+                    <TimelineTitle className="flex items-center gap-2 font-medium text-emerald-800 dark:text-emerald-300">
+                      {event.title}
+                      {getStatusBadge(event.status)}
+                    </TimelineTitle>
+                    <TimelineIndicator className={cn(
+                      "flex items-center justify-center shadow-md",
+                      index + 1 <= getActiveStep() 
+                        ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white dark:from-emerald-600 dark:to-teal-700" 
+                        : "bg-gray-200 dark:bg-gray-700"
+                    )}>
+                      {getStepIcon(event.status)}
+                    </TimelineIndicator>
+                  </TimelineHeader>
+                  <TimelineContent className="text-gray-700 dark:text-gray-300 mt-2">
                     {event.description}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </CardContent>
-      </Card>
+                  </TimelineContent>
+                </TimelineItem>
+              ))}
+            </Timeline>
+          </CardContent>
+        </Card>
+      </motion.div>
       
       {/* Order items */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ShoppingBag className="h-5 w-5 text-green-600" />
-            Chi tiết đơn hàng
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {order.items.map((item, index) => (
-              <div key={index} className="flex items-center gap-4">
-                <div className="flex-shrink-0">
-                  <img 
-                    src={item.thumbnail} 
-                    alt={item.name}
-                    className="h-16 w-16 rounded-md object-cover"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Đơn giá: {formatCurrency(item.price)}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground">Số lượng</p>
-                  <p>{item.quantity}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Thành tiền</p>
-                  <p className="font-medium">{formatCurrency(item.price * item.quantity)}</p>
-                </div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        <Card className="border-emerald-100 dark:border-emerald-800/30 shadow-md overflow-hidden rounded-xl">
+          <CardHeader className="bg-gradient-to-r from-emerald-50 via-emerald-50/70 to-teal-50/50 dark:from-emerald-950/30 dark:via-emerald-950/20 dark:to-teal-950/10 border-b border-emerald-100 dark:border-emerald-800/30 py-5">
+            <CardTitle className="flex items-center gap-2 text-xl text-emerald-800 dark:text-emerald-300">
+              <ShoppingBag className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              Chi tiết đơn hàng
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 bg-gradient-to-b from-white to-emerald-50/20 dark:from-gray-900 dark:to-emerald-950/5">
+            <div className="space-y-5">
+              {order.items.map((item, index) => (
+                <motion.div 
+                  key={index} 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  className="flex items-center gap-4 p-4 rounded-xl border border-emerald-100 dark:border-emerald-800/30 bg-white dark:bg-gray-900/80 hover:bg-emerald-50/80 dark:hover:bg-emerald-900/10 transition-colors shadow-sm hover:shadow-md"
+                >
+                  <div className="flex-shrink-0">
+                    <div className="h-20 w-20 rounded-lg overflow-hidden border border-emerald-100 dark:border-emerald-800/30 shadow-sm bg-white dark:bg-gray-800 p-1 flex items-center justify-center">
+                      <img 
+                        src={item.thumbnail} 
+                        alt={item.name}
+                        className="h-full w-full object-contain"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-lg text-emerald-800 dark:text-emerald-300">{item.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Đơn giá: {formatCurrency(item.price)}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-1">Số lượng</p>
+                    <p className="font-medium bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/20 px-3 py-1.5 rounded-full text-emerald-700 dark:text-emerald-400 shadow-sm">{item.quantity}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground mb-1">Thành tiền</p>
+                    <p className="font-medium text-emerald-700 dark:text-emerald-400">{formatCurrency(item.price * item.quantity)}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+            
+            <Separator className="my-6 bg-emerald-100 dark:bg-emerald-800/30" />
+            
+            <div className="space-y-3 p-5 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/10 border border-emerald-100 dark:border-emerald-800/30 shadow-sm">
+              <div className="flex justify-between">
+                <p className="text-muted-foreground">Tạm tính</p>
+                <p>{formatCurrency(order.subtotal)}</p>
               </div>
-            ))}
-          </div>
-          
-          <Separator className="my-6" />
-          
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <p className="text-muted-foreground">Tạm tính</p>
-              <p>{formatCurrency(order.subtotal)}</p>
+              <div className="flex justify-between">
+                <p className="text-muted-foreground">Phí vận chuyển</p>
+                <p>{formatCurrency(order.shippingFee)}</p>
+              </div>
+              <Separator className="my-3 bg-emerald-200/50 dark:bg-emerald-800/30" />
+              <div className="flex justify-between font-medium">
+                <p className="text-emerald-800 dark:text-emerald-300">Tổng cộng</p>
+                <p className="text-lg text-emerald-700 dark:text-emerald-400 font-semibold">{formatCurrency(order.totalAmount)}</p>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <p className="text-muted-foreground">Phí vận chuyển</p>
-              <p>{formatCurrency(order.shippingFee)}</p>
-            </div>
-            <Separator className="my-2" />
-            <div className="flex justify-between font-medium">
-              <p>Tổng cộng</p>
-              <p className="text-lg">{formatCurrency(order.totalAmount)}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
       
       {/* Customer and shipping info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-green-600" />
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
+        <Card className="border-emerald-100 dark:border-emerald-800/30 shadow-md overflow-hidden rounded-xl h-full">
+          <CardHeader className="bg-gradient-to-r from-emerald-50 via-emerald-50/70 to-teal-50/50 dark:from-emerald-950/30 dark:via-emerald-950/20 dark:to-teal-950/10 border-b border-emerald-100 dark:border-emerald-800/30 py-5">
+            <CardTitle className="flex items-center gap-2 text-xl text-emerald-800 dark:text-emerald-300">
+              <MapPin className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
               Thông tin giao hàng
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <p className="font-medium">Địa chỉ giao hàng</p>
+          <CardContent className="p-6 bg-gradient-to-b from-white to-emerald-50/20 dark:from-gray-900 dark:to-emerald-950/5 h-full">
+            <div className="space-y-4 h-full">
+              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/10 border border-emerald-100 dark:border-emerald-800/30 shadow-sm">
+                <p className="font-medium mb-2 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                  <MapPin className="h-4 w-4" />
+                  Địa chỉ giao hàng
+                </p>
                 <p className="text-muted-foreground">{order.shippingInfo.address}</p>
                 <p className="text-muted-foreground">{order.shippingInfo.city}</p>
               </div>
-              <div>
-                <p className="font-medium">Phương thức vận chuyển</p>
+              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/10 border border-emerald-100 dark:border-emerald-800/30 shadow-sm">
+                <p className="font-medium mb-2 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                  <Truck className="h-4 w-4" />
+                  Phương thức vận chuyển
+                </p>
                 <p className="text-muted-foreground">{order.shippingInfo.method}</p>
               </div>
               {order.status === 'delivered' && order.shippingInfo.deliveredAt && (
-                <div>
-                  <p className="font-medium">Thời gian giao hàng</p>
+                <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/10 border border-emerald-100 dark:border-emerald-800/30 shadow-sm">
+                  <p className="font-medium mb-2 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                    <CheckCircle className="h-4 w-4" />
+                    Thời gian giao hàng
+                  </p>
                   <p className="text-muted-foreground">{formatDate(order.shippingInfo.deliveredAt)}</p>
                 </div>
               )}
               {(order.status === 'processing' || order.status === 'shipping') && order.shippingInfo.estimatedDelivery && (
-                <div>
-                  <p className="font-medium">Dự kiến giao hàng</p>
+                <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/10 border border-emerald-100 dark:border-emerald-800/30 shadow-sm">
+                  <p className="font-medium mb-2 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                    <Clock className="h-4 w-4" />
+                    Dự kiến giao hàng
+                  </p>
                   <p className="text-muted-foreground">{order.shippingInfo.estimatedDelivery}</p>
                 </div>
               )}
@@ -493,55 +595,73 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-green-600" />
+        <Card className="border-emerald-100 dark:border-emerald-800/30 shadow-md overflow-hidden rounded-xl h-full">
+          <CardHeader className="bg-gradient-to-r from-emerald-50 via-emerald-50/70 to-teal-50/50 dark:from-emerald-950/30 dark:via-emerald-950/20 dark:to-teal-950/10 border-b border-emerald-100 dark:border-emerald-800/30 py-5">
+            <CardTitle className="flex items-center gap-2 text-xl text-emerald-800 dark:text-emerald-300">
+              <FileText className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
               Thông tin thanh toán
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <p className="font-medium">Khách hàng</p>
+          <CardContent className="p-6 bg-gradient-to-b from-white to-emerald-50/20 dark:from-gray-900 dark:to-emerald-950/5 h-full">
+            <div className="space-y-4 h-full">
+              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/10 border border-emerald-100 dark:border-emerald-800/30 shadow-sm">
+                <p className="font-medium mb-2 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                  <FileText className="h-4 w-4" />
+                  Khách hàng
+                </p>
                 <p className="text-muted-foreground">{order.customer.name}</p>
                 <p className="text-muted-foreground">{order.customer.email}</p>
                 <p className="text-muted-foreground">{order.customer.phone}</p>
               </div>
-              <div>
-                <p className="font-medium">Phương thức thanh toán</p>
+              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/10 border border-emerald-100 dark:border-emerald-800/30 shadow-sm">
+                <p className="font-medium mb-2 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                  <CreditCard className="h-4 w-4" />
+                  Phương thức thanh toán
+                </p>
                 <p className="text-muted-foreground">{order.paymentMethod}</p>
               </div>
-              <div>
-                <p className="font-medium">Trạng thái thanh toán</p>
+              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/10 border border-emerald-100 dark:border-emerald-800/30 shadow-sm">
+                <p className="font-medium mb-2 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                  <InfoIcon className="h-4 w-4" />
+                  Trạng thái thanh toán
+                </p>
                 <div className="mt-1">{getPaymentStatusBadge(order.paymentStatus)}</div>
               </div>
             </div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
       
       {/* Actions footer */}
-      <CardFooter className="flex justify-end gap-4 mt-4 px-0">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        className="flex justify-end gap-4 mt-8 pb-8"
+      >
         <Button 
-          variant="ghost" 
+          variant="outline" 
           onClick={onBack}
+          className="border-emerald-200 dark:border-emerald-800/50 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 transition-colors"
         >
+          <ArrowLeft className="h-4 w-4 mr-2" />
           Quay lại
         </Button>
         
         {order.status === 'delivered' && (
-          <Button>
+          <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md transition-all hover:shadow-lg">
+            <RefreshCcw className="h-4 w-4 mr-2" />
             Mua lại
           </Button>
         )}
         
         {(order.status === 'processing' || order.status === 'placed' || order.status === 'confirmed') && (
-          <Button variant="destructive">
+          <Button variant="destructive" className="shadow-md hover:shadow-lg transition-all">
+            <InfoIcon className="h-4 w-4 mr-2" />
             Hủy đơn hàng
           </Button>
         )}
-      </CardFooter>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 } 

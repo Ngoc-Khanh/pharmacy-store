@@ -14,12 +14,14 @@ export const reactRouter: RouteObject[] = [
     path: "/",
     element: <Navigate to={routes.store.root} />,
   },
-
   {
     path: routes.admin.root,
     element: <Navigate to={routes.admin.dashboard} />,
   },
-
+  {
+    path: routes.store.account.settings,
+    element: <Navigate to={routes.store.account.root} />,
+  },
   // AUTHENTICATION PAGES
   {
     path: routes.auth.login,
@@ -79,6 +81,10 @@ export const reactRouter: RouteObject[] = [
           {
             path: routes.store.account.orders,
             element: <OrdersPage />,
+          },
+          {
+            path: routes.store.account.invoices,
+            element: <div>Invoices Page's</div>,
           }
         ]
       }

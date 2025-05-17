@@ -14,11 +14,13 @@ const baseRoutes = {
     medicineDetails: (id: string) => `/store/medicines/${id}/details`,
     checkout: "/store/checkout",
     account: {
+      settings: "/store/account/settings",
       root: "/store/account",
       addresses: "/store/account/addresses",
       changePwd: "/store/account/change-password",
       cart: "/store/account/cart",
       orders: "/store/account/orders",
+      invoices: "/store/account/invoices",
     },
   },
 
@@ -54,6 +56,7 @@ export const routeNames = {
   [baseRoutes.store.account.changePwd]: "Đổi mật khẩu",
   [baseRoutes.store.account.cart]: "Giỏ hàng",
   [baseRoutes.store.account.orders]: "Đơn hàng của tôi",
+  [baseRoutes.store.account.invoices]: "Hóa đơn",
 };
 
 export const routes = {

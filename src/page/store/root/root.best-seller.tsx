@@ -98,7 +98,7 @@ export function BestSeller() {
                 whileHover={{ y: -5 }}
               >
                 <Card className="rounded-xl border-0 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group bg-white/80 backdrop-blur-sm dark:bg-gray-900/60 h-full flex flex-col border-gray-100/80 dark:border-gray-800/50">
-                  <Link to={`${routes.store.root}?medicine=${product.id}`} className="block flex-1">
+                  <Link to={routes.store.medicineDetails(product.id)} className="block flex-1">
                     <div className="relative">
                       <div className="aspect-square bg-gradient-to-br from-gray-50/50 to-gray-100/50 dark:from-gray-800/50 dark:to-gray-900/50 flex items-center justify-center overflow-hidden">
                         <img
@@ -149,7 +149,7 @@ export function BestSeller() {
                         className="rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 group border-0 hover:shadow-md transition-all duration-200"
                         asChild
                       >
-                        <Link to={`${routes.store.root}?medicine=${product.id}`}>
+                        <Link to={routes.store.medicineDetails(product.id)}>
                           <span>Chi tiết</span>
                           <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </Link>
@@ -173,9 +173,12 @@ export function BestSeller() {
             variant="outline"
             className="group px-6 py-6 rounded-full border-green-300 dark:border-green-700 bg-white/80 dark:bg-gray-900/60 hover:bg-green-50 dark:hover:bg-green-950/30 text-green-700 dark:text-green-400 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 backdrop-blur-sm"
             disabled={isLoading}
+            asChild
           >
-            Xem tất cả sản phẩm
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+            <Link to={routes.store.medicines}>
+              Xem tất cả sản phẩm
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+            </Link>
           </Button>
         </motion.div>
       </div>
