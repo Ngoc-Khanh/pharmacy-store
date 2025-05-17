@@ -1,5 +1,5 @@
-import { AddAddressDto, ChangePasswordDto, UpdateProfileDto } from "@/data/dto";
-import { User, UserAddress } from "@/data/interfaces";
+import { AddAddressDto, CartItemDto, ChangePasswordDto, UpdateProfileDto } from "@/data/dto";
+import { Cart, User, UserAddress } from "@/data/interfaces";
 import { SRO } from "@/data/sro";
 import { apiDelete, apiGet, apiPatch, apiPost } from "../api";
 
@@ -36,6 +36,21 @@ export const AccountAPI = {
 
   async changePassword(data: ChangePasswordDto) {
     const res = await apiPatch<ChangePasswordDto, SRO<User>>("v1/store/account/profile/change-password", data);
+    return res.data.data;
+  },
+
+  async CartList() {
+    const res = await apiGet<SRO<Cart>>("v1/store/account/carts");
+    return res.data.data;
+  },
+
+  async AddToCart(data: CartItemDto) {
+    const res = await apiPost<CartItemDto, SRO<Cart>>("v1/store/account/carts/add", data);
+    return res.data.data;
+  },
+
+  async RemoveFromCart(id: string) {
+    const res = await apiDelete<SRO<Cart>>(`v1/store/account/carts/remove/${id}`);
     return res.data.data;
   }
 }

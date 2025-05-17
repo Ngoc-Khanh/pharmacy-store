@@ -1,78 +1,231 @@
 import { CartItem, Medicine } from "@/data/interfaces";
 import { atom } from "jotai";
+import { AccountAPI } from "@/services/api/account.api";
+import { toast } from "sonner";
 
-// `cartAtom` là một atom của Jotai lưu trữ một mảng `CartItem`, khởi tạo rỗng.
-// `CartItem` định nghĩa cấu trúc sản phẩm trong giỏ hàng.
+// Atom để theo dõi state gọi API (chỉ sử dụng nội bộ, không dùng cho loading UI)
+export const cartApiLoadingAtom = atom(false);
+
+// Atom để theo dõi lỗi
+export const cartErrorAtom = atom<string | null>(null);
+
+// `cartAtom` lưu trữ danh sách sản phẩm trong giỏ hàng
 export const cartAtom = atom<CartItem[]>([]);
 
-// `cartItemCountAtom` là một atom của Jotai tính tổng số lượng sản phẩm trong giỏ hàng.
-// Nó dùng `get` để lấy trạng thái `cartAtom` và `reduce` để tính tổng `quantity`.
-export const cartItemCountAtom = atom((get) => {
-  const cart = get(cartAtom);
-  return cart.reduce((count, item) => count + item.quantity, 0);
-});
-
-// `cartTotalPriceAtom` là một atom của Jotai tính tổng giá trị của các sản phẩm trong giỏ hàng.
-// Nó dùng `get` để lấy trạng thái `cartAtom` và `reduce` để tính tổng giá.
-export const cartTotalPriceAtom = atom((get) => {
-  const cart = get(cartAtom);
-  return cart.reduce((total, item) => {
-    return total + item.medicine.variants.price * item.quantity;
-  }, 0);
-});
-
-// `addToCartAtom` là một atom của Jotai để thêm sản phẩm vào giỏ hàng hoặc cập nhật số lượng nếu đã tồn tại.
-// Nó dùng `get` để lấy trạng thái hiện tại của giỏ hàng và `set` để cập nhật.
-export const addToCartAtom = atom(
+// Khởi tạo giỏ hàng từ API - đây là nơi duy nhất cần hiển thị loading
+export const initCartAtom = atom(
   null,
-  (get, set, { medicine, quantity }: { medicine: Medicine; quantity: number }) => {
-    const cart = get(cartAtom);
-    const existingItem = cart.find(item => item.medicine.id === medicine.id);
+  async (get, set) => {
+    // Chỉ cần loading khi lần đầu khởi tạo
+    const isLoading = get(cartApiLoadingAtom);
+    if (isLoading) return; // Tránh gọi API nhiều lần
 
-    if (existingItem) {
-      // Sản phẩm đã tồn tại, cập nhật số lượng
-      set(cartAtom, cart.map(item =>
-        item.medicine.id === medicine.id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      ));
-    } else {
-      // Thêm sản phẩm mới vào giỏ hàng
-      set(cartAtom, [...cart, { medicine, quantity }]);
+    try {
+      set(cartApiLoadingAtom, true);
+      set(cartErrorAtom, null);
+      const cartData = await AccountAPI.CartList();
+      // Đảm bảo items tồn tại và là mảng trước khi cập nhật
+      set(cartAtom, cartData?.items?.filter(item => item?.medicine?.id) || []);
+    } catch (error) {
+      console.error("Không thể tải giỏ hàng", error);
+      set(cartErrorAtom, "Không thể tải giỏ hàng");
+      toast.error("Không thể tải giỏ hàng. Vui lòng làm mới trang.");
+    } finally {
+      set(cartApiLoadingAtom, false);
     }
   }
 );
 
-// `updateCartItemQuantityAtom` là một atom của Jotai để cập nhật số lượng của một sản phẩm cụ thể trong giỏ hàng.
-// Nó dùng `get` để lấy trạng thái hiện tại của giỏ hàng và `set` để cập nhật.
+// `cartItemCountAtom` tính tổng số lượng sản phẩm trong giỏ hàng
+export const cartItemCountAtom = atom((get) => {
+  const cart = get(cartAtom);
+  return cart.reduce((count, item) => count + (item?.quantity || 0), 0);
+});
+
+// `cartTotalPriceAtom` tính tổng giá trị của các sản phẩm trong giỏ hàng
+export const cartTotalPriceAtom = atom((get) => {
+  const cart = get(cartAtom);
+  return cart.reduce((total, item) => {
+    // Thêm kiểm tra null để tránh truy cập thuộc tính của undefined
+    if (!item?.medicine?.variants?.price) return total;
+    return total + (item.medicine.variants.price * (item.quantity || 1));
+  }, 0);
+});
+
+// `addToCartAtom` thêm sản phẩm vào giỏ hàng - sử dụng Optimistic Update
+export const addToCartAtom = atom(
+  null,
+  async (get, set, { medicine, quantity }: { medicine: Medicine; quantity: number }) => {
+    if (!medicine?.id) {
+      console.error("Đối tượng sản phẩm không hợp lệ", medicine);
+      toast.error("Không thể thêm vào giỏ hàng do dữ liệu không hợp lệ");
+      return;
+    }
+    
+    // Lưu lại trạng thái hiện tại để có thể hoàn tác nếu API lỗi
+    const currentCart = get(cartAtom);
+    
+    try {
+      // Tìm sản phẩm đã tồn tại trong giỏ hàng
+      const existingItem = currentCart.find(item => item?.medicine?.id === medicine.id);
+      
+      // Cập nhật state ngay lập tức (Optimistic Update)
+      if (existingItem) {
+        // Nếu sản phẩm đã tồn tại, cập nhật số lượng
+        set(cartAtom, currentCart.map(item =>
+          item.medicine.id === medicine.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        ));
+      } else {
+        // Thêm sản phẩm mới vào giỏ hàng
+        set(cartAtom, [...currentCart, { medicine, quantity }]);
+      }
+
+      // Gọi API trong background để lưu vào database
+      set(cartApiLoadingAtom, true);
+      await AccountAPI.AddToCart({
+        medicineId: medicine.id,
+        quantity: quantity
+      });
+      
+      // Có thể cân nhắc gọi CartList() để cập nhật lại từ phản hồi máy chủ
+      // const latestCartData = await AccountAPI.CartList();
+      // set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+    } catch (error) {
+      console.error("Không thể thêm vào giỏ hàng", error);
+      // Nếu API thất bại, khôi phục lại trạng thái ban đầu
+      set(cartAtom, currentCart);
+      set(cartErrorAtom, "Không thể thêm vào giỏ hàng");
+      toast.error("Không thể thêm vào giỏ hàng. Vui lòng thử lại sau.");
+    } finally {
+      set(cartApiLoadingAtom, false);
+    }
+  }
+);
+
+// `updateCartItemQuantityAtom` cập nhật số lượng của một sản phẩm - sử dụng Optimistic Update
 export const updateCartItemQuantityAtom = atom(
   null,
-  (get, set, update: { medicineId: string; quantity: number }) => {
-    const cart = get(cartAtom);
-    const updatedCart = cart.map(item =>
-      item.medicine.id === update.medicineId
-      ? { ...item, quantity: update.quantity }
-      : item
-    );
-    set(cartAtom, updatedCart);
+  async (get, set, update: { medicineId: string; quantity: number }) => {
+    if (!update?.medicineId) {
+      console.error("ID sản phẩm không hợp lệ", update);
+      toast.error("Không thể cập nhật giỏ hàng do dữ liệu không hợp lệ");
+      return;
+    }
+    
+    // Lưu lại trạng thái hiện tại để có thể hoàn tác nếu API lỗi
+    const currentCart = get(cartAtom);
+    
+    try {
+      // Tìm sản phẩm trong giỏ hàng hiện tại
+      const existingItem = currentCart.find(item => item?.medicine?.id === update.medicineId);
+      if (!existingItem) {
+        toast.error("Sản phẩm không tồn tại trong giỏ hàng");
+        return;
+      }
+      
+      // Cập nhật state ngay lập tức (Optimistic Update)
+      const updatedCart = currentCart.map(item =>
+        item.medicine.id === update.medicineId
+          ? { ...item, quantity: update.quantity }
+          : item
+      );
+      set(cartAtom, updatedCart);
+
+      // Gọi API trong background để lưu vào database
+      set(cartApiLoadingAtom, true);
+      
+      // Loại bỏ sản phẩm cũ và thêm lại với số lượng mới
+      await AccountAPI.RemoveFromCart(update.medicineId);
+      await AccountAPI.AddToCart({
+        medicineId: update.medicineId,
+        quantity: update.quantity
+      });
+      
+      // Có thể cân nhắc gọi CartList() để cập nhật lại từ phản hồi máy chủ
+      // const latestCartData = await AccountAPI.CartList();
+      // set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+    } catch (error) {
+      console.error("Không thể cập nhật giỏ hàng", error);
+      // Khôi phục lại trạng thái ban đầu nếu API thất bại
+      set(cartAtom, currentCart);
+      set(cartErrorAtom, "Không thể cập nhật giỏ hàng");
+      toast.error("Không thể cập nhật giỏ hàng. Vui lòng thử lại sau.");
+    } finally {
+      set(cartApiLoadingAtom, false);
+    }
   }
 );
 
-// `removeFromCartAtom` là một atom của Jotai để xóa một sản phẩm khỏi giỏ hàng bằng `medicineId`.
-// Nó dùng `get` để lấy trạng thái hiện tại của giỏ hàng và `set` để cập nhật.
+// `removeFromCartAtom` xóa sản phẩm khỏi giỏ hàng - sử dụng Optimistic Update
 export const removeFromCartAtom = atom(
   null,
-  (get, set, medicineId: string) => {
-    const cart = get(cartAtom);
-    set(cartAtom, cart.filter(item => item.medicine.id !== medicineId));
+  async (get, set, medicineId: string) => {
+    if (!medicineId) {
+      console.error("ID sản phẩm không hợp lệ");
+      toast.error("Không thể xóa khỏi giỏ hàng do dữ liệu không hợp lệ");
+      return;
+    }
+    
+    // Lưu lại trạng thái hiện tại để có thể hoàn tác nếu API lỗi
+    const currentCart = get(cartAtom);
+    
+    try {
+      // Cập nhật state ngay lập tức (Optimistic Update)
+      set(cartAtom, currentCart.filter(item => item?.medicine?.id !== medicineId));
+
+      // Gọi API trong background để lưu vào database
+      set(cartApiLoadingAtom, true);
+      await AccountAPI.RemoveFromCart(medicineId);
+      
+      // Có thể cân nhắc gọi CartList() để cập nhật lại từ phản hồi máy chủ
+      // const latestCartData = await AccountAPI.CartList();
+      // set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+    } catch (error) {
+      console.error("Không thể xóa khỏi giỏ hàng", error);
+      // Khôi phục lại trạng thái ban đầu nếu API thất bại
+      set(cartAtom, currentCart);
+      set(cartErrorAtom, "Không thể xóa khỏi giỏ hàng");
+      toast.error("Không thể xóa khỏi giỏ hàng. Vui lòng thử lại sau.");
+    } finally {
+      set(cartApiLoadingAtom, false);
+    }
   }
 );
 
-// `clearCartAtom` là một atom của Jotai để xóa tất cả sản phẩm khỏi giỏ hàng.
-// Nó dùng `set` để đặt lại trạng thái giỏ hàng thành một mảng rỗng.
+// `clearCartAtom` xóa tất cả sản phẩm khỏi giỏ hàng - sử dụng Optimistic Update
 export const clearCartAtom = atom(
   null,
-  (_, set) => {
-    set(cartAtom, []);
+  async (get, set) => {
+    // Lưu lại trạng thái hiện tại để có thể hoàn tác nếu API lỗi
+    const currentCart = get(cartAtom);
+    
+    try {
+      // Cập nhật state ngay lập tức (Optimistic Update)
+      set(cartAtom, []);
+      
+      // Gọi API trong background để lưu vào database
+      set(cartApiLoadingAtom, true);
+      
+      // Xóa từng sản phẩm trong giỏ hàng
+      for (const item of currentCart) {
+        if (item?.medicine?.id) {
+          await AccountAPI.RemoveFromCart(item.medicine.id);
+        }
+      }
+      
+      // Có thể cân nhắc gọi CartList() để cập nhật lại từ phản hồi máy chủ
+      // const latestCartData = await AccountAPI.CartList();
+      // set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+    } catch (error) {
+      console.error("Không thể xóa giỏ hàng", error);
+      // Khôi phục lại trạng thái ban đầu nếu API thất bại
+      set(cartAtom, currentCart);
+      set(cartErrorAtom, "Không thể xóa giỏ hàng");
+      toast.error("Không thể xóa giỏ hàng. Vui lòng thử lại sau.");
+    } finally {
+      set(cartApiLoadingAtom, false);
+    }
   }
 );

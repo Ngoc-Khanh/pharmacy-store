@@ -26,3 +26,8 @@ export type ChangePasswordDto = {
   newPassword: string;
   newPasswordConfirmation: string;
 }
+
+export type CartItemDto = {
+  medicineId: string;
+  quantity: number;
+}
