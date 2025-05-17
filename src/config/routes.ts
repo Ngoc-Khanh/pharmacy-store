@@ -12,13 +12,13 @@ const baseRoutes = {
     categories: "/store/categories",
     medicines: "/store/medicines",
     medicineDetails: (id: string) => `/store/medicines/${id}/details`,
-    cart: "/store/cart",
     checkout: "/store/checkout",
-    orders: "/store/orders",
     account: {
       root: "/store/account",
       addresses: "/store/account/addresses",
       changePwd: "/store/account/change-password",
+      cart: "/store/account/cart",
+      orders: "/store/account/orders",
     },
   },
 
@@ -42,8 +42,6 @@ export const routeNames = {
   [baseRoutes.store.root]: "Trang chủ",
   [baseRoutes.store.categories]: "Danh mục",
   [baseRoutes.store.medicines]: "Dược phẩm",
-  [baseRoutes.store.cart]: "Giỏ hàng",
-  [baseRoutes.store.orders]: "Đơn hàng của tôi",
 
   // ADMIN NAME ROUTES
   [baseRoutes.admin.root]: "Admin",
@@ -54,6 +52,8 @@ export const routeNames = {
   [baseRoutes.store.account.root]: "Tài khoản",
   [baseRoutes.store.account.addresses]: "Địa chỉ",
   [baseRoutes.store.account.changePwd]: "Đổi mật khẩu",
+  [baseRoutes.store.account.cart]: "Giỏ hàng",
+  [baseRoutes.store.account.orders]: "Đơn hàng của tôi",
 };
 
 export const routes = {

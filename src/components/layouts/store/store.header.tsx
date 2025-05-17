@@ -55,7 +55,7 @@ export default function StoreHeader() {
                   <span className="sr-only">GitHub</span>
                 </a>
               </Button>
-              <StoreCart />
+              {isAuthenticated && <StoreCart />}
               <ModeSwitcher />
               {isAuthenticated ? (
                 <div className="flex items-center gap-2 pl-2">
@@ -66,7 +66,12 @@ export default function StoreHeader() {
                   )}
                 </div>
               ) : (
-                <Button variant="ghost" size="default" asChild className="hover:bg-green-50 dark:hover:bg-green-950/50 hover:text-green-600 dark:hover:text-green-400">
+                <Button
+                  variant="ghost"
+                  size="default"
+                  asChild
+                  className="hover:bg-green-50 dark:hover:bg-green-950/50 hover:text-green-600 dark:hover:text-green-400"
+                >
                   <a href={routes.auth.login}>Đăng nhập | Đăng ký</a>
                 </Button>
               )}

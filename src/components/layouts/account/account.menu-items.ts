@@ -22,24 +22,24 @@ export const menuItems = [
       },
     ],
   },
-  // {
-  //   title: "Shopping",
-  //   items: [
-  //     {
-  //       label: "My Orders",
-  //       icon: Package,
-  //       href: routes.account.orders,
-  //     },
-  //     {
-  //       label: "My Invoices",
-  //       icon: Heart,
-  //       href: routes.account.invoices,
-  //     },
-  //     {
-  //       label: "My Store",
-  //       icon: Store,
-  //       // href: routes.mainStore,
-  //     },
-  //   ],
-  // },
+  {
+    title: "Mua sắm",
+    items: [
+      // {
+      //   label: "My Orders",
+      //   icon: Package,
+      //   href: routes.account.orders,
+      // },
+      // {
+      //   label: "My Invoices",
+      //   icon: Heart,
+      //   href: routes.account.invoices,
+      // },
+      // {
+      //   label: "My Store",
+      //   icon: Store,
+      //   // href: routes.mainStore,
+      // },
+    ],
+  },
 ];

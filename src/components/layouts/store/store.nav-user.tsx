@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { routes } from "@/config";
 import { User as IUser } from "@/data/interfaces";
+
 import { motion } from "framer-motion";
 import { FileText, LogOut, Settings, Shield, ShoppingBag, User } from "lucide-react";
 import { useState } from "react";
@@ -111,15 +112,15 @@ export default function StoreNavUser({ user }: { user: IUser }) {
                     <div className="flex items-center justify-center w-8 h-8 rounded-md bg-blue-100 dark:bg-blue-900/30">
                       <User size={16} className="text-blue-600 dark:text-blue-400" />
                     </div>
-                    <span>My Account</span>
+                    <span>Tài khoản của tôi</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer rounded-md">
-                  <Link to={routes.store.root} className="flex items-center gap-2.5 w-full">
+                  <Link to={routes.store.account.cart} className="flex items-center gap-2.5 w-full">
                     <div className="flex items-center justify-center w-8 h-8 rounded-md bg-amber-100 dark:bg-amber-900/30">
                       <ShoppingBag size={16} className="text-amber-600 dark:text-amber-400" />
                     </div>
-                    <span>My Orders</span>
+                    <span>Giỏ hàng</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer rounded-md">

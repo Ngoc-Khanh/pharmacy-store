@@ -2,8 +2,7 @@ import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import { OrdersPage, RootPage } from "@/page/store";
-import { AddressesPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
-import { CartPage } from "@/page/store/cart";
+import { AddressesPage, CartPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
 import CategoriesPage from "@/page/store/categories/page";
 import MedicinesPage from "@/page/store/medicines";
 import MedicineDetailsPage from "@/page/store/medicines/[id]";
@@ -55,16 +54,8 @@ export const reactRouter: RouteObject[] = [
         element: <MedicineDetailsPage />,
       },
       {
-        path: routes.store.cart,
-        element: <CartPage />,
-      },
-      {
         path: routes.store.checkout,
         element: <div>Checkout Page's</div>,
-      },
-      {
-        path: routes.store.orders,
-        element: <OrdersPage />,
       },
       {
         element: <AccountLayout />,
@@ -80,6 +71,14 @@ export const reactRouter: RouteObject[] = [
           {
             path: routes.store.account.changePwd,
             element: <ChangePasswordPage />,
+          },
+          {
+            path: routes.store.account.cart,
+            element: <CartPage />,
+          },
+          {
+            path: routes.store.account.orders,
+            element: <OrdersPage />,
           }
         ]
       }
