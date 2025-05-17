@@ -1,9 +1,9 @@
 import { routeNames, routes } from "@/config";
-import { Lock, MapPin, User } from "lucide-react";
+import { FileText, Lock, MapPin, Package, ShoppingCart, User } from "lucide-react";
 
 export const menuItems = [
   {
-    title: "Account",
+    title: "Tài khoản",
     items: [
       {
         label: routeNames[routes.store.account.root],
@@ -25,21 +25,21 @@ export const menuItems = [
   {
     title: "Mua sắm",
     items: [
-      // {
-      //   label: "My Orders",
-      //   icon: Package,
-      //   href: routes.account.orders,
-      // },
-      // {
-      //   label: "My Invoices",
-      //   icon: Heart,
-      //   href: routes.account.invoices,
-      // },
-      // {
-      //   label: "My Store",
-      //   icon: Store,
-      //   // href: routes.mainStore,
-      // },
+      {
+        label: "Giỏ hàng",
+        icon: ShoppingCart,
+        href: routes.store.account.cart,
+      },
+      {
+        label: "Đơn hàng",
+        icon: Package,
+        href: routes.store.account.orders,
+      },
+      {
+        label: "Hóa đơn",
+        icon: FileText,
+        href: routes.store.account.invoices,
+      },
     ],
   },
 ];

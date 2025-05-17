@@ -105,7 +105,7 @@ export function Categories() {
 
         <div className="flex justify-center mt-10">
           <Button className="group bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-300" asChild>
-            <Link to={routes.store.root} className="flex items-center gap-2">
+            <Link to={routes.store.categories} className="flex items-center gap-2">
               Xem tất cả danh mục
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
             </Link>

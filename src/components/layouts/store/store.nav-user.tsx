@@ -7,7 +7,7 @@ import { routes } from "@/config";
 import { User as IUser } from "@/data/interfaces";
 
 import { motion } from "framer-motion";
-import { FileText, LogOut, Settings, Shield, ShoppingBag, User } from "lucide-react";
+import { FileText, LogOut, Package, Shield, ShoppingBag, User } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -124,19 +124,19 @@ export default function StoreNavUser({ user }: { user: IUser }) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer rounded-md">
-                  <Link to={routes.store.root} className="flex items-center gap-2.5 w-full">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-md bg-purple-100 dark:bg-purple-900/30">
-                      <FileText size={16} className="text-purple-600 dark:text-purple-400" />
+                  <Link to={routes.store.account.orders} className="flex items-center gap-2.5 w-full">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-md bg-green-100 dark:bg-green-900/30">
+                      <Package size={16} className="text-green-600 dark:text-green-400" />
                     </div>
-                    <span>Invoices</span>
+                    <span>Đơn hàng</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer rounded-md">
-                  <Link to={routes.store.root} className="flex items-center gap-2.5 w-full">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-md bg-green-100 dark:bg-green-900/30">
-                      <Settings size={16} className="text-green-600 dark:text-green-400" />
+                  <Link to={routes.store.account.invoices} className="flex items-center gap-2.5 w-full">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-md bg-purple-100 dark:bg-purple-900/30">
+                      <FileText size={16} className="text-purple-600 dark:text-purple-400" />
                     </div>
-                    <span>Settings</span>
+                    <span>Hóa đơn</span>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -153,7 +153,7 @@ export default function StoreNavUser({ user }: { user: IUser }) {
                 <div className="flex items-center justify-center w-8 h-8 rounded-md bg-red-100 dark:bg-red-900/30">
                   <LogOut size={16} className="text-red-600 dark:text-red-400" />
                 </div>
-                <span>Log out</span>
+                <span>Đăng xuất</span>
               </DropdownMenuItem>
             </div>
           </motion.div>

@@ -11,7 +11,7 @@ export function AccountSidebar() {
     <div className="w-72 space-y-6">
       <div className="bg-white/90 dark:bg-gray-950/90 shadow-xl dark:shadow-green-900/5 border border-gray-100 dark:border-gray-800/50 backdrop-blur-sm rounded-2xl p-6 sticky top-6">
         <h2 className="text-xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-400 dark:to-teal-400">
-          Tài khoản của tôi
+          Cài đặt
         </h2>
 
         {menuItems.map((section, index) => (
