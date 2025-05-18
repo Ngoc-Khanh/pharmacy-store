@@ -1,2 +1,6 @@
-export { default as RootPage } from "./root/page";
+export { default as CategoriesPage } from "./categories/page";
+export { default as MedicineDetailsPage } from "./medicines/[id]/page";
+export { default as MedicinesPage } from "./medicines/page";
 export { default as OrdersPage } from "./orders/page";
+export { default as RootPage } from "./root/page";
+

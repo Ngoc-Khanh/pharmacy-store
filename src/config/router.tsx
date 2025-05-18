@@ -1,12 +1,9 @@
 import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
-import UsersPage from "@/page/admin/users";
+import { MedicinesAdminPage, MedicinesDetailPage, UsersAdminPage } from "@/page/admin";
 import { LoginPage, RegisterPage } from "@/page/auth";
-import { OrdersPage, RootPage } from "@/page/store";
+import { CategoriesPage, MedicineDetailsPage, MedicinesPage, OrdersPage, RootPage } from "@/page/store";
 import { AddressesPage, CartPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
-import CategoriesPage from "@/page/store/categories/page";
-import MedicinesPage from "@/page/store/medicines";
-import MedicineDetailsPage from "@/page/store/medicines/[id]";
 
 import { Navigate, RouteObject } from "react-router-dom";
 
@@ -102,7 +99,19 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: routes.admin.users,
-        element: <UsersPage />,
+        element: <UsersAdminPage />,
+      },
+      {
+        path: routes.admin.categories,
+        element: <div>Categories Page's</div>,
+      },
+      {
+        path: routes.admin.medicines,
+        element: <MedicinesAdminPage />,
+      },
+      {
+        path: routes.admin.medicineDetails(":id"),
+        element: <MedicinesDetailPage />,
       },
       {
         path: routes.admin.settings.root,

@@ -1,10 +1,10 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { Link, useLocation } from "react-router-dom";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { routeNames, routes } from "@/config";
 import { Home } from "lucide-react";
 import React from "react";
-import { routes } from "@/config";
+import { Link, useLocation } from "react-router-dom";
 
 export function AdminHeader() {
   const location = useLocation();
@@ -23,7 +23,7 @@ export function AdminHeader() {
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink asChild>
-                  <Link to={routes.admin.dashboard} target="_blank">
+                  <Link to={routes.admin.dashboard}>
                     <Home size={16} strokeWidth={2} aria-hidden="true" />
                     <span className="sr-only">Home</span>
                   </Link>
@@ -34,17 +34,24 @@ export function AdminHeader() {
 
                 const to = `/${pathnames.slice(0, index + 1).join("/")}`;
                 const isLast = index === pathnames.length - 1;
-                const name = to.split("/").pop();
+                
+                // Get proper name from routeNames if available
+                let displayName = routeNames[to];
+                
+                // If route name not found, use capitalized path segment
+                if (!displayName) {
+                  displayName = value.charAt(0).toUpperCase() + value.slice(1);
+                }
 
                 return (
                   <React.Fragment key={to}>
                     <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem>
                       {isLast ? (
-                        <BreadcrumbPage>{name}</BreadcrumbPage>
+                        <BreadcrumbPage>{displayName}</BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink asChild>
-                          <Link to={to}>{name}</Link>
+                          <Link to={to}>{displayName}</Link>
                         </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>
