@@ -66,14 +66,14 @@ export function DataTableColumnHeader<TData, TValue>({
             className="cursor-pointer hover:bg-emerald-50 text-sm font-medium group flex items-center"
           >
             <ArrowUp className="mr-2 h-3.5 w-3.5 text-emerald-600 group-hover:text-emerald-700" />
-            <span className="group-hover:text-emerald-700">Ascending</span>
+            <span className="group-hover:text-emerald-700">Tăng dần</span>
           </DropdownMenuItem>
           <DropdownMenuItem 
             onClick={() => column.toggleSorting(true)}
             className="cursor-pointer hover:bg-emerald-50 text-sm font-medium group flex items-center"
           >
             <ArrowDown className="mr-2 h-3.5 w-3.5 text-emerald-600 group-hover:text-emerald-700" />
-            <span className="group-hover:text-emerald-700">Descending</span>
+            <span className="group-hover:text-emerald-700">Giảm dần</span>
           </DropdownMenuItem>
           {column.getCanHide() && (
             <>
@@ -83,7 +83,7 @@ export function DataTableColumnHeader<TData, TValue>({
                 className="cursor-pointer hover:bg-rose-50 text-sm font-medium group flex items-center"
               >
                 <EyeOff className="mr-2 h-3.5 w-3.5 text-rose-500 group-hover:text-rose-600" />
-                <span className="group-hover:text-rose-600">Hide Column</span>
+                <span className="group-hover:text-rose-600">Ẩn cột</span>
               </DropdownMenuItem>
             </>
           )}
