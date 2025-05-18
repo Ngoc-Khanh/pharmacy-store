@@ -1,7 +1,5 @@
-import { useMedicinesDialog } from "@/atoms/dialog.atom";
-
 export default function MedicinesDialogs() {
-  const { open, setOpen, currentMedicine, setCurrentMedicine } = useMedicinesDialog();
+  // const { open, setOpen, currentMedicine, setCurrentMedicine } = useMedicinesDialog();
   
   return (
     <>
