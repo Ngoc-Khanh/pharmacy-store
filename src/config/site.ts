@@ -1,4 +1,4 @@
-import { BarChartIcon, FolderIcon, HelpCircleIcon, LayoutDashboardIcon, SearchIcon, SettingsIcon } from "lucide-react";
+import { BarChartIcon, FolderIcon, HelpCircleIcon, LayoutDashboardIcon, SearchIcon, SettingsIcon, UsersIcon } from "lucide-react";
 import { routeNames, routes } from "./routes";
 
 export const siteConfig = {
@@ -50,11 +50,11 @@ export const sidebarItem = {
       url: routes.admin.dashboard,
       icon: LayoutDashboardIcon,
     },
-    // {
-    //   title: routeNames[routes.admin.users],
-    //   url: routes.admin.users,
-    //   icon: UsersIcon,
-    // },
+    {
+      title: routeNames[routes.admin.users],
+      url: routes.admin.users,
+      icon: UsersIcon,
+    },
     // {
     //   title: routeNames[routes.admin.medicines],
     //   url: routes.admin.medicines,

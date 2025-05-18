@@ -27,6 +27,7 @@ const baseRoutes = {
   admin: {
     root: "/admin",
     dashboard: "/admin/dashboard",
+    users: "/admin/users",
     settings: {
       root: "/admin/settings",
     }
@@ -47,8 +48,9 @@ export const routeNames = {
 
   // ADMIN NAME ROUTES
   [baseRoutes.admin.root]: "Admin",
-  [baseRoutes.admin.dashboard]: "Dashboard",
-  [baseRoutes.admin.settings.root]: "Settings",
+  [baseRoutes.admin.dashboard]: "Bảng điều khiển",
+  [baseRoutes.admin.settings.root]: "Cài đặt",
+  [baseRoutes.admin.users]: "Quản lý người dùng",
 
   // STORE NAME ROUTES
   [baseRoutes.store.account.root]: "Tài khoản",

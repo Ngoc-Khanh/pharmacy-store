@@ -1,5 +1,5 @@
 import { Category, Medicine } from "@/data/interfaces";
-import { PaginatedResponse, SRO } from "@/data/sro";
+import { Paginated, SRO } from "@/data/sro";
 import { apiGet } from "../api";
 
 export const StoreAPI = {
@@ -14,7 +14,7 @@ export const StoreAPI = {
   },
 
   async MedicinesRoot() {
-    const res = await apiGet<SRO<PaginatedResponse<Medicine>>>("v1/store/medicines");
+    const res = await apiGet<SRO<Paginated<Medicine>>>("v1/store/medicines");
     return res.data;
   },
 
