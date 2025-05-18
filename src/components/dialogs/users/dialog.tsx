@@ -1,5 +1,6 @@
 import { useUsersDialog } from "@/atoms/dialog.atom";
 import { UsersActionDialog } from "./users.action-dialog";
+import { UsersChangeStatusDialog } from "./users.change-status-dialog";
 import { ViewUsersDialog } from "./users.view-dialogs";
 
 export default function UsersDialogs() {
@@ -44,6 +45,36 @@ export default function UsersDialogs() {
               }
             }}
             currentUser={currentUser}
+          />
+
+          <UsersChangeStatusDialog
+            key={`user-suspend-${currentUser.id}`}
+            open={open === "suspend"}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                setOpen(null);
+                setTimeout(() => {
+                  setCurrentUser(null);
+                }, 300);
+              }
+            }}
+            currentUser={currentUser}
+            mode="suspend"
+          />
+
+          <UsersChangeStatusDialog
+            key={`user-activate-${currentUser.id}`}
+            open={open === "activate"}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                setOpen(null);
+                setTimeout(() => {
+                  setCurrentUser(null);
+                }, 300);
+              }
+            }}
+            currentUser={currentUser}
+            mode="activate"
           />
         </>
       )}

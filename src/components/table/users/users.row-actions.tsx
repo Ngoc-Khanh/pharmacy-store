@@ -83,7 +83,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
             <DropdownMenuItem
               onClick={() => {
                 setCurrentUser(row.original);
-                setOpen(isActive ? "ban" : "activate");
+                setOpen(isActive ? "suspend" : "activate");
               }}
               className={cn(
                 "cursor-pointer flex items-center gap-2 py-1.5 px-2 text-sm rounded-sm group",
