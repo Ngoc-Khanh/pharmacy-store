@@ -1,7 +1,7 @@
 import { User } from "@/data/interfaces";
 import { atom, useAtom } from "jotai";
 
-type UsersDialogType = "add" | "edit" | "delete" | "view" | "ban" | "activate"
+type UsersDialogType = "add" | "edit" | "delete" | "view" | "suspend" | "activate"
 
 export const openUsersDialogAtom = atom<UsersDialogType | null>(null);
 export const currentUserAtom = atom<User | null>(null);
