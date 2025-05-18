@@ -135,8 +135,8 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
         onOpenChange(state);
       }}
     >
-      <DialogContent className="sm:max-w-[650px] p-0 overflow-hidden rounded-xl border border-primary/10 shadow-lg">
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary to-primary/60"></div>
+      <DialogContent className="sm:max-w-[650px] p-0 overflow-hidden rounded-xl border border-emerald-200/50 dark:border-emerald-900/30 shadow-lg">
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-400/80"></div>
 
         <DialogHeader className="p-6 pb-0 space-y-2">
           <motion.div
@@ -145,11 +145,11 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
             transition={{ duration: 0.4 }}
             className="flex items-center gap-2"
           >
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <Sparkles className="h-5 w-5 text-primary" />
+            <div className="h-10 w-10 rounded-full bg-emerald-100/80 dark:bg-emerald-900/30 flex items-center justify-center">
+              <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
-              <DialogTitle className="text-xl font-semibold tracking-tight">
+              <DialogTitle className="text-xl font-semibold tracking-tight text-emerald-800 dark:text-emerald-300">
                 {isEdit ? "Chỉnh sửa người dùng" : "Thêm người dùng mới"}
               </DialogTitle>
               <DialogDescription className="text-sm text-muted-foreground/80 mt-0.5">
@@ -160,20 +160,20 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 px-6 py-4 max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-primary/10 scrollbar-track-transparent">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 px-6 py-4 max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-emerald-200/30 dark:scrollbar-thumb-emerald-800/20 scrollbar-track-transparent">
             <div className="grid gird-cols-1 gap-6">
               <motion.div
                 custom={1}
                 variants={formSectionVariants}
                 initial="hidden"
                 animate="visible"
-                className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300"
+                className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-emerald-200/50 dark:hover:border-emerald-800/30 transition-all duration-300"
               >
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="h-6 w-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                    <UserIcon className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                  <div className="h-6 w-6 rounded-full bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center">
+                    <UserIcon className="h-3 w-3 text-sky-600 dark:text-sky-400" />
                   </div>
-                  <h3 className="font-medium text-blue-600 dark:text-blue-400">Thông tin cá nhân</h3>
+                  <h3 className="font-medium text-sky-600 dark:text-sky-400">Thông tin cá nhân</h3>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -189,11 +189,11 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                         <FormControl>
                           <div className="relative group">
                             <Input
-                              className="pl-9 transition-all border-input/50 focus:border-primary/50 group-hover:border-primary/30"
+                              className="pl-9 transition-all border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30"
                               placeholder="John"
                               {...field}
                             />
-                            <UserCircle className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-primary/70 transition-colors" />
+                            <UserCircle className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-emerald-500/70 transition-colors" />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -212,11 +212,11 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                         <FormControl>
                           <div className="relative group">
                             <Input
-                              className="pl-9 transition-all border-input/50 focus:border-primary/50 group-hover:border-primary/30"
+                              className="pl-9 transition-all border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30"
                               placeholder="Doe"
                               {...field}
                             />
-                            <UserCircle className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-primary/70 transition-colors" />
+                            <UserCircle className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-emerald-500/70 transition-colors" />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -238,11 +238,11 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                         <FormControl>
                           <div className="relative group">
                             <Input
-                              className="pl-9 transition-all border-input/50 focus:border-primary/50 group-hover:border-primary/30"
+                              className="pl-9 transition-all border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30"
                               placeholder="johndoe"
                               {...field}
                             />
-                            <UserIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-primary/70 transition-colors" />
+                            <UserIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-emerald-500/70 transition-colors" />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -257,7 +257,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                 variants={formSectionVariants}
                 initial="hidden"
                 animate="visible"
-                className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300"
+                className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-emerald-200/50 dark:hover:border-emerald-800/30 transition-all duration-300"
               >
                 <div className="flex items-center gap-2 mb-4">
                   <div className="h-6 w-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
@@ -279,12 +279,12 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                         <FormControl>
                           <div className="relative group">
                             <Input
-                              className="pl-9 transition-all border-input/50 focus:border-primary/50 group-hover:border-primary/30"
+                              className="pl-9 transition-all border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30"
                               placeholder="john.doe@example.com"
                               type="email"
                               {...field}
                             />
-                            <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-primary/70 transition-colors" />
+                            <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-emerald-500/70 transition-colors" />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -303,11 +303,11 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                         <FormControl>
                           <div className="relative group">
                             <Input
-                              className="pl-9 transition-all border-input/50 focus:border-primary/50 group-hover:border-primary/30"
+                              className="pl-9 transition-all border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30"
                               placeholder="+1234567890"
                               {...field}
                             />
-                            <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-primary/70 transition-colors" />
+                            <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-emerald-500/70 transition-colors" />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -322,7 +322,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                 variants={formSectionVariants}
                 initial="hidden"
                 animate="visible"
-                className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300"
+                className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-emerald-200/50 dark:hover:border-emerald-800/30 transition-all duration-300"
               >
                 <div className="flex items-center gap-2 mb-4">
                   <div className="h-6 w-6 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
@@ -344,13 +344,13 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <div className="relative group">
-                              <SelectTrigger className="pl-9 transition-all border-input/50 focus:border-primary/50 group-hover:border-primary/30">
-                                <ShieldCheck className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-primary/70 transition-colors" />
+                              <SelectTrigger className="pl-9 transition-all border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30">
+                                <ShieldCheck className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-emerald-500/70 transition-colors" />
                                 <SelectValue placeholder="Chọn vai trò" />
                               </SelectTrigger>
                             </div>
                           </FormControl>
-                          <SelectContent className="border border-primary/10">
+                          <SelectContent className="border border-emerald-200/10">
                             <SelectItem value="admin">
                               <div className="flex items-center gap-2">
                                 <Badge variant="outline" className="bg-red-100 text-red-800 dark:bg-red-900/60 dark:text-red-300 border-red-200 dark:border-red-800 shadow-sm">
@@ -393,13 +393,13 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <div className="relative group">
-                              <SelectTrigger className="pl-9 transition-all border-input/50 focus:border-primary/50 group-hover:border-primary/30">
-                                <ToggleLeft className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-primary/70 transition-colors" />
+                              <SelectTrigger className="pl-9 transition-all border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30">
+                                <ToggleLeft className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-emerald-500/70 transition-colors" />
                                 <SelectValue placeholder="Chọn trạng thái" />
                               </SelectTrigger>
                             </div>
                           </FormControl>
-                          <SelectContent className="border border-primary/10">
+                          <SelectContent className="border border-emerald-200/10">
                             <SelectItem value="active">
                               <div className="flex items-center gap-2">
                                 <Badge className="bg-green-100 text-green-800 dark:bg-green-900/60 dark:text-green-300 border-none shadow-sm">
@@ -435,7 +435,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                 variants={formSectionVariants}
                 initial="hidden"
                 animate="visible"
-                className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300"
+                className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-emerald-200/50 dark:hover:border-emerald-800/30 transition-all duration-300"
               >
                 <div className="flex items-center gap-2 mb-4">
                   <div className="h-6 w-6 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
@@ -477,13 +477,13 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                                 className={cn(
                                   "pl-9 transition-all", 
                                   isEdit 
-                                    ? "border-input/30 focus:border-primary/50 group-hover:border-primary/30"
-                                    : "border-input/50 focus:border-primary/50 group-hover:border-primary/30"
+                                    ? "border-input/30 focus:border-emerald-500/50 group-hover:border-emerald-400/30"
+                                    : "border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30"
                                 )}
                                 placeholder={isEdit ? "Để trống nếu không thay đổi" : "e.g., S3cur3P@ssw0rd"}
                                 {...field}
                               />
-                              <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-primary/70 transition-colors" />
+                              <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 group-hover:text-emerald-500/70 transition-colors" />
                             </div>
                           </FormControl>
                         </div>
@@ -515,7 +515,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                                   ? "bg-muted/30 border-input/20 text-muted-foreground/70"
                                   : !isPasswordTouched 
                                     ? "bg-muted/50 border-input/30" 
-                                    : "border-input/50 focus:border-primary/50 group-hover:border-primary/30"
+                                    : "border-input/50 focus:border-emerald-500/50 group-hover:border-emerald-400/30"
                               )}
                               disabled={!isPasswordTouched}
                               placeholder={isEdit ? "Để trống nếu không thay đổi" : "e.g., S3cur3P@ssw0rd"}
@@ -525,7 +525,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                               "absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors",
                               !isPasswordTouched
                                 ? "text-muted-foreground/40"
-                                : "text-muted-foreground/70 group-hover:text-primary/70"
+                                : "text-muted-foreground/70 group-hover:text-emerald-500/70"
                             )} />
                           </div>
                         </FormControl>
@@ -556,8 +556,8 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
                   "transition-all duration-300 shadow-md hover:shadow-lg relative overflow-hidden",
                   isPending ? "opacity-80 cursor-not-allowed" : "",
                   isEdit
-                    ? "bg-blue-600 hover:bg-blue-700"
-                    : "bg-gradient-to-r from-primary to-primary/90 hover:opacity-90"
+                    ? "bg-sky-600 hover:bg-sky-700"
+                    : "bg-gradient-to-r from-emerald-500 to-emerald-600/90 hover:opacity-90"
                 )}
               >
                 <motion.span
