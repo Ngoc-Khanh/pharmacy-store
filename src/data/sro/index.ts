@@ -6,7 +6,7 @@ export type SRO<T = unknown> = {
   error: string | null;
 };
 
-export interface PaginatedResponse<T> {
+export interface Paginated<T> {
   current_page: number;
   data: T[];
   first_page_url: string;

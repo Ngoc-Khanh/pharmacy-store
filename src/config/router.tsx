@@ -1,5 +1,6 @@
 import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
+import UsersPage from "@/page/admin/users";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import { OrdersPage, RootPage } from "@/page/store";
 import { AddressesPage, CartPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
@@ -98,6 +99,10 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.admin.dashboard,
         element: <div>Dashboard Page's</div>,
+      },
+      {
+        path: routes.admin.users,
+        element: <UsersPage />,
       },
       {
         path: routes.admin.settings.root,
