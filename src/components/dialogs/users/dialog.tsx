@@ -1,6 +1,7 @@
 import { useUsersDialog } from "@/atoms/dialog.atom";
 import { UsersActionDialog } from "./users.action-dialog";
 import { UsersChangeStatusDialog } from "./users.change-status-dialog";
+import { UsersDeleteDialog } from "./users.delete-dialog";
 import { ViewUsersDialog } from "./users.view-dialogs";
 
 export default function UsersDialogs() {
@@ -36,6 +37,20 @@ export default function UsersDialogs() {
           <ViewUsersDialog
             key={`user-view-${currentUser.id}`}
             open={open === "view"}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                setOpen(null);
+                setTimeout(() => {
+                  setCurrentUser(null);
+                }, 300);
+              }
+            }}
+            currentUser={currentUser}
+          />
+
+          <UsersDeleteDialog
+            key={`user-delete-${currentUser.id}`}
+            open={open === "delete"}
             onOpenChange={(isOpen) => {
               if (!isOpen) {
                 setOpen(null);

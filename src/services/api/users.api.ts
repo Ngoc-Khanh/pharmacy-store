@@ -1,7 +1,7 @@
 import { AddUserDto } from "@/data/dto";
 import { User } from "@/data/interfaces";
 import { Paginated, SRO } from "@/data/sro";
-import { apiGet, apiPatch, apiPost } from "../api";
+import { apiDelete, apiGet, apiPatch, apiPost } from "../api";
 
 export const UsersAPI = {
   async UsersList() {
@@ -16,6 +16,11 @@ export const UsersAPI = {
   
   async UserUpdate(id: string, data: AddUserDto) {
     const res = await apiPatch<AddUserDto ,SRO<User>>(`/v1/admin/users/update/${id}`, data);
+    return res.data.data;
+  },
+
+  async UserDelete(id: string) {
+    const res = await apiDelete<SRO<User>>(`/v1/admin/users/delete/${id}`);
     return res.data.data;
   },
 };

@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { User } from "@/data/interfaces";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, RowData, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
 import { useState } from "react";
+import { DataTablePagination } from "../data-table-pagination";
 import { UsersTableToolbar } from "./users.table-toolbar";
 
 declare module "@tanstack/react-table" {
@@ -108,7 +109,7 @@ export default function UsersDataTable({ columns, data }: DataTableProps) {
           </TableBody>
         </Table>
       </div>
-      {/* Pagination */}
+      <DataTablePagination table={table} />
     </div>
   )
 }
