@@ -1,4 +1,4 @@
-import { BarChartIcon, FolderIcon, HelpCircleIcon, LayoutDashboardIcon, SearchIcon, SettingsIcon, UsersIcon } from "lucide-react";
+import { FolderIcon, LayoutDashboardIcon, PillIcon, SettingsIcon, UsersIcon } from "lucide-react";
 import { routeNames, routes } from "./routes";
 
 export const siteConfig = {
@@ -55,20 +55,15 @@ export const sidebarItem = {
       url: routes.admin.users,
       icon: UsersIcon,
     },
-    // {
-    //   title: routeNames[routes.admin.medicines],
-    //   url: routes.admin.medicines,
-    //   icon: PillIcon,
-    // },
     {
-      title: "Analytics",
-      url: "#",
-      icon: BarChartIcon,
+      title: routeNames[routes.admin.categories],
+      url: routes.admin.categories,
+      icon: FolderIcon,
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: FolderIcon,
+      title: routeNames[routes.admin.medicines],
+      url: routes.admin.medicines,
+      icon: PillIcon,
     },
   ],
   navSecondary: [
@@ -76,16 +71,6 @@ export const sidebarItem = {
       title: routeNames[routes.admin.settings.root],
       url: routes.admin.settings.root,
       icon: SettingsIcon,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: HelpCircleIcon,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: SearchIcon,
     },
   ],
 }

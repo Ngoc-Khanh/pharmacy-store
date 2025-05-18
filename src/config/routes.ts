@@ -28,6 +28,9 @@ const baseRoutes = {
     root: "/admin",
     dashboard: "/admin/dashboard",
     users: "/admin/users",
+    categories: "/admin/categories",
+    medicines: "/admin/medicines",
+    medicineDetails: (id: string) => `/admin/medicines/${id}/details`,
     settings: {
       root: "/admin/settings",
     }
@@ -51,6 +54,9 @@ export const routeNames = {
   [baseRoutes.admin.dashboard]: "Bảng điều khiển",
   [baseRoutes.admin.settings.root]: "Cài đặt",
   [baseRoutes.admin.users]: "Quản lý người dùng",
+  [baseRoutes.admin.categories]: "Quản lý danh mục",
+  [baseRoutes.admin.medicines]: "Quản lý dược phẩm",
+  [baseRoutes.admin.medicineDetails(":id")]: "Chi tiết dược phẩm",
 
   // STORE NAME ROUTES
   [baseRoutes.store.account.root]: "Tài khoản",
