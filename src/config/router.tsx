@@ -1,6 +1,8 @@
 import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { MedicinesAdminPage, MedicinesDetailPage, UsersAdminPage } from "@/page/admin";
+import CategoriesAdminPage from "@/page/admin/categories";
+import TestPage from "@/page/admin/categories/test";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import { CategoriesPage, MedicineDetailsPage, MedicinesPage, OrdersPage, RootPage } from "@/page/store";
 import { AddressesPage, CartPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
@@ -103,7 +105,7 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: routes.admin.categories,
-        element: <div>Categories Page's</div>,
+        element: <CategoriesAdminPage />,
       },
       {
         path: routes.admin.medicines,
@@ -112,6 +114,10 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.admin.medicineDetails(":id"),
         element: <MedicinesDetailPage />,
+      },
+      {
+        path: "/admin/test",
+        element: <TestPage />,
       },
       {
         path: routes.admin.settings.root,

@@ -1,12 +1,12 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, ShoppingBag, Package, Pill, Stethoscope, Tablets, Apple } from "lucide-react";
-import { Link } from "react-router-dom";
-import { routes } from "@/config";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { routes } from "@/config";
 import { StoreAPI } from "@/services/api/store.api";
+import { useQuery } from "@tanstack/react-query";
+import { Apple, ArrowRight, Package, Pill, ShoppingBag, Stethoscope, Tablets } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function CategorySkeleton() {
   return (
@@ -69,7 +69,9 @@ export function Categories() {
               <p className="text-gray-500">Không có danh mục nào</p>
             </div>
           ) : (
-            categories.map((category, index) => {
+            categories
+              .filter(category => category.isActive === true)
+              .map((category, index) => {
               // Xác định icon dựa trên tên danh mục
               const CategoryIcon = categoryIcons[category.title] || categoryIcons.default;
 
