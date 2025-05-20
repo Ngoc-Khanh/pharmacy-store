@@ -3,7 +3,8 @@ export interface Category {
   title: string;
   slug: string;
   description: string;
-  readonly updated_at: string;
-  readonly created_at: string;
+  isActive?: boolean;
+  readonly updatedAt: string;
+  readonly createdAt: string;
 }
 

@@ -219,9 +219,11 @@ export function CategoriesView() {
             initial="hidden"
             animate="visible"
           >
-            {filteredCategories.map((category) => {
-              const CategoryIcon = categoryIcons[category.title] || categoryIcons.default;
-              
+            {filteredCategories
+              .filter(category => category.isActive === true)
+              .map((category) => {
+                const CategoryIcon = categoryIcons[category.title] || categoryIcons.default;
+                
               return (
                 <motion.div key={category.id} variants={itemVariants}>
                   <Link to={`${routes.store.root}?category=${category.slug}`} className="block h-full">

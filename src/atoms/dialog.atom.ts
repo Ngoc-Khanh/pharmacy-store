@@ -1,4 +1,4 @@
-import { Medicine, User } from "@/data/interfaces";
+import { Category, Medicine, User } from "@/data/interfaces";
 import { atom, useAtom } from "jotai";
 
 type UsersDialogType = "add" | "edit" | "delete" | "view" | "suspend" | "activate"
@@ -11,6 +11,18 @@ export const useUsersDialog = () => {
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
 
   return { open, setOpen, currentUser, setCurrentUser };
+}
+
+type CategoriesDialogType = "add" | "edit" | "delete"
+
+export const openCategoriesDialogAtom = atom<CategoriesDialogType | null>(null);
+export const currentCategoryAtom = atom<Category | null>(null);
+
+export const useCategoriesDialog = () => {
+  const [open, setOpen] = useAtom(openCategoriesDialogAtom);
+  const [currentCategory, setCurrentCategory] = useAtom(currentCategoryAtom);
+
+  return { open, setOpen, currentCategory, setCurrentCategory };
 }
 
 type MedicinesDialogType = "add" | "edit" | "delete"
