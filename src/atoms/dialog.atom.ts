@@ -13,7 +13,7 @@ export const useUsersDialog = () => {
   return { open, setOpen, currentUser, setCurrentUser };
 }
 
-type CategoriesDialogType = "add" | "edit" | "delete"
+type CategoriesDialogType = "add" | "edit" | "delete" | "status"
 
 export const openCategoriesDialogAtom = atom<CategoriesDialogType | null>(null);
 export const currentCategoryAtom = atom<Category | null>(null);

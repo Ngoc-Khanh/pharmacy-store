@@ -52,8 +52,8 @@ export function CategoryRowActions({ row }: CategoryRowActionsProps) {
             <DropdownMenuItem
               onClick={() => {
                 setCurrentCategory(row.original);
-                // Using closest option since there's no toggle type
-                setOpen("edit");
+                // Changed to use status dialog type
+                setOpen("status");
               }}
               className={cn(
                 "cursor-pointer flex items-center gap-2 py-1.5 px-2 text-sm rounded-sm group",
