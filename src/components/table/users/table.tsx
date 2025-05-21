@@ -4,6 +4,8 @@ import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedR
 import { useState } from "react";
 import { DataTablePagination } from "../data-table-pagination";
 import { UsersTableToolbar } from "./users.table-toolbar";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,67 +51,91 @@ export default function UsersDataTable({ columns, data }: DataTableProps) {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <UsersTableToolbar table={table} />
-      <div className="rounded-md border overflow-hidden">
-        <Table>
-          <TableHeader className="bg-muted/50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="group/row hover:bg-muted/60">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      className={`${header.column.columnDef.meta?.className ?? ""} font-medium text-sm`}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="group/row hover:bg-muted/40 transition-colors"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cell.column.columnDef.meta?.className ?? ""}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+      
+      <div className="overflow-hidden rounded-xl border border-emerald-100 dark:border-emerald-800/30 bg-white dark:bg-slate-950 shadow-sm">
+        <motion.div
+          initial={{ opacity: 0.7 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="relative"
+        >
+          <div className="overflow-y-auto max-h-[calc(100vh-340px)]">
+            <Table>
+              <TableHeader className="bg-emerald-50/70 dark:bg-emerald-950/40 sticky top-0 z-10">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id} className="border-b border-emerald-100 dark:border-emerald-800/20 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/50">
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          colSpan={header.colSpan}
+                          className={cn(
+                            header.column.columnDef.meta?.className ?? "",
+                            "font-semibold text-emerald-800 dark:text-emerald-300 text-sm py-4"
+                          )}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row, idx) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className={cn(
+                        "group/row hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors border-b border-emerald-50 dark:border-emerald-900/20",
+                        row.getIsSelected() && "bg-emerald-50/80 dark:bg-emerald-950/50",
+                        idx % 2 === 0 && "bg-white dark:bg-slate-950",
+                        idx % 2 === 1 && "bg-emerald-50/20 dark:bg-emerald-950/10"
                       )}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className={cn(
+                            cell.column.columnDef.meta?.className ?? "",
+                            "py-3"
+                          )}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center text-emerald-600 dark:text-emerald-400"
+                    >
+                      Không tìm thấy kết quả.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Không tìm thấy kết quả.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </motion.div>
       </div>
-      <DataTablePagination table={table} />
+      
+      <div className="bg-white dark:bg-slate-950 rounded-xl border border-emerald-100 dark:border-emerald-800/30 shadow-sm p-2">
+        <DataTablePagination table={table} />
+      </div>
     </div>
   )
 }
