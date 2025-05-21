@@ -1,3 +1,4 @@
+import { useMedicinesDialog } from "@/atoms/dialog.atom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,8 +9,47 @@ import { Medicine } from "@/data/interfaces";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { CheckCircle2, CircleDot, ExternalLink, FileText, Info, Package2, Pill, ShoppingBag, Sparkles, Tag, Eye } from "lucide-react";
+import { CheckCircle2, CircleDot, ExternalLink, Eye, FileText, Info, Package2, Pill, ShoppingBag, Sparkles, Tag, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
+
+// Add this component for the actions cell
+// eslint-disable-next-line react-refresh/only-export-components
+const MedicineActionsCell = ({ medicine }: { medicine: Medicine }) => {
+  const { setOpen, setCurrentMedicine } = useMedicinesDialog();
+  const id = medicine.id;
+
+  return (
+    <div className="flex items-center justify-center">
+      <Button
+        variant="outline"
+        size="sm"
+        asChild
+        className="bg-white dark:bg-gray-900 hover:bg-teal-50 hover:text-teal-600 dark:hover:bg-teal-950/20 dark:hover:text-teal-400 transition-all border-teal-100 dark:border-teal-900/30 hover:border-teal-200 dark:hover:border-teal-800/50 shadow-sm hover:shadow rounded-full"
+      >
+        <Link to={routes.admin.medicineDetails(id)}>
+          <div className="flex items-center gap-1.5">
+            <ExternalLink className="h-3.5 w-3.5" />
+            <span className="font-medium">Chi tiết</span>
+          </div>
+        </Link>
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="ml-2 bg-white dark:bg-gray-900 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/20 dark:hover:text-rose-400 transition-all border-rose-100 dark:border-rose-900/30 hover:border-rose-200 dark:hover:border-rose-800/50 shadow-sm hover:shadow rounded-full"
+        onClick={() => {
+          setCurrentMedicine(medicine);
+          setOpen("delete");
+        }}
+      >
+        <div className="flex items-center gap-1.5">
+          <Trash className="h-3.5 w-3.5" />
+          <span className="font-medium">Xóa</span>
+        </div>
+      </Button>
+    </div>
+  );
+};
 
 export const medicinesColumns: ColumnDef<Medicine>[] = [
   {
@@ -348,25 +388,7 @@ export const medicinesColumns: ColumnDef<Medicine>[] = [
       </div>
     ),
     cell: ({ row }) => {
-      const id = row.original.id;
-
-      return (
-        <div className="flex items-center justify-center">
-          <Button
-            variant="outline"
-            size="sm"
-            asChild
-            className="bg-white dark:bg-gray-900 hover:bg-teal-50 hover:text-teal-600 dark:hover:bg-teal-950/20 dark:hover:text-teal-400 transition-all border-teal-100 dark:border-teal-900/30 hover:border-teal-200 dark:hover:border-teal-800/50 shadow-sm hover:shadow rounded-full"
-          >
-            <Link to={routes.admin.medicineDetails(id)}>
-              <div className="flex items-center gap-1.5">
-                <ExternalLink className="h-3.5 w-3.5" />
-                <span className="font-medium">Chi tiết</span>
-              </div>
-            </Link>
-          </Button>
-        </div>
-      );
+      return <MedicineActionsCell medicine={row.original} />;
     },
     size: 120,
     enableSorting: false,

@@ -27,7 +27,6 @@ interface Ratings {
   star: number;
   liked: number;
   reviewCount?: number;
-  review_count?: number;
 }
 
 interface Variant {

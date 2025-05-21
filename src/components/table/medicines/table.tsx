@@ -1,10 +1,10 @@
+import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Medicine } from "@/data/interfaces";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, RowData, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { DataTablePagination } from "../data-table-pagination";
-import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
