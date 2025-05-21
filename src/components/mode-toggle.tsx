@@ -1,8 +1,12 @@
+import { cn } from "@/lib/utils";
 import { useTheme } from "@/providers/theme.provider";
-import { Switch } from "@/components/ui/switch";
 import { Moon, Sun } from "lucide-react";
 
-export const ModeToggle = () => {
+interface ModeToggleProps {
+  className?: string;
+}
+
+export const ModeToggle = ({ className }: ModeToggleProps) => {
   const { theme, setTheme } = useTheme();
   const isLightMode = theme === "light";
 
@@ -11,25 +15,36 @@ export const ModeToggle = () => {
   };
 
   return (
-    <div className="flex items-center justify-between px-2 py-1">
-      <div className="flex items-center gap-2">
-        {isLightMode ? (
-          <>
-            <Sun className="h-4 w-4 transition-all dark:-rotate-90 dark:scale-0" />
-            <span className="text-sm">Light mode</span>
-          </>
-        ) : (
-          <>
-            <Moon className="h-4 w-4 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="text-sm">Dark mode</span>
-          </>
-        )}
+    <div className={cn("flex items-center justify-between rounded-lg px-2.5 py-2", className)}>
+      <div className="flex items-center gap-3">
+        <div className="relative h-6 w-12 cursor-pointer rounded-full bg-blue-100 dark:bg-blue-900/40" onClick={handleToggle}>
+          <div className="absolute inset-y-0 left-0 flex items-center justify-center">
+            <Sun 
+              className={cn(
+                "h-4 w-4 ml-1.5 text-yellow-500 transition-all duration-300", 
+                isLightMode ? "opacity-100" : "opacity-30"
+              )} 
+            />
+          </div>
+          <div className="absolute inset-y-0 right-0 flex items-center justify-center">
+            <Moon 
+              className={cn(
+                "h-4 w-4 mr-1.5 text-blue-500 transition-all duration-300", 
+                !isLightMode ? "opacity-100" : "opacity-30"
+              )} 
+            />
+          </div>
+          <div 
+            className={cn(
+              "absolute top-1 h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 ease-in-out",
+              isLightMode ? "left-1" : "translate-x-6"
+            )}
+          />
+        </div>
+        <span className="text-sm font-medium">
+          Giao diện {isLightMode ? 'sáng' : 'tối'}
+        </span>
       </div>
-      <Switch
-        id="theme-toggle"
-        checked={isLightMode}
-        onCheckedChange={handleToggle}
-      />
     </div>
   );
 };

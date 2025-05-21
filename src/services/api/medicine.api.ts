@@ -1,10 +1,26 @@
+import { AddMedicineDto } from "@/data/dto";
 import { Medicine } from "@/data/interfaces";
 import { SRO } from "@/data/sro";
-import { apiGet } from "../api";
+import { apiDelete, apiGet, apiPatch, apiPost } from "../api";
 
 export const MedicineAPI = {
   async MedicineList() {
     const res = await apiGet<SRO<Medicine[]>>("/v1/admin/medicines");
     return res.data.data;
-  }
-}
+  },
+
+  async MedicineCreate(medicine: AddMedicineDto) {
+    const res = await apiPost<AddMedicineDto, SRO<Medicine>>("/v1/admin/medicines/add", medicine);
+    return res.data.data;
+  },
+
+  async MedicineUpdate(id: string, medicine: AddMedicineDto) {
+    const res = await apiPatch<AddMedicineDto, SRO<Medicine>>(`/v1/admin/medicines/update/${id}`, medicine);
+    return res.data.data;
+  },
+
+  async MedicineDelete(id: string) {
+    const res = await apiDelete<SRO<Medicine>>(`/v1/admin/medicines/delete/${id}`);
+    return res.data.data;
+  },
+};
