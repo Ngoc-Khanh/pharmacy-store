@@ -1,87 +1,54 @@
+import { activeStepAtom, steps } from "@/atoms/stepper.atom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  Stepper,
-  StepperIndicator,
-  StepperItem,
-  StepperTitle,
-  StepperTrigger,
-} from "@/components/ui/stepper";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import { AddMedicineDto } from "@/data/dto";
-import { Category, Medicine } from "@/data/interfaces";
+import { Form } from "@/components/ui/form";
+import { Stepper, StepperItem } from "@/components/ui/stepper";
+import { Medicine } from "@/data/interfaces";
 import { medicineSchema, MedicineSchema } from "@/data/schemas";
-import { cn } from "@/lib/utils";
-import { CategoriesAPI } from "@/services/api/categories.api";
 import { MedicineAPI } from "@/services/api/medicine.api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ImagePlus, Loader2 } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { useAtom } from "jotai";
+import { ArrowLeft, ArrowRight, Loader2, Pill, Plus, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-// Helper function to generate a slug from a string
-const generateSlug = (text: string): string => {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-'); // Replace multiple hyphens with single hyphen
-};
+import { ActionStepFour } from "./medicines.action-step-four";
+import { ActionStepOne } from "./medicines.action-step-one";
+import { ActionStepThree } from "./medicines.action-step-three";
+import { ActionStepTwo } from "./medicines.action-step-two";
 
-interface Props {
+interface MedicinesActionDialogProps {
   currentMedicine?: Medicine,
   open: boolean,
   onOpenChange: (open: boolean) => void,
 }
 
-const steps = [
-  { id: "basic-info", name: "Thông tin cơ bản", step: 1 },
-  { id: "variants", name: "Biến thể", step: 2 },
-  { id: "details", name: "Chi tiết", step: 3 },
-  { id: "usage-guide", name: "Hướng dẫn sử dụng", step: 4 },
-];
-
-export default function MedicinesActionDialog({ currentMedicine, open, onOpenChange }: Props) {
+export default function MedicinesActionDialog({ currentMedicine, open, onOpenChange }: MedicinesActionDialogProps) {
   const queryClient = useQueryClient();
   const isEdit = !!currentMedicine;
-  const [activeStep, setActiveStep] = useState(1);
-  const [isUploading, setIsUploading] = useState(false);
+  const [activeStep, setActiveStep] = useAtom(activeStepAtom);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const { data: categories = [] } = useQuery({
-    queryKey: ["categories"],
-    queryFn: CategoriesAPI.CategoriesList,
-    enabled: open,
-  });
 
   const form = useForm<MedicineSchema>({
     resolver: zodResolver(medicineSchema),
     defaultValues: isEdit ? {
       ...currentMedicine,
-      categoryId: currentMedicine.category?.id || "",
       isEdit,
     } : {
       categoryId: "",
       name: "",
-      slug: "",
       thumbnail: {
-        publicId: "",
         url: "",
-        alt: "",
       },
       description: "",
       variants: {
-        price: 0,
-        limitQuantity: 0,
+        price: 10000,
+        limitQuantity: 1,
         stockStatus: "IN-STOCK",
-        originalPrice: 0,
+        originalPrice: 10000,
         discountPercent: 0,
         isFeatured: false,
         isActive: true,
@@ -104,69 +71,22 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
       },
       isEdit,
     }
-  });
+  })
 
-  // Auto-generate slug when name changes
+  // Add effect to automatically calculate price when originalPrice or discountPercent changes
   useEffect(() => {
-    if (!isEdit) {
-      const subscription = form.watch((value, { name }) => {
-        if (name === 'name') {
-          const generatedSlug = generateSlug(value.name || "");
-          form.setValue('slug', generatedSlug);
-        }
-      });
-      
-      return () => subscription.unsubscribe();
-    }
-  }, [form, isEdit]);
+    const originalPrice = form.watch('variants.originalPrice');
+    const discountPercent = form.watch('variants.discountPercent');
 
-  // Simulate file upload
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setIsUploading(true);
-      
-      // Simulate upload with timeout
-      setTimeout(() => {
-        // In a real app, you would upload to a server and get back a URL
-        const reader = new FileReader();
-        reader.onload = () => {
-          form.setValue('thumbnail.url', reader.result as string);
-          form.setValue('thumbnail.alt', file.name);
-          form.setValue('thumbnail.publicId', `img_${Date.now()}`);
-          setIsUploading(false);
-        };
-        reader.readAsDataURL(file);
-      }, 1000);
+    if (originalPrice && discountPercent >= 0) {
+      const calculatedPrice = originalPrice * (1 - discountPercent / 100);
+      form.setValue('variants.price', Math.round(calculatedPrice));
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.watch('variants.originalPrice'), form.watch('variants.discountPercent')]);
 
-  // API integration
-  const saveMutation = useMutation({
-    mutationFn: async (data: MedicineSchema) => {
-      // Convert form data to DTO
-      const medicineDto: AddMedicineDto = {
-        name: data.name,
-        slug: data.slug,
-        description: data.description,
-        categoryId: data.categoryId,
-        thumbnail: data.thumbnail,
-        variants: {
-          ...data.variants,
-          // Ensure these boolean fields are never undefined
-          isFeatured: data.variants.isFeatured ?? false,
-          isActive: data.variants.isActive ?? true
-        },
-        details: data.details,
-        usageguide: data.usageguide
-      };
-      
-      if (isEdit && currentMedicine) {
-        return await MedicineAPI.MedicineUpdate(currentMedicine.id, medicineDto);
-      } else {
-        return await MedicineAPI.MedicineCreate(medicineDto);
-      }
-    },
+  const addMedicineMutation = useMutation({
+    mutationFn: MedicineAPI.MedicineCreate,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["medicines"] });
       toast.success(isEdit ? "Cập nhật thuốc thành công" : "Thêm thuốc mới thành công");
@@ -175,14 +95,14 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
     onError: (error) => {
       toast.error(`Lỗi: ${error instanceof Error ? error.message : 'Không thể lưu thuốc'}`);
     }
-  });
+  })
 
   const handleNext = async () => {
     setIsSubmitting(true);
-    
+
     const fieldsToValidate = getFieldsByStep(activeStep);
     const typedFields = fieldsToValidate as Array<keyof MedicineSchema>;
-    
+
     setTimeout(async () => {
       const isValid = await form.trigger(typedFields);
       if (isValid) {
@@ -197,7 +117,22 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
   };
 
   const onSubmit = (data: MedicineSchema) => {
-    saveMutation.mutate(data);
+    if (!isEdit) addMedicineMutation.mutate(data);
+  }
+
+  const renderCurrentStep = () => {
+    switch (activeStep) {
+      case 1:
+        return <ActionStepOne form={form} />;
+      case 2:
+        return <ActionStepTwo form={form} />;
+      case 3:
+        return <ActionStepThree form={form} />;
+      case 4:
+        return <ActionStepFour form={form} />;
+      default:
+        return null;
+    }
   };
 
   const getFieldsByStep = (step: number): string[] => {
@@ -215,24 +150,6 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
     }
   };
 
-  // Helper function to add a new item to an array in form data
-  const addArrayItem = (path: 'details.usage' | 'usageguide.directions' | 'usageguide.precautions', value: string) => {
-    const currentValues = form.getValues(path) as string[];
-    form.setValue(path, [...currentValues, value], { shouldValidate: true });
-  };
-
-  // Helper function to remove an item from an array in form data
-  const removeArrayItem = (path: 'details.usage' | 'usageguide.directions' | 'usageguide.precautions', index: number) => {
-    const currentValues = form.getValues(path) as string[];
-    if (currentValues.length > 1) {
-      form.setValue(
-        path, 
-        currentValues.filter((_, i) => i !== index),
-        { shouldValidate: true }
-      );
-    }
-  };
-
   return (
     <Dialog
       open={open}
@@ -244,568 +161,119 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
         onOpenChange(state);
       }}
     >
-      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
-            {isEdit ? "Cập nhật thuốc" : "Thêm thuốc mới"}
-          </DialogTitle>
-          
-          <div className="w-full mt-6 mb-4">
-            <div className="mx-auto max-w-xl space-y-4 text-center">
-              <Stepper value={activeStep} onValueChange={setActiveStep} className="items-start gap-4">
-                {steps.map((step) => (
-                  <StepperItem key={step.id} step={step.step} className="flex-1">
-                    <StepperTrigger className="w-full flex-col items-start gap-2 rounded">
-                      <StepperIndicator 
-                        className={cn(
-                          "bg-border h-1 w-full",
-                          activeStep === step.step && "bg-blue-500",
-                          activeStep > step.step && "bg-green-500"
-                        )}
-                      >
-                        <span className="sr-only">{step.name}</span>
-                      </StepperIndicator>
-                      <div className="space-y-0.5">
-                        <StepperTitle>{step.name}</StepperTitle>
-                      </div>
-                    </StepperTrigger>
-                  </StepperItem>
-                ))}
-              </Stepper>
+      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto bg-white border-teal-100 shadow-md">
+        <DialogHeader className="bg-gradient-to-r from-teal-600/90 to-emerald-500/90 text-white p-6 -m-6 mb-6 rounded-t-lg">
+          <div className="flex items-center gap-3">
+            <div className="bg-white/90 p-2 rounded-full shadow-sm">
+              <Pill className="h-6 w-6 text-teal-600" />
             </div>
+            <DialogTitle className="text-xl font-semibold">
+              {isEdit ? "Cập nhật thuốc" : "Thêm thuốc mới"}
+            </DialogTitle>
+          </div>
+
+          <div className="mx-auto w-full mt-8 mb-2 text-center">
+            <Stepper value={activeStep} className="items-start mt-4 gap-4">
+              {steps.map(({ step, title }) => (
+                <StepperItem key={step} step={step} className="flex-1 pointer-events-none">
+                  <div className="w-full flex-col items-start gap-2 rounded select-none">
+                    <div
+                      className={`h-1.5 w-full transition-all duration-300 rounded-full ${activeStep >= step
+                          ? "bg-white shadow-sm"
+                          : "bg-white/30"
+                        }`}
+                    >
+                      <span className="sr-only">{step}</span>
+                    </div>
+                    <div className="space-y-0.5 pt-1.5">
+                      <span
+                        className={`transition-all duration-300 text-sm font-medium ${activeStep === step
+                            ? "text-white"
+                            : activeStep > step
+                              ? "text-white/80"
+                              : "text-white/60"
+                          }`}
+                      >
+                        {title}
+                      </span>
+                    </div>
+                  </div>
+                </StepperItem>
+              ))}
+            </Stepper>
           </div>
         </DialogHeader>
-        
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Step 1: Basic Information */}
-            {activeStep === 1 && (
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Danh mục</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn danh mục thuốc" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {categories.map((category: Category) => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.title}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tên thuốc</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nhập tên thuốc" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="slug"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Slug (tự động)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="thuoc-abc-xyz" {...field} readOnly className="bg-slate-50" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Mô tả</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Mô tả ngắn về thuốc" 
-                          className="min-h-24" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <div>
-                  <FormLabel className="block mb-2">Hình ảnh</FormLabel>
-                  <div 
-                    className={cn(
-                      "border-2 border-dashed rounded-lg p-4 transition-all duration-200",
-                      form.getValues("thumbnail.url") 
-                        ? "border-green-300 bg-green-50" 
-                        : "border-gray-300 hover:border-blue-300 hover:bg-blue-50"
-                    )}
-                  >
-                    {form.getValues("thumbnail.url") ? (
-                      <div className="relative">
-                        <img 
-                          src={form.getValues("thumbnail.url")} 
-                          alt={form.getValues("thumbnail.alt")} 
-                          className="mx-auto h-40 object-contain rounded"
-                        />
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          size="sm" 
-                          className="absolute -top-2 -right-2 rounded-full h-8 w-8 p-0"
-                          onClick={() => {
-                            form.setValue("thumbnail.url", "");
-                            form.setValue("thumbnail.alt", "");
-                            form.setValue("thumbnail.publicId", "");
-                          }}
-                        >
-                          ×
-                        </Button>
-                      </div>
-                    ) : (
-                      <label className="flex flex-col items-center justify-center cursor-pointer text-center h-40">
-                        {isUploading ? (
-                          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-                        ) : (
-                          <>
-                            <ImagePlus className="w-8 h-8 text-gray-400 mb-2" />
-                            <p className="text-sm text-gray-500">
-                              Kéo thả hình ảnh vào đây hoặc nhấp để tải lên
-                            </p>
-                          </>
-                        )}
-                        <input 
-                          type="file" 
-                          accept="image/*" 
-                          className="hidden" 
-                          onChange={handleFileUpload}
-                          disabled={isUploading}
-                        />
-                      </label>
-                    )}
-                  </div>
-                  {form.formState.errors.thumbnail && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {form.formState.errors.thumbnail.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-            
-            {/* Step 2: Variants */}
-            {activeStep === 2 && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="variants.price"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá bán (VNĐ)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="100000" 
-                            {...field}
-                            onChange={e => field.onChange(Number(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="variants.originalPrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá gốc (VNĐ)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="120000" 
-                            {...field}
-                            onChange={e => field.onChange(Number(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="variants.discountPercent"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giảm giá (%)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="10" 
-                            {...field}
-                            onChange={e => field.onChange(Number(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="variants.limitQuantity"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Số lượng tối đa</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="100" 
-                            {...field}
-                            onChange={e => field.onChange(Number(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                <FormField
-                  control={form.control}
-                  name="variants.stockStatus"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Trạng thái kho</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn trạng thái" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="IN-STOCK">Còn hàng</SelectItem>
-                          <SelectItem value="LOW-STOCK">Sắp hết hàng</SelectItem>
-                          <SelectItem value="OUT-OF-STOCK">Hết hàng</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <div className="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 p-4 bg-slate-50 rounded-lg">
-                  <FormField
-                    control={form.control}
-                    name="variants.isFeatured"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center space-x-2">
-                        <FormControl>
-                          <Switch 
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Sản phẩm nổi bật</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="variants.isActive"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center space-x-2">
-                        <FormControl>
-                          <Switch 
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Sản phẩm kích hoạt</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            )}
-            
-            {/* Step 3: Details */}
-            {activeStep === 3 && (
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="details.ingredients"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Thành phần</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Nhập thành phần của thuốc" 
-                          className="min-h-24" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <div className="bg-slate-50 p-4 rounded-lg">
-                  <FormLabel className="block mb-3 font-medium">Cách sử dụng</FormLabel>
-                  {form.getValues("details.usage").map((_, index) => (
-                    <div key={index} className="flex items-center gap-2 mb-2">
-                      <FormField
-                        control={form.control}
-                        name={`details.usage.${index}` as `details.usage.${number}`}
-                        render={({ field }) => (
-                          <FormItem className="flex-1">
-                            <FormControl>
-                              <Input placeholder={`Cách sử dụng ${index + 1}`} {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        size="icon"
-                        onClick={() => removeArrayItem("details.usage", index)}
-                        className="shrink-0"
-                      >
-                        -
-                      </Button>
-                    </div>
-                  ))}
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => addArrayItem("details.usage", "")}
-                    className="mt-2"
-                  >
-                    + Thêm cách sử dụng
-                  </Button>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="details.parameters.origin"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Xuất xứ</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Việt Nam" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="details.parameters.packaging"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Đóng gói</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Hộp 30 viên" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            )}
-            
-            {/* Step 4: Usage Guide */}
-            {activeStep === 4 && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg mb-6">
-                  <FormField
-                    control={form.control}
-                    name="usageguide.dosage.adult"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Liều dùng cho người lớn</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Ngày 2 viên sau bữa ăn" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="usageguide.dosage.child"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Liều dùng cho trẻ em</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Ngày 1 viên sau bữa ăn" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                <div className="border border-slate-200 p-4 rounded-lg mb-4">
-                  <FormLabel className="block mb-3 font-medium">Hướng dẫn sử dụng</FormLabel>
-                  {form.getValues("usageguide.directions").map((_, index) => (
-                    <div key={index} className="flex items-center gap-2 mb-2">
-                      <FormField
-                        control={form.control}
-                        name={`usageguide.directions.${index}` as `usageguide.directions.${number}`}
-                        render={({ field }) => (
-                          <FormItem className="flex-1">
-                            <FormControl>
-                              <Input placeholder={`Hướng dẫn ${index + 1}`} {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        size="icon"
-                        onClick={() => removeArrayItem("usageguide.directions", index)}
-                        className="shrink-0"
-                      >
-                        -
-                      </Button>
-                    </div>
-                  ))}
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => addArrayItem("usageguide.directions", "")}
-                    className="mt-2"
-                  >
-                    + Thêm hướng dẫn
-                  </Button>
-                </div>
-                
-                <div className="border border-slate-200 p-4 rounded-lg">
-                  <FormLabel className="block mb-3 font-medium">Lưu ý</FormLabel>
-                  {form.getValues("usageguide.precautions").map((_, index) => (
-                    <div key={index} className="flex items-center gap-2 mb-2">
-                      <FormField
-                        control={form.control}
-                        name={`usageguide.precautions.${index}` as `usageguide.precautions.${number}`}
-                        render={({ field }) => (
-                          <FormItem className="flex-1">
-                            <FormControl>
-                              <Input placeholder={`Lưu ý ${index + 1}`} {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        size="icon"
-                        onClick={() => removeArrayItem("usageguide.precautions", index)}
-                        className="shrink-0"
-                      >
-                        -
-                      </Button>
-                    </div>
-                  ))}
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => addArrayItem("usageguide.precautions", "")}
-                    className="mt-2"
-                  >
-                    + Thêm lưu ý
-                  </Button>
-                </div>
-              </div>
-            )}
-            
-            <DialogFooter className="flex justify-between mt-6 pt-4 border-t">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-4">
+            <motion.div
+              key={activeStep}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {renderCurrentStep()}
+            </motion.div>
+
+            <DialogFooter className="mt-8 pt-4 border-t border-teal-50 flex flex-col sm:flex-row gap-2">
               {activeStep > 1 && (
-                <Button 
-                  type="button" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={handleBack}
+                  className="border-teal-200 hover:bg-teal-50 text-teal-700 flex items-center gap-1.5"
                 >
+                  <ArrowLeft className="w-4 h-4" />
                   Quay lại
                 </Button>
               )}
-              
-              <div className="flex justify-end gap-2">
-                <Button 
-                  type="button" 
-                  variant="outline" 
+
+              <div className="flex justify-end gap-2 flex-1">
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => onOpenChange(false)}
+                  className="border-teal-200 hover:bg-teal-50 text-teal-700"
                 >
                   Hủy
                 </Button>
-                
+
                 {activeStep < steps.length ? (
-                  <Button 
-                    type="button" 
+                  <Button
+                    type="button"
                     onClick={handleNext}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-teal-600 hover:bg-teal-700 flex items-center gap-1.5"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting && (
+                    {isSubmitting ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        Tiếp theo
+                        <ArrowRight className="w-4 h-4" />
+                      </>
                     )}
-                    Tiếp theo
                   </Button>
                 ) : (
-                  <Button 
+                  <Button
                     type="submit"
-                    disabled={saveMutation.isPending}
-                    className="bg-green-600 hover:bg-green-700"
+                    disabled={addMedicineMutation.isPending}
+                    className="bg-teal-600 hover:bg-teal-700 flex items-center gap-1.5"
                   >
-                    {saveMutation.isPending && (
+                    {addMedicineMutation.isPending ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : isEdit ? (
+                      <>
+                        <Save className="w-4 h-4" />
+                        Cập nhật
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="w-4 h-4" />
+                        Thêm thuốc
+                      </>
                     )}
-                    {isEdit ? "Cập nhật" : "Thêm thuốc"}
                   </Button>
                 )}
               </div>

@@ -4,6 +4,7 @@ import { MedicinesAdminPage, MedicinesDetailPage, UsersAdminPage } from "@/page/
 import CategoriesAdminPage from "@/page/admin/categories";
 import TestPage from "@/page/admin/categories/test";
 import { LoginPage, RegisterPage } from "@/page/auth";
+import ComingSoonPage from "@/page/coming-soon";
 import { CategoriesPage, MedicineDetailsPage, MedicinesPage, OrdersPage, RootPage } from "@/page/store";
 import { AddressesPage, CartPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
 
@@ -33,7 +34,7 @@ export const reactRouter: RouteObject[] = [
   },
   {
     path: routes.auth.forgotPassword,
-    element: <div>Forgot Password Page's</div>,
+    element: <Navigate to="/coming-soon" />,
   },
 
   {
@@ -57,7 +58,7 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: routes.store.checkout,
-        element: <div>Checkout Page's</div>,
+        element: <Navigate to="/coming-soon" />,
       },
       {
         element: <AccountLayout />,
@@ -84,7 +85,7 @@ export const reactRouter: RouteObject[] = [
           },
           {
             path: routes.store.account.invoices,
-            element: <div>Invoices Page's</div>,
+            element: <Navigate to="/coming-soon" />,
           }
         ]
       }
@@ -97,7 +98,7 @@ export const reactRouter: RouteObject[] = [
     children: [
       {
         path: routes.admin.dashboard,
-        element: <div>Dashboard Page's</div>,
+        element: <Navigate to="/coming-soon" />,
       },
       {
         path: routes.admin.users,
@@ -121,7 +122,7 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: routes.admin.settings.root,
-        element: <div>Settings Page's</div>,
+        element: <Navigate to="/coming-soon" />,
       }
     ]
   },
@@ -134,6 +135,11 @@ export const reactRouter: RouteObject[] = [
 
   // FALLBACK 404 ROUTER
   { path: "*", element: <div>Not Found Error Page's</div> },
+
+  {
+    path: "/coming-soon",
+    element: <ComingSoonPage />,
+  },
 
   {
     path: "/test",

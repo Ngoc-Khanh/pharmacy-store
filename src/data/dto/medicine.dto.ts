@@ -1,12 +1,9 @@
 export type AddMedicineDto = {
   categoryId: string;
   name: string;
-  slug?: string;
   description: string;
   thumbnail?: {
-    publicId?: string;
     url: string;
-    alt: string;
   };
   variants: {
     price: number;
@@ -14,8 +11,8 @@ export type AddMedicineDto = {
     stockStatus: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
     originalPrice: number;
     discountPercent: number;
-    isFeatured: boolean;
-    isActive: boolean;
+    isFeatured?: boolean;
+    isActive?: boolean;
   }
   details: {
     ingredients: string;
