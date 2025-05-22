@@ -3,11 +3,8 @@ import { z } from "zod";
 export const medicineSchema = z.object({
   categoryId: z.string().min(1, { message: "Danh mục là bắt buộc" }),
   name: z.string().min(1, { message: "Tên thuốc là bắt buộc" }),
-  slug: z.string().min(1, { message: "Slug là bắt buộc" }),
   thumbnail: z.optional(z.object({
-    publicId: z.string().min(1, { message: "Public ID là bắt buộc" }),
     url: z.string().min(1, { message: "URL là bắt buộc" }),
-    alt: z.string().min(1, { message: "Alt là bắt buộc" }),
   })),
   description: z.string().min(1, { message: "Mô tả là bắt buộc" }),
   variants: z.object({
