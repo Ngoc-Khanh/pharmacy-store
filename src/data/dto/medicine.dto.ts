@@ -1,14 +1,13 @@
+import { StockStatus } from "../enum";
+
 export type AddMedicineDto = {
   categoryId: string;
+  supplierId: string;
   name: string;
   description: string;
-  thumbnail?: {
-    url: string;
-  };
   variants: {
-    price: number;
     limitQuantity: number;
-    stockStatus: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
+    stockStatus: StockStatus;
     originalPrice: number;
     discountPercent: number;
     isFeatured?: boolean;
@@ -17,7 +16,7 @@ export type AddMedicineDto = {
   details: {
     ingredients: string;
     usage: string[];
-    parameters: {
+    paramaters: {
       origin: string;
       packaging: string;
     };

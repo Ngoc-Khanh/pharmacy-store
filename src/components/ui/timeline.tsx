@@ -123,6 +123,7 @@ interface TimelineIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function TimelineIndicator({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   asChild = false,
   className,
   children,

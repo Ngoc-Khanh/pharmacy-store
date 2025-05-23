@@ -9,13 +9,13 @@ export const MedicineAPI = {
     return res.data.data;
   },
 
-  async MedicineCreate(medicine: AddMedicineDto) {
-    const res = await apiPost<AddMedicineDto, SRO<Medicine>>("/v1/admin/medicines/add", medicine);
+  async MedicineCreate(data: AddMedicineDto) {
+    const res = await apiPost<AddMedicineDto, SRO<Medicine>>("/v1/admin/medicines/add", data);
     return res.data.data;
   },
 
-  async MedicineUpdate(id: string, medicine: AddMedicineDto) {
-    const res = await apiPatch<AddMedicineDto, SRO<Medicine>>(`/v1/admin/medicines/update/${id}`, medicine);
+  async MedicineUpdate(id: string, data: AddMedicineDto) {
+    const res = await apiPatch<AddMedicineDto, SRO<Medicine>>(`/v1/admin/medicines/update/${id}`, data);
     return res.data.data;
   },
 

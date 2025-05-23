@@ -6,7 +6,7 @@ import { MedicineAPI } from "@/services/api/medicine.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { motion } from 'framer-motion';
-import { Trash } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -40,9 +40,14 @@ export default function MedicinesDeleteDialog({ currentMedicine, open, onOpenCha
   return (
     <ConfirmDialog
       open={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={(state) => {
+        if (!deleteMedicineMutation.isPending) {
+          onOpenChange(state);
+          if (!state) setValue("");
+        }
+      }}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentMedicine.name}
+      disabled={value.trim() !== currentMedicine.name || deleteMedicineMutation.isPending}
       title={
         <motion.div
           initial={{ x: -5, opacity: 0 }}
@@ -57,8 +62,17 @@ export default function MedicinesDeleteDialog({ currentMedicine, open, onOpenCha
           initial={{ y: 5, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="space-y-4"
+          className="space-y-4 relative"
         >
+          {deleteMedicineMutation.isPending && (
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center rounded-md z-50">
+              <div className="flex flex-col items-center gap-2 p-4">
+                <Loader2 className="h-8 w-8 animate-spin text-destructive" />
+                <p className="text-sm font-medium text-destructive">Đang xóa thuốc...</p>
+              </div>
+            </div>
+          )}
+          
           <p className="text-muted-foreground">
             Bạn có chắc chắn muốn xóa thuốc <span className="font-medium text-foreground">{currentMedicine.name}</span>?
             Hành động này không thể hoàn tác và sẽ xóa vĩnh viễn thuốc này khỏi hệ thống.
@@ -75,11 +89,19 @@ export default function MedicinesDeleteDialog({ currentMedicine, open, onOpenCha
               placeholder={currentMedicine.name}
               className="mt-2"
               autoComplete="off"
+              disabled={deleteMedicineMutation.isPending}
             />
           </div>
         </motion.div>
       }
-      confirmText="Xóa thuốc"
+      confirmText={
+        deleteMedicineMutation.isPending ? (
+          <span className="flex items-center gap-1">
+            <Loader2 className="h-4 w-4 animate-spin" /> 
+            Đang xóa...
+          </span>
+        ) : "Xóa thuốc"
+      }
       destructive
     />
   )

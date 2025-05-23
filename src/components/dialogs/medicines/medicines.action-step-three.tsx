@@ -123,7 +123,7 @@ export function ActionStepThree({ form }: ActionStepThreeProps) {
         <motion.div whileHover={{ scale: 1.01 }} className="transition-all duration-200">
           <FormField
             control={form.control}
-            name="details.parameters.origin"
+            name="details.paramaters.origin"
             render={({ field }) => (
               <FormItem className="transition-all duration-200 hover:bg-teal-50/50 p-3 rounded-lg">
                 <FormLabel className="text-teal-700 font-medium flex items-center gap-1">
@@ -145,7 +145,7 @@ export function ActionStepThree({ form }: ActionStepThreeProps) {
         <motion.div whileHover={{ scale: 1.01 }} className="transition-all duration-200">
           <FormField
             control={form.control}
-            name="details.parameters.packaging"
+            name="details.paramaters.packaging"
             render={({ field }) => (
               <FormItem className="transition-all duration-200 hover:bg-teal-50/50 p-3 rounded-lg">
                 <FormLabel className="text-teal-700 font-medium flex items-center gap-1">
