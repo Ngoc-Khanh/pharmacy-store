@@ -1,4 +1,4 @@
-import { FolderIcon, LayoutDashboardIcon, PillIcon, SettingsIcon, UsersIcon } from "lucide-react";
+import { FileText, FolderIcon, HeartPlus, LayoutDashboardIcon, Package, PillIcon, SettingsIcon, UsersIcon } from "lucide-react";
 import { routeNames, routes } from "./routes";
 
 export const siteConfig = {
@@ -65,6 +65,21 @@ export const sidebarItem = {
       url: routes.admin.medicines,
       icon: PillIcon,
     },
+    {
+      title: routeNames[routes.admin.suppliers],
+      url: routes.admin.suppliers,
+      icon: HeartPlus,
+    },
+    {
+      title: routeNames[routes.admin.orders],
+      url: routes.admin.orders,
+      icon: Package,
+    },
+    {
+      title: routeNames[routes.admin.invoices],
+      url: routes.admin.invoices,
+      icon: FileText,
+    }
   ],
   navSecondary: [
     {

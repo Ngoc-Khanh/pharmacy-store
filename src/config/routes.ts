@@ -31,6 +31,9 @@ const baseRoutes = {
     categories: "/admin/categories",
     medicines: "/admin/medicines",
     medicineDetails: (id: string) => `/admin/medicines/${id}/details`,
+    suppliers: "/admin/suppliers",
+    orders: "/admin/orders",
+    invoices: "/admin/invoices",
     settings: {
       root: "/admin/settings",
     }
@@ -57,7 +60,10 @@ export const routeNames = {
   [baseRoutes.admin.categories]: "Quản lý danh mục",
   [baseRoutes.admin.medicines]: "Quản lý dược phẩm",
   [baseRoutes.admin.medicineDetails(":id")]: "Chi tiết dược phẩm",
-
+  [baseRoutes.admin.suppliers]: "Quản lý nhà cung cấp",
+  [baseRoutes.admin.orders]: "Quản lý đơn hàng",
+  [baseRoutes.admin.invoices]: "Quản lý hóa đơn",
+  
   // STORE NAME ROUTES
   [baseRoutes.store.account.root]: "Tài khoản",
   [baseRoutes.store.account.addresses]: "Địa chỉ",
