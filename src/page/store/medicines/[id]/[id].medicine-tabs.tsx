@@ -125,8 +125,8 @@ export function MedicineDetailsTabs({ activeTab, onTabChange, categoryName, upda
                 </h4>
                 <div className="space-y-4">
                   {[
-                    { label: "Xuất xứ", value: details?.parameter?.origin },
-                    { label: "Quy cách đóng gói", value: details?.parameter?.packaging },
+                    { label: "Xuất xứ", value: details?.paramaters?.origin },
+                    { label: "Quy cách đóng gói", value: details?.paramaters?.packaging },
                     { label: "Danh mục", value: categoryName || "Chưa phân loại" },
                     { label: "Ngày cập nhật", value: updatedAt ? new Date(updatedAt).toLocaleDateString('vi-VN') : "Chưa cập nhật" }
                   ].map((item, index) => (
