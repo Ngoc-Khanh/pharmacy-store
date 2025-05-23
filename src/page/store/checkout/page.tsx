@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+import { User } from "@/data/interfaces";
 import { CheckoutOrderPayments } from "./checkout.order-payments";
 import { CheckoutOrderSummary } from "./checkout.order-summary";
 
@@ -53,22 +54,20 @@ export default function CheckoutPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left side - Order details & Payment */}
-        {user && (
-          <CheckoutOrderPayments 
-            user={user} 
-            onAddressSelect={handleAddressSelect}
-            onNewAddressToggle={handleNewAddressToggle}
-            selectedAddress={selectedAddress}
-            showNewAddressForm={showNewAddressForm}
-            paymentMethod={paymentMethod}
-            onPaymentMethodChange={handlePaymentMethodChange}
-          />
-        )}
+        <CheckoutOrderPayments
+          user={user as User}
+          onAddressSelect={handleAddressSelect}
+          onNewAddressToggle={handleNewAddressToggle}
+          selectedAddress={selectedAddress}
+          showNewAddressForm={showNewAddressForm}
+          paymentMethod={paymentMethod}
+          onPaymentMethodChange={handlePaymentMethodChange}
+        />
 
         {/* Right side - Order summary */}
-        <CheckoutOrderSummary 
-          cart={cart} 
-          totalPrice={totalPrice} 
+        <CheckoutOrderSummary
+          cart={cart}
+          totalPrice={totalPrice}
           selectedAddress={selectedAddress}
           showNewAddressForm={showNewAddressForm}
           paymentMethod={paymentMethod}

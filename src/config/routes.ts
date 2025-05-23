@@ -21,6 +21,7 @@ const baseRoutes = {
       changePwd: "/store/account/change-password",
       cart: "/store/account/cart",
       orders: "/store/account/orders",
+      orderDetails: (id: string) => `/store/account/orders/${id}/details`,
       invoices: "/store/account/invoices",
     },
   },
@@ -54,6 +55,8 @@ export const routeNames = {
   [baseRoutes.store.medicines]: "Dược phẩm",
   [baseRoutes.store.checkout]: "Thanh toán",
   [baseRoutes.store.checkoutSuccess(":id")]: "Thanh toán thành công",
+  [baseRoutes.store.account.orders]: "Đơn hàng của tôi",
+  [baseRoutes.store.account.orderDetails(":id")]: "Chi tiết đơn hàng",
 
   // ADMIN NAME ROUTES
   [baseRoutes.admin.root]: "Admin",
