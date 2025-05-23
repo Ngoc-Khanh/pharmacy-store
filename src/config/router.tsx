@@ -5,7 +5,7 @@ import CategoriesAdminPage from "@/page/admin/categories";
 import TestPage from "@/page/admin/categories/test";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
-import { CategoriesPage, MedicinesDetailPage, MedicinesPage, OrdersPage, RootPage } from "@/page/store";
+import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, OrdersPage, RootPage } from "@/page/store";
 import { AddressesPage, CartPage, ChangePasswordPage, RootAccountPage } from "@/page/store/account";
 
 import { Navigate, RouteObject } from "react-router-dom";
@@ -58,7 +58,11 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: routes.store.checkout,
-        element: <div>Checkout</div>,
+        element: <CheckoutPage />,
+      },
+      {
+        path: routes.store.checkoutSuccess(":id"),
+        element: <CheckoutSuccessPage />,
       },
       {
         element: <AccountLayout />,

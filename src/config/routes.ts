@@ -13,6 +13,7 @@ const baseRoutes = {
     medicines: "/store/medicines",
     medicineDetails: (id: string) => `/store/medicines/${id}/details`,
     checkout: "/store/checkout",
+    checkoutSuccess: (id: string) => `/store/checkout/${id}/success`,
     account: {
       settings: "/store/account/settings",
       root: "/store/account",
@@ -51,6 +52,8 @@ export const routeNames = {
   [baseRoutes.store.root]: "Trang chủ",
   [baseRoutes.store.categories]: "Danh mục",
   [baseRoutes.store.medicines]: "Dược phẩm",
+  [baseRoutes.store.checkout]: "Thanh toán",
+  [baseRoutes.store.checkoutSuccess(":id")]: "Thanh toán thành công",
 
   // ADMIN NAME ROUTES
   [baseRoutes.admin.root]: "Admin",

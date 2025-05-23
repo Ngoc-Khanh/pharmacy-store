@@ -15,3 +15,18 @@ export enum AccountStatus {
   SUSPENDED = "SUSPENDED",
   PENDING = "PENDING",
 }
+
+export enum PaymentMethod {
+  COD = "COD",
+  CREDIT_CARD = "CREDIT-CARD",
+  BANK_TRANSFER = "BANK-TRANSFER",
+}
+
+export enum OrderStatus {
+  PENDING = "PENDING",
+  PROCESSING = "PROCESSING",
+  SHIPPED = "SHIPPED",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED",
+  COMPLETED = "COMPLETED",
+}
