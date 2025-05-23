@@ -5,6 +5,7 @@ import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedR
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { DataTablePagination } from "../data-table-pagination";
+import { MedicinesTableToolbar } from "./medicines.table-toolbar";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -56,7 +57,7 @@ export default function MedicinesDataTable({ columns, data }: DataTableProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      {/* toolbar */}
+      <MedicinesTableToolbar table={table} />
       <Card className="overflow-hidden border-teal-100 dark:border-teal-800/30 shadow-md">
         <CardContent className="p-0">
           <div className="overflow-x-auto">

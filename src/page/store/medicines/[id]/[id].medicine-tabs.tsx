@@ -1,18 +1,27 @@
-import { Details, UsageGuide } from "@/data/interfaces";
+import { Details, Supplier, UsageGuide } from "@/data/interfaces";
 
-import { BarChart2, Check, Info } from "lucide-react";
+import { BarChart2, Building, Check, Clock, Globe, Info, Mail, MapPin, Phone, Shield } from "lucide-react";
 import { motion } from "motion/react";
 
 interface MedicineDetailsTabsProps {
   details?: Details;
   usageguide?: UsageGuide;
+  supplier?: Supplier;
   activeTab: string;
   onTabChange: (tab: string) => void;
   categoryName?: string;
   updatedAt?: string;
 }
 
-export function MedicineDetailsTabs({ activeTab, onTabChange, categoryName, updatedAt, details, usageguide }: MedicineDetailsTabsProps) {
+export function MedicineDetailsTabs({ 
+  activeTab, 
+  onTabChange, 
+  categoryName, 
+  updatedAt, 
+  details, 
+  usageguide,
+  supplier
+}: MedicineDetailsTabsProps) {
   return (
     <motion.div
       className="mb-12"
@@ -25,7 +34,8 @@ export function MedicineDetailsTabs({ activeTab, onTabChange, categoryName, upda
         <div className="flex space-x-1 md:space-x-4">
           {[
             { id: "details", label: "Chi tiết sản phẩm" },
-            { id: "usageguide", label: "Hướng dẫn sử dụng" }
+            { id: "usageguide", label: "Hướng dẫn sử dụng" },
+            { id: "supplier", label: "Nhà cung cấp" }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -216,6 +226,151 @@ export function MedicineDetailsTabs({ activeTab, onTabChange, categoryName, upda
                 </div>
               </motion.div>
             </div>
+          </div>
+        )}
+
+        {activeTab === "supplier" && (
+          <div className="prose prose-emerald dark:prose-invert max-w-none">
+            <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-8 pb-2 border-b border-blue-100 dark:border-blue-900/50">
+              Thông tin nhà cung cấp
+            </h3>
+            
+            {supplier ? (
+              <div className="grid gap-8 md:grid-cols-7">
+                {/* Supplier Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="md:col-span-4 bg-gradient-to-br from-white to-blue-50 dark:from-slate-800 dark:to-blue-900/20 p-6 rounded-2xl shadow-md border border-blue-100 dark:border-blue-900/30 hover:shadow-lg transition-all duration-300 relative overflow-hidden"
+                >
+                  {/* Background decoration */}
+                  <div className="absolute -right-12 -bottom-12 h-64 w-64 rounded-full bg-blue-500/5 dark:bg-blue-500/10"></div>
+                  <div className="absolute right-20 bottom-20 h-24 w-24 rounded-full bg-blue-500/5 dark:bg-blue-500/10"></div>
+                  
+                  {/* Supplier title */}
+                  <div className="flex items-start mb-6">
+                    <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mr-6 flex-shrink-0 shadow-md">
+                      <Building className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="inline-flex mb-2 items-center bg-blue-100 dark:bg-blue-800/30 px-2 py-1 rounded text-xs font-medium text-blue-700 dark:text-blue-300">
+                        <Shield className="h-3 w-3 mr-1" />
+                        Nhà cung cấp được xác minh
+                      </div>
+                      <h4 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                        {supplier.name}
+                      </h4>
+                    </div>
+                  </div>
+                  
+                  {/* Supplier info */}
+                  <div className="grid gap-4 text-base">
+                    <motion.div 
+                      className="flex items-start p-4 bg-white dark:bg-slate-800/70 rounded-xl shadow-sm hover:shadow transition-shadow"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-800/30 flex-shrink-0 flex items-center justify-center mr-3">
+                        <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="font-medium text-slate-700 dark:text-slate-300">Địa chỉ</h5>
+                        <p className="text-slate-600 dark:text-slate-400">{supplier.address}</p>
+                      </div>
+                    </motion.div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <motion.div 
+                        className="flex items-start p-4 bg-white dark:bg-slate-800/70 rounded-xl shadow-sm hover:shadow transition-shadow"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-800/30 flex-shrink-0 flex items-center justify-center mr-3">
+                          <Phone className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div className="flex-1">
+                          <h5 className="font-medium text-slate-700 dark:text-slate-300">Điện thoại</h5>
+                          <a href={`tel:${supplier.contactPhone}`} className="text-blue-600 dark:text-blue-400 hover:underline">
+                            {supplier.contactPhone}
+                          </a>
+                        </div>
+                      </motion.div>
+                      
+                      <motion.div 
+                        className="flex items-start p-4 bg-white dark:bg-slate-800/70 rounded-xl shadow-sm hover:shadow transition-shadow"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-800/30 flex-shrink-0 flex items-center justify-center mr-3">
+                          <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div className="flex-1">
+                          <h5 className="font-medium text-slate-700 dark:text-slate-300">Email</h5>
+                          <a href={`mailto:${supplier.contactEmail}`} className="text-blue-600 dark:text-blue-400 hover:underline">
+                            {supplier.contactEmail}
+                          </a>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+                  
+                  {/* Partnership badge */}
+                  {supplier.createdAt && (
+                    <motion.div 
+                      className="mt-6 flex items-center p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      <Clock className="h-5 w-5 text-blue-500 dark:text-blue-400 mr-2" />
+                      <span className="text-sm text-slate-700 dark:text-slate-300">
+                        Là đối tác từ <span className="font-medium">{new Date(supplier.createdAt).toLocaleDateString('vi-VN')}</span>
+                      </span>
+                    </motion.div>
+                  )}
+                </motion.div>
+                
+                {/* Additional Info */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="md:col-span-3"
+                >
+                  <div className="bg-white dark:bg-slate-800/50 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                    <div className="flex items-center mb-5">
+                      <Globe className="h-6 w-6 text-blue-500 mr-2" />
+                      <h4 className="font-semibold text-xl">Thông tin thêm</h4>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center">
+                        <Check className="h-5 w-5 text-emerald-500 mr-3" />
+                        <span className="text-slate-700 dark:text-slate-300">Đảm bảo chất lượng sản phẩm</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Check className="h-5 w-5 text-emerald-500 mr-3" />
+                        <span className="text-slate-700 dark:text-slate-300">Chuyển hàng đúng hẹn</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Check className="h-5 w-5 text-emerald-500 mr-3" />
+                        <span className="text-slate-700 dark:text-slate-300">Bảo hành hoàn tiền</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            ) : (
+              <div className="text-center p-12 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                <Building className="h-16 w-16 mx-auto text-slate-300 dark:text-slate-700 mb-4" />
+                <h4 className="text-xl font-medium text-slate-700 dark:text-slate-300 mb-2">Không có thông tin nhà cung cấp</h4>
+                <p className="text-slate-500 dark:text-slate-400">Thông tin về nhà cung cấp của sản phẩm này hiện chưa được cập nhật.</p>
+              </div>
+            )}
           </div>
         )}
       </motion.div>

@@ -34,7 +34,7 @@ export const reactRouter: RouteObject[] = [
   },
   {
     path: routes.auth.forgotPassword,
-    element: <Navigate to="/coming-soon" />,
+    element: <div>Forgot Password</div>,
   },
 
   {
@@ -58,7 +58,7 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: routes.store.checkout,
-        element: <Navigate to="/coming-soon" />,
+        element: <div>Checkout</div>,
       },
       {
         element: <AccountLayout />,
@@ -85,7 +85,7 @@ export const reactRouter: RouteObject[] = [
           },
           {
             path: routes.store.account.invoices,
-            element: <Navigate to="/coming-soon" />,
+            element: <div>Invoices</div>,
           }
         ]
       }
@@ -98,7 +98,7 @@ export const reactRouter: RouteObject[] = [
     children: [
       {
         path: routes.admin.dashboard,
-        element: <Navigate to="/coming-soon" />,
+        element: <div>Dashboard</div>,
       },
       {
         path: routes.admin.users,
@@ -117,12 +117,24 @@ export const reactRouter: RouteObject[] = [
         element: <MedicinesAdminDetailPage />,
       },
       {
+        path: routes.admin.suppliers,
+        element: <div>Suppliers</div>,
+      },
+      {
+        path: routes.admin.orders,
+        element: <div>Orders</div>,
+      },
+      {
+        path: routes.admin.invoices,
+        element: <div>Invoices</div>,
+      },
+      {
         path: "/admin/test",
         element: <TestPage />,
       },
       {
         path: routes.admin.settings.root,
-        element: <Navigate to="/coming-soon" />,
+        element: <div>Settings</div>,
       }
     ]
   },
