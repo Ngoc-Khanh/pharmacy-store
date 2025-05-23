@@ -1,6 +1,7 @@
-import { Category, Medicine } from "@/data/interfaces";
+import { Category, Medicine, Order } from "@/data/interfaces";
 import { Paginated, SRO } from "@/data/sro";
-import { apiGet } from "../api";
+import { apiGet, apiPost } from "../api";
+import { PlaceOrderDto } from "@/data/dto";
 
 export const StoreAPI = {
   async CategoryRoot() {
@@ -25,6 +26,11 @@ export const StoreAPI = {
 
   async CategoriesRoot() {
     const res = await apiGet<SRO<Category[]>>("v1/store/categories");
+    return res.data.data;
+  },
+
+  async PlaceOrder(data: PlaceOrderDto) {
+    const res = await apiPost<PlaceOrderDto, SRO<Order>>("v1/store/orders/add", data);
     return res.data.data;
   },
 };
