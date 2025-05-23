@@ -1,2 +1,2 @@
+export { default as MedicinesAdminDetailPage } from "./[id]";
 export { default } from "./page";
-export { default as MedicinesDetailPage } from "./detail";
