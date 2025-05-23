@@ -6,7 +6,7 @@ import { MedicineAPI } from "@/services/api/medicine.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { motion } from 'framer-motion';
-import { Trash } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -42,7 +42,7 @@ export default function MedicinesDeleteDialog({ currentMedicine, open, onOpenCha
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentMedicine.name}
+      disabled={value.trim() !== currentMedicine.name || deleteMedicineMutation.isPending}
       title={
         <motion.div
           initial={{ x: -5, opacity: 0 }}
@@ -75,11 +75,19 @@ export default function MedicinesDeleteDialog({ currentMedicine, open, onOpenCha
               placeholder={currentMedicine.name}
               className="mt-2"
               autoComplete="off"
+              disabled={deleteMedicineMutation.isPending}
             />
           </div>
         </motion.div>
       }
-      confirmText="Xóa thuốc"
+      confirmText={
+        deleteMedicineMutation.isPending ? (
+          <span className="flex items-center gap-1">
+            <Loader2 className="h-4 w-4 animate-spin" /> 
+            Đang xóa...
+          </span>
+        ) : "Xóa thuốc"
+      }
       destructive
     />
   )

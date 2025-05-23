@@ -83,8 +83,8 @@ export default function MedicinesPage() {
         case 'price-asc': return a.variants.price - b.variants.price;
         case 'price-desc': return b.variants.price - a.variants.price;
         case 'rating': {
-          const reviewCountA = a.ratings.review_count || a.ratings.reviewCount || 0;
-          const reviewCountB = b.ratings.review_count || b.ratings.reviewCount || 0;
+          const reviewCountA = a.ratings.reviewCount || 0;
+          const reviewCountB = b.ratings.reviewCount || 0;
           return reviewCountB - reviewCountA;
         }
         default: return 0;

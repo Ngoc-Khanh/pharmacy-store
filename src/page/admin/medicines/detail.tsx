@@ -420,7 +420,7 @@ export default function MedicinesDetailPage() {
                                 </div>
                                 <span className="text-sm text-slate-600 dark:text-slate-300">Đánh giá</span>
                               </div>
-                              <span className="font-bold text-blue-600 dark:text-blue-400">{medicine?.ratings?.reviewCount || medicine?.ratings?.review_count || 0}</span>
+                              <span className="font-bold text-blue-600 dark:text-blue-400">{medicine?.ratings?.reviewCount || 0}</span>
                             </CardContent>
                           </Card>
                         </div>

@@ -1,17 +1,18 @@
 import { activeStepAtom, steps } from "@/atoms/stepper.atom";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Stepper, StepperItem } from "@/components/ui/stepper";
+import { StockStatus } from "@/data/enum";
 import { Medicine } from "@/data/interfaces";
 import { medicineSchema, MedicineSchema } from "@/data/schemas";
 import { MedicineAPI } from "@/services/api/medicine.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import { useAtom } from "jotai";
-import { ArrowLeft, ArrowRight, Loader2, Pill, Plus, Save } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight, Pill, Save } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -20,34 +21,31 @@ import { ActionStepOne } from "./medicines.action-step-one";
 import { ActionStepThree } from "./medicines.action-step-three";
 import { ActionStepTwo } from "./medicines.action-step-two";
 
-interface MedicinesActionDialogProps {
+interface Props {
   currentMedicine?: Medicine,
   open: boolean,
   onOpenChange: (open: boolean) => void,
 }
 
-export default function MedicinesActionDialog({ currentMedicine, open, onOpenChange }: MedicinesActionDialogProps) {
+export default function MedicinesActionDialog({ currentMedicine, open, onOpenChange }: Props) {
   const queryClient = useQueryClient();
   const isEdit = !!currentMedicine;
   const [activeStep, setActiveStep] = useAtom(activeStepAtom);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<MedicineSchema>({
     resolver: zodResolver(medicineSchema),
     defaultValues: isEdit ? {
       ...currentMedicine,
-      isEdit,
+      isEdit
     } : {
       categoryId: "",
+      supplierId: "",
       name: "",
-      thumbnail: {
-        url: "",
-      },
       description: "",
       variants: {
         price: 10000,
         limitQuantity: 1,
-        stockStatus: "IN-STOCK",
+        stockStatus: StockStatus.IN_STOCK,
         originalPrice: 10000,
         discountPercent: 0,
         isFeatured: false,
@@ -56,7 +54,7 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
       details: {
         ingredients: "",
         usage: [""],
-        parameters: {
+        paramaters: {
           origin: "",
           packaging: "",
         },
@@ -73,51 +71,58 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
     }
   })
 
-  // Add effect to automatically calculate price when originalPrice or discountPercent changes
+  // Auto-calculate price based on originalPrice and discountPercent
+  const originalPrice = form.watch("variants.originalPrice");
+  const discountPercent = form.watch("variants.discountPercent");
+  
   useEffect(() => {
-    const originalPrice = form.watch('variants.originalPrice');
-    const discountPercent = form.watch('variants.discountPercent');
-
     if (originalPrice && discountPercent >= 0) {
       const calculatedPrice = originalPrice * (1 - discountPercent / 100);
-      form.setValue('variants.price', Math.round(calculatedPrice));
+      form.setValue("variants.price", Number(calculatedPrice.toFixed(0)));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.watch('variants.originalPrice'), form.watch('variants.discountPercent')]);
+  }, [originalPrice, discountPercent, form]);
 
   const addMedicineMutation = useMutation({
     mutationFn: MedicineAPI.MedicineCreate,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["medicines"] });
-      toast.success(isEdit ? "Cập nhật thuốc thành công" : "Thêm thuốc mới thành công");
+      toast.success("Thêm thuốc mới thành công");
+      setActiveStep(1);
       onOpenChange(false);
     },
-    onError: (error) => {
-      toast.error(`Lỗi: ${error instanceof Error ? error.message : 'Không thể lưu thuốc'}`);
+    onError: () => {
+      toast.error("Thêm thuốc thất bại");
     }
   })
 
-  const handleNext = async () => {
-    setIsSubmitting(true);
+  const updateMedicineMutation = useMutation({
+    mutationFn: (values: MedicineSchema) => {
+      if (!currentMedicine?.id) throw new Error("Cần có ID thuốc để cập nhật");
+      return MedicineAPI.MedicineUpdate(currentMedicine.id, values);
+    },
+    onSuccess: () => {
+      toast.success("Cập nhật thuốc thành công");
+      form.reset();
+      onOpenChange(false);
+      queryClient.invalidateQueries({ queryKey: ["medicines"] });
+    },
+    onError: () => {
+      toast.error("Cập nhật thuốc thất bại");
+    }
+  })
 
-    const fieldsToValidate = getFieldsByStep(activeStep);
-    const typedFields = fieldsToValidate as Array<keyof MedicineSchema>;
-
-    setTimeout(async () => {
-      const isValid = await form.trigger(typedFields);
-      if (isValid) {
-        setActiveStep((prev) => Math.min(prev + 1, steps.length));
+  const handleSubmit = async (values: MedicineSchema) => {
+    try {
+      const isValid = await form.trigger();
+      if (!isValid) {
+        toast.error("Vui lòng kiểm tra lại thông tin");
+        return;
       }
-      setIsSubmitting(false);
-    }, 500);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prev) => Math.max(prev - 1, 1));
-  };
-
-  const onSubmit = (data: MedicineSchema) => {
-    if (!isEdit) addMedicineMutation.mutate(data);
+      if (isEdit) updateMedicineMutation.mutate(values);
+      else addMedicineMutation.mutate(values);
+    } catch {
+      toast.error("Có lỗi xảy ra khi xử lý biểu mẫu");
+    }
   }
 
   const renderCurrentStep = () => {
@@ -138,13 +143,13 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
   const getFieldsByStep = (step: number): string[] => {
     switch (step) {
       case 1:
-        return ["categoryId", "name", "description"];
+        return ["categoryId", "supplierId", "name", "description"];
       case 2:
-        return ["variants.price", "variants.stockStatus", "variants.limitQuantity"];
+        return ["variants.originalPrice", "variants.discountPercent", "variants.limitQuantity", "variants.stockStatus"];
       case 3:
-        return ["details.ingredients", "details.parameters.origin", "details.parameters.packaging"];
+        return ["details.ingredients", "details.paramaters.origin", "details.paramaters.packaging"];
       case 4:
-        return ["usageguide.dosage.adult", "usageguide.dosage.child"];
+        return ["usageguide.dosage.adult", "usageguide.dosage.child", "usageguide.directions", "usageguide.precautions"];
       default:
         return [];
     }
@@ -171,6 +176,9 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
               {isEdit ? "Cập nhật thuốc" : "Thêm thuốc mới"}
             </DialogTitle>
           </div>
+          <DialogDescription className="text-white/90 mt-2">
+            {isEdit ? "Cập nhật thông tin thuốc trong hệ thống" : "Thêm thông tin thuốc mới vào hệ thống"}
+          </DialogDescription>
 
           <div className="mx-auto w-full mt-8 mb-2 text-center">
             <Stepper value={activeStep} className="items-start mt-4 gap-4">
@@ -179,8 +187,8 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
                   <div className="w-full flex-col items-start gap-2 rounded select-none">
                     <div
                       className={`h-1.5 w-full transition-all duration-300 rounded-full ${activeStep >= step
-                          ? "bg-white shadow-sm"
-                          : "bg-white/30"
+                        ? "bg-white shadow-sm"
+                        : "bg-white/30"
                         }`}
                     >
                       <span className="sr-only">{step}</span>
@@ -188,10 +196,10 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
                     <div className="space-y-0.5 pt-1.5">
                       <span
                         className={`transition-all duration-300 text-sm font-medium ${activeStep === step
-                            ? "text-white"
-                            : activeStep > step
-                              ? "text-white/80"
-                              : "text-white/60"
+                          ? "text-white"
+                          : activeStep > step
+                            ? "text-white/80"
+                            : "text-white/60"
                           }`}
                       >
                         {title}
@@ -205,7 +213,17 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-4">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (activeStep === 4) {
+                form.handleSubmit(handleSubmit, () => {
+                  toast.error("Vui lòng kiểm tra lại thông tin");
+                })();
+              }
+            }} 
+            className="space-y-6 py-4"
+          >
             <motion.div
               key={activeStep}
               initial={{ opacity: 0, y: 10 }}
@@ -219,68 +237,58 @@ export default function MedicinesActionDialog({ currentMedicine, open, onOpenCha
             <DialogFooter className="mt-8 pt-4 border-t border-teal-50 flex flex-col sm:flex-row gap-2">
               {activeStep > 1 && (
                 <Button
-                  type="button"
                   variant="outline"
-                  onClick={handleBack}
-                  className="border-teal-200 hover:bg-teal-50 text-teal-700 flex items-center gap-1.5"
+                  className="flex items-center gap-1"
+                  onClick={() => setActiveStep(activeStep - 1)}
+                  type="button"
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ChevronLeft className="h-4 w-4" />
                   Quay lại
                 </Button>
               )}
+              
+              <div className="flex-1" />
 
-              <div className="flex justify-end gap-2 flex-1">
+              {activeStep < 4 ? (
                 <Button
+                  variant="default"
+                  className="bg-teal-600 hover:bg-teal-700 flex items-center gap-1"
+                  onClick={async () => {
+                    const fields = getFieldsByStep(activeStep);
+                    const result = await form.trigger(fields as Array<keyof MedicineSchema>);
+                    if (result) {
+                      setActiveStep(activeStep + 1);
+                    } else {
+                      toast.error("Vui lòng điền đầy đủ thông tin");
+                    }
+                  }}
                   type="button"
-                  variant="outline"
-                  onClick={() => onOpenChange(false)}
-                  className="border-teal-200 hover:bg-teal-50 text-teal-700"
                 >
-                  Hủy
+                  Tiếp theo
+                  <ChevronRight className="h-4 w-4" />
                 </Button>
-
-                {activeStep < steps.length ? (
-                  <Button
-                    type="button"
-                    onClick={handleNext}
-                    className="bg-teal-600 hover:bg-teal-700 flex items-center gap-1.5"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <>
-                        Tiếp theo
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </Button>
-                ) : (
-                  <Button
-                    type="submit"
-                    disabled={addMedicineMutation.isPending}
-                    className="bg-teal-600 hover:bg-teal-700 flex items-center gap-1.5"
-                  >
-                    {addMedicineMutation.isPending ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : isEdit ? (
-                      <>
-                        <Save className="w-4 h-4" />
-                        Cập nhật
-                      </>
-                    ) : (
-                      <>
-                        <Plus className="w-4 h-4" />
-                        Thêm thuốc
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
+              ) : (
+                <Button
+                  variant="default"
+                  className="bg-teal-600 hover:bg-teal-700 flex items-center gap-1"
+                  type="button"
+                  onClick={() => form.handleSubmit(handleSubmit)()}
+                  disabled={addMedicineMutation.isPending || updateMedicineMutation.isPending}
+                >
+                  {(addMedicineMutation.isPending || updateMedicineMutation.isPending) ? (
+                    "Đang xử lý..."
+                  ) : (
+                    <>
+                      {isEdit ? "Cập nhật" : "Tạo mới"}
+                      <Save className="h-4 w-4 ml-1" />
+                    </>
+                  )}
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

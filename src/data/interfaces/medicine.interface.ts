@@ -1,4 +1,6 @@
+import { StockStatus } from "../enum";
 import { Category } from "./category.interface";
+import { Supplier } from "./supplier.interface";
 
 export interface Medicine {
   readonly id: string;
@@ -10,7 +12,7 @@ export interface Medicine {
   variants: Variant;
   ratings: Ratings;
   category: Category;
-  // supplier: Supplier;
+  supplier: Supplier;
   details: Details;
   usageguide: UsageGuide;
   readonly createdAt?: string; 
@@ -32,7 +34,7 @@ interface Ratings {
 interface Variant {
   price: number;
   limitQuantity?: number;
-  stockStatus?: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
+  stockStatus?: StockStatus;
   originalPrice?: number;
   discountPercent?: number;
   isFeatured?: boolean;
@@ -42,11 +44,10 @@ interface Variant {
 export interface Details {
   ingredients: string;
   usage: string[];
-  parameter?: Parameters;
-  paramaters?: Parameters;
+  paramaters?: Paramaters;
 }
 
-interface Parameters {
+interface Paramaters {
   origin: string;
   packaging: string;
 }
