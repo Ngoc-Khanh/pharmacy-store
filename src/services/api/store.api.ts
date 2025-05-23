@@ -1,7 +1,7 @@
-import { Category, Medicine, Order } from "@/data/interfaces";
+import { PlaceOrderDto } from "@/data/dto";
+import { Category, Medicine, Order, OrderDetails } from "@/data/interfaces";
 import { Paginated, SRO } from "@/data/sro";
 import { apiGet, apiPost } from "../api";
-import { PlaceOrderDto } from "@/data/dto";
 
 export const StoreAPI = {
   async CategoryRoot() {
@@ -26,6 +26,17 @@ export const StoreAPI = {
 
   async CategoriesRoot() {
     const res = await apiGet<SRO<Category[]>>("v1/store/categories");
+    return res.data.data;
+  },
+
+  async OrdersUserList() {
+    const res = await apiGet<SRO<Order[]>>("v1/store/orders");
+    console.log("API Response:", res);
+    return res.data.data;
+  },
+
+  async OrderDetails(id: string) {
+    const res = await apiGet<SRO<OrderDetails>>(`v1/store/orders/${id}/details`);
     return res.data.data;
   },
 

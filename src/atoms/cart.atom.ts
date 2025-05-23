@@ -89,9 +89,9 @@ export const addToCartAtom = atom(
         quantity: quantity
       });
       
-      // Có thể cân nhắc gọi CartList() để cập nhật lại từ phản hồi máy chủ
-      // const latestCartData = await AccountAPI.CartList();
-      // set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+      // Fetch lại dữ liệu giỏ hàng từ server để đảm bảo state khớp với server
+      const latestCartData = await AccountAPI.CartList();
+      set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
     } catch (error) {
       console.error("Không thể thêm vào giỏ hàng", error);
       // Nếu API thất bại, khôi phục lại trạng thái ban đầu
@@ -143,9 +143,9 @@ export const updateCartItemQuantityAtom = atom(
         quantity: update.quantity
       });
       
-      // Có thể cân nhắc gọi CartList() để cập nhật lại từ phản hồi máy chủ
-      // const latestCartData = await AccountAPI.CartList();
-      // set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+      // Fetch lại dữ liệu giỏ hàng từ server để đảm bảo state khớp với server
+      const latestCartData = await AccountAPI.CartList();
+      set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
     } catch (error) {
       console.error("Không thể cập nhật giỏ hàng", error);
       // Khôi phục lại trạng thái ban đầu nếu API thất bại
@@ -179,9 +179,9 @@ export const removeFromCartAtom = atom(
       set(cartApiLoadingAtom, true);
       await AccountAPI.RemoveFromCart(medicineId);
       
-      // Có thể cân nhắc gọi CartList() để cập nhật lại từ phản hồi máy chủ
-      // const latestCartData = await AccountAPI.CartList();
-      // set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+      // Fetch lại dữ liệu giỏ hàng từ server để đảm bảo state khớp với server
+      const latestCartData = await AccountAPI.CartList();
+      set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
     } catch (error) {
       console.error("Không thể xóa khỏi giỏ hàng", error);
       // Khôi phục lại trạng thái ban đầu nếu API thất bại
@@ -208,16 +208,25 @@ export const clearCartAtom = atom(
       // Gọi API trong background để lưu vào database
       set(cartApiLoadingAtom, true);
       
-      // Xóa từng sản phẩm trong giỏ hàng
+      // Xóa từng sản phẩm trong giỏ hàng một cách tuần tự
       for (const item of currentCart) {
         if (item?.medicine?.id) {
-          await AccountAPI.RemoveFromCart(item.medicine.id);
+          try {
+            await AccountAPI.RemoveFromCart(item.medicine.id);
+            // Thêm một khoảng thời gian nhỏ giữa các lần gọi API để tránh quá tải
+            await new Promise(resolve => setTimeout(resolve, 300)); 
+          } catch (itemError) {
+            console.error(`Lỗi khi xóa sản phẩm ${item.medicine.id}:`, itemError);
+            // Tiếp tục với sản phẩm tiếp theo ngay cả khi xóa sản phẩm hiện tại bị lỗi
+          }
         }
       }
       
-      // Có thể cân nhắc gọi CartList() để cập nhật lại từ phản hồi máy chủ
-      // const latestCartData = await AccountAPI.CartList();
-      // set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+      // Fetch lại dữ liệu giỏ hàng từ server sau khi đã xóa tất cả
+      const latestCartData = await AccountAPI.CartList();
+      set(cartAtom, latestCartData?.items?.filter(item => item?.medicine?.id) || []);
+      
+      toast.success("Đã xóa tất cả sản phẩm trong giỏ hàng");
     } catch (error) {
       console.error("Không thể xóa giỏ hàng", error);
       // Khôi phục lại trạng thái ban đầu nếu API thất bại

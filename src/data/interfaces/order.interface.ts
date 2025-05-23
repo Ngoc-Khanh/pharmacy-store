@@ -1,4 +1,5 @@
 import { OrderStatus } from "../enum";
+import { Medicine } from "./medicine.interface";
 import { UserAddress } from "./user.interface";
 
 export interface Order {
@@ -12,8 +13,8 @@ export interface Order {
   totalPrice: number;
   shippingAddress: UserAddress;
   paymentMethod: string;
-  createdAt: string;
-  updatedAt: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
 }
 
 export interface OrderItem {
@@ -21,4 +22,27 @@ export interface OrderItem {
   quantity: number;
   price: number;
   itemTotal: number;
+}
+
+export interface OrderDetails {
+  readonly id: string;
+  readonly userId: string;
+  status: OrderStatus;
+  items: OrderDetailsItem[];
+  subTotal: number;
+  shippingFee: number;
+  discount: number;
+  totalPrice: number;
+  shippingAddress: UserAddress;
+  paymentMethod: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface OrderDetailsItem {
+  medicineId: string;
+  quantity: number;
+  price: number;
+  itemTotal: number;
+  medicine: Medicine;
 }
