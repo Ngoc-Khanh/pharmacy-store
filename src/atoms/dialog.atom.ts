@@ -37,7 +37,7 @@ export const useMedicinesDialog = () => {
   return { open, setOpen, currentMedicine, setCurrentMedicine };
 }
 
-type OrdersDialogType = "delete" | "confirm" | "cancel" | "complete"
+type OrdersDialogType = "delete" | "confirm" | "cancel" | "complete" | "view"
 
 export const openOrdersDialogAtom = atom<OrdersDialogType | null>(null);
 export const currentOrderAtom = atom<OrderAdmin | null>(null);

@@ -31,6 +31,25 @@ export interface OrderAdmin extends Order {
   };
 }
 
+export interface OrderAdminDetails {
+  readonly id: string;
+  readonly userId: string;
+  status: OrderStatus;
+  items: OrderAdminDetailsItem[];
+  subTotal: number;
+  shippingFee: number;
+  discount: number;
+  totalPrice: number;
+  shippingAddress: UserAddress;
+  paymentMethod: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface OrderAdminDetailsItem extends OrderItem {
+  medicine: Medicine;
+}
+
 export interface OrderItem {
   medicineId: string;
   quantity: number;

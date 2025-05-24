@@ -35,6 +35,26 @@ export function OrderRowActions({ row }: OrderRowActionsProps) {
     orderStatus !== OrderStatus.DELIVERED &&
     orderStatus !== OrderStatus.COMPLETED;
 
+  const handleViewDetails = () => {
+    setCurrentOrder(order);
+    setOpen("view");
+  };
+
+  const handleConfirmOrder = () => {
+    setCurrentOrder(order);
+    setOpen("confirm");
+  };
+
+  const handleCompleteOrder = () => {
+    setCurrentOrder(order);
+    setOpen("complete");
+  };
+
+  const handleCancelOrder = () => {
+    setCurrentOrder(order);
+    setOpen("cancel");
+  };
+
   return (
     <div className="flex justify-end items-center gap-1">
       <DropdownMenu modal={false}>
@@ -60,9 +80,7 @@ export function OrderRowActions({ row }: OrderRowActionsProps) {
             className="space-y-0.5"
           >
             <DropdownMenuItem
-              onClick={() => {
-                // View order details
-              }}
+              onClick={handleViewDetails}
               className="cursor-pointer flex items-center gap-2 py-1.5 px-2 text-sm hover:bg-teal-50 dark:hover:bg-teal-900/20 text-slate-700 hover:text-teal-600 dark:text-slate-300 dark:hover:text-teal-300 rounded-md group transition-colors"
             >
               <div className="rounded-full bg-teal-50 dark:bg-teal-900/30 p-1 group-hover:bg-teal-100 dark:group-hover:bg-teal-800/30 transition-colors">
@@ -73,10 +91,7 @@ export function OrderRowActions({ row }: OrderRowActionsProps) {
 
             {canConfirm && (
               <DropdownMenuItem
-                onClick={() => {
-                  setCurrentOrder(order);
-                  setOpen("confirm");
-                }}
+                onClick={handleConfirmOrder}
                 className="cursor-pointer flex items-center gap-2 py-1.5 px-2 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-300 rounded-md group transition-colors"
               >
                 <div className="rounded-full bg-blue-50 dark:bg-blue-900/30 p-1 group-hover:bg-blue-100 dark:group-hover:bg-blue-800/30 transition-colors">
@@ -88,10 +103,7 @@ export function OrderRowActions({ row }: OrderRowActionsProps) {
 
             {canDeliver && (
               <DropdownMenuItem
-                onClick={() => {
-                  setCurrentOrder(order);
-                  setOpen("complete");
-                }}
+                onClick={handleCompleteOrder}
                 className="cursor-pointer flex items-center gap-2 py-1.5 px-2 text-sm hover:bg-green-50 dark:hover:bg-green-900/20 text-slate-700 hover:text-green-600 dark:text-slate-300 dark:hover:text-green-300 rounded-md group transition-colors"
               >
                 <div className="rounded-full bg-green-50 dark:bg-green-900/30 p-1 group-hover:bg-green-100 dark:group-hover:bg-green-800/30 transition-colors">
@@ -117,10 +129,7 @@ export function OrderRowActions({ row }: OrderRowActionsProps) {
 
             {canCancel && (
               <DropdownMenuItem
-                onClick={() => {
-                  setCurrentOrder(order);
-                  setOpen("cancel");
-                }}
+                onClick={handleCancelOrder}
                 className="cursor-pointer flex items-center gap-2 py-1.5 px-2 text-sm hover:bg-rose-50 dark:hover:bg-rose-900/20 text-slate-700 hover:text-rose-600 dark:text-slate-300 dark:hover:text-rose-300 rounded-md group transition-colors"
               >
                 <div className="rounded-full bg-rose-50 dark:bg-rose-900/30 p-1 group-hover:bg-rose-100 dark:group-hover:bg-rose-800/30 transition-colors">
