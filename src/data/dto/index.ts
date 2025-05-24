@@ -2,6 +2,6 @@ export type { AddAddressDto, CartItemDto, ChangePasswordDto, UpdateProfileDto } 
 export type { credentialsDto, registrationDto } from "./auth.dto";
 export type { AddCategoryDto } from "./category.dto";
 export type { AddMedicineDto } from "./medicine.dto";
-export type { PlaceOrderDto } from "./order.dto";
+export type { OrderAdminChangeStatusDto, PlaceOrderDto } from "./order.dto";
 export type { AddUserDto, ChangeStatusUserDto } from "./users.dto";
 

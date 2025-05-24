@@ -17,6 +17,20 @@ export interface Order {
   readonly updatedAt: string;
 }
 
+export interface OrderAdmin extends Order {
+  user: {
+    username: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    profileImage: {
+      publicId: string;
+      url: string;
+      alt: string;
+    };
+  };
+}
+
 export interface OrderItem {
   medicineId: string;
   quantity: number;

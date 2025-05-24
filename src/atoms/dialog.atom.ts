@@ -1,4 +1,4 @@
-import { Category, Medicine, User } from "@/data/interfaces";
+import { Category, Medicine, OrderAdmin, User } from "@/data/interfaces";
 import { atom, useAtom } from "jotai";
 
 type UsersDialogType = "add" | "edit" | "delete" | "view" | "suspend" | "activate"
@@ -35,4 +35,16 @@ export const useMedicinesDialog = () => {
   const [currentMedicine, setCurrentMedicine] = useAtom(currentMedicineAtom);
 
   return { open, setOpen, currentMedicine, setCurrentMedicine };
+}
+
+type OrdersDialogType = "delete" | "confirm" | "cancel" | "complete"
+
+export const openOrdersDialogAtom = atom<OrdersDialogType | null>(null);
+export const currentOrderAtom = atom<OrderAdmin | null>(null);
+
+export const useOrdersDialog = () => {
+  const [open, setOpen] = useAtom(openOrdersDialogAtom);
+  const [currentOrder, setCurrentOrder] = useAtom(currentOrderAtom);
+
+  return { open, setOpen, currentOrder, setCurrentOrder };
 }
