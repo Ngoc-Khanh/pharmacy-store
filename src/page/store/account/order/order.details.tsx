@@ -14,37 +14,38 @@ import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import { vi } from "date-fns/locale";
 import { formatCurrency } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Tạo badge với màu sắc tương ứng với trạng thái đơn hàng
 const StatusBadge = ({ status }: { status: OrderStatus }) => {
   const statusConfig = {
     [OrderStatus.PENDING]: { 
-      color: "bg-green-50 text-green-700 border-green-200", 
+      color: "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800", 
       label: "Chờ xác nhận",
       icon: <ClockIcon className="w-3 h-3 mr-1" />
     },
     [OrderStatus.PROCESSING]: { 
-      color: "bg-blue-50 text-blue-600 border-blue-200", 
+      color: "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-900", 
       label: "Đang xử lý",
       icon: <Package className="w-3 h-3 mr-1" />
     },
     [OrderStatus.SHIPPED]: { 
-      color: "bg-indigo-50 text-indigo-600 border-indigo-200", 
+      color: "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-900", 
       label: "Đang giao hàng",
       icon: <Truck className="w-3 h-3 mr-1" />
     },
     [OrderStatus.DELIVERED]: { 
-      color: "bg-teal-50 text-teal-600 border-teal-200", 
+      color: "bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border-teal-200 dark:border-teal-900", 
       label: "Đã giao hàng",
       icon: <ShoppingBagIcon className="w-3 h-3 mr-1" />
     },
     [OrderStatus.CANCELLED]: { 
-      color: "bg-rose-50 text-rose-600 border-rose-200", 
+      color: "bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-900", 
       label: "Đã hủy",
       icon: <Package className="w-3 h-3 mr-1" />
     },
     [OrderStatus.COMPLETED]: { 
-      color: "bg-green-50 text-green-700 border-green-200", 
+      color: "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800", 
       label: "Hoàn thành",
       icon: <CheckCircle2Icon className="w-3 h-3 mr-1" />
     },
@@ -52,7 +53,7 @@ const StatusBadge = ({ status }: { status: OrderStatus }) => {
 
   const config = statusConfig[status];
   return (
-    <Badge className={`${config.color} px-3 py-1.5 rounded-full text-xs font-medium flex items-center shadow-sm`}>
+    <Badge className={`${config.color} px-3 py-1.5 rounded-full text-xs font-medium flex items-center shadow-sm dark:shadow-none`}>
       {config.icon} {config.label}
     </Badge>
   );
@@ -86,7 +87,7 @@ const OrderTimeline = ({ status }: { status: OrderStatus }) => {
   if (status === OrderStatus.CANCELLED) {
     return (
       <div className="flex items-center justify-center py-6">
-        <Badge variant="destructive" className="px-4 py-1.5 rounded-full shadow-sm">
+        <Badge variant="destructive" className="px-4 py-1.5 rounded-full shadow-sm dark:shadow-none">
           Đơn hàng đã bị hủy
         </Badge>
       </div>
@@ -111,13 +112,15 @@ const OrderTimeline = ({ status }: { status: OrderStatus }) => {
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
               <div 
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md ${
-                  isActive ? "bg-gradient-to-r from-green-600 to-green-500 text-white" : "bg-gray-100 text-gray-400"
+                className={`w-14 h-14 rounded-full flex items-center justify-center ${
+                  isActive 
+                    ? "bg-gradient-to-r from-green-600 to-green-500 dark:from-green-500 dark:to-green-600 text-white shadow-md dark:shadow-green-900/30" 
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 shadow-sm dark:shadow-none"
                 }`}
               >
                 <StepIcon className={`w-6 h-6 ${isActive ? "" : "opacity-60"}`} />
               </div>
-              <p className={`text-xs mt-3 font-medium ${isActive ? "text-green-700" : "text-gray-400"}`}>
+              <p className={`text-xs mt-3 font-medium ${isActive ? "text-green-700 dark:text-green-400" : "text-gray-400 dark:text-gray-500"}`}>
                 {step.label}
               </p>
             </motion.div>
@@ -136,7 +139,9 @@ const OrderTimeline = ({ status }: { status: OrderStatus }) => {
                 <div 
                   key={index} 
                   className={`flex-1 h-full ${
-                    isPast ? "bg-gradient-to-r from-green-600 to-green-500" : "bg-gray-200"
+                    isPast 
+                      ? "bg-gradient-to-r from-green-600 to-green-500 dark:from-green-500 dark:to-green-600" 
+                      : "bg-gray-200 dark:bg-gray-700"
                   }`}
                 />
               );
@@ -148,6 +153,64 @@ const OrderTimeline = ({ status }: { status: OrderStatus }) => {
   );
 };
 
+// OrderDetailsSkeleton component
+const OrderDetailsSkeleton = () => (
+  <div className="space-y-6 p-6">
+    <div className="flex items-center justify-between">
+      <Skeleton className="h-10 w-32 rounded-full bg-green-100/60 dark:bg-green-950/30" />
+      <Skeleton className="h-8 w-28 rounded-full bg-green-100/60 dark:bg-green-950/30" />
+    </div>
+
+    <Card className="overflow-hidden border-0 shadow-md dark:shadow-none dark:border dark:border-green-950/30 rounded-xl">
+      <div className="bg-green-50/70 dark:bg-green-950/30 p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="space-y-3">
+            <Skeleton className="h-8 w-48 bg-green-100/60 dark:bg-green-900/30 rounded-lg" />
+            <Skeleton className="h-4 w-36 bg-green-100/60 dark:bg-green-900/30 rounded-md" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-32 bg-green-100/60 dark:bg-green-900/30 rounded-md" />
+            <Skeleton className="h-4 w-40 bg-green-100/60 dark:bg-green-900/30 rounded-md" />
+          </div>
+        </div>
+      </div>
+
+      <div className="p-6 space-y-8">
+        <div className="py-8">
+          <div className="flex justify-between">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="flex flex-col items-center">
+                <Skeleton className="w-14 h-14 rounded-full bg-green-100/60 dark:bg-green-900/30" />
+                <Skeleton className="mt-3 h-4 w-16 bg-green-100/60 dark:bg-green-900/30 rounded-md" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <Skeleton className="h-6 w-36 bg-green-100/60 dark:bg-green-900/30 rounded-md" />
+            <Skeleton className="h-32 w-full bg-green-100/60 dark:bg-green-900/30 rounded-xl" />
+          </div>
+          <div className="space-y-3">
+            <Skeleton className="h-6 w-36 bg-green-100/60 dark:bg-green-900/30 rounded-md" />
+            <Skeleton className="h-32 w-full bg-green-100/60 dark:bg-green-900/30 rounded-xl" />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <Skeleton className="h-6 w-40 bg-green-100/60 dark:bg-green-900/30 rounded-md" />
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-20 w-full bg-green-100/60 dark:bg-green-900/30 rounded-xl" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </Card>
+  </div>
+);
+
 export default function OrderDetails() {
   const { id } = useParams<{ id: string }>();
 
@@ -158,21 +221,15 @@ export default function OrderDetails() {
   });
 
   if (isLoading) {
-    return (
-      <div className="animate-pulse space-y-6 p-6">
-        <div className="h-8 bg-green-50 rounded-full w-1/3"></div>
-        <div className="h-64 bg-green-50 rounded-lg"></div>
-        <div className="h-32 bg-green-50 rounded-lg"></div>
-      </div>
-    );
+    return <OrderDetailsSkeleton />;
   }
 
   if (isError || !order) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-semibold text-gray-700">Không thể tải thông tin đơn hàng</h2>
-        <p className="mt-2 text-gray-500">Vui lòng thử lại sau hoặc liên hệ hỗ trợ</p>
-        <Button asChild className="mt-4 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white shadow-sm rounded-full">
+        <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200">Không thể tải thông tin đơn hàng</h2>
+        <p className="mt-2 text-gray-500 dark:text-gray-400">Vui lòng thử lại sau hoặc liên hệ hỗ trợ</p>
+        <Button asChild className="mt-4 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 text-white shadow-sm dark:shadow-green-900/20 rounded-full">
           <Link to={routes.store.account.orders}>Quay lại danh sách đơn hàng</Link>
         </Button>
       </div>
@@ -197,7 +254,7 @@ export default function OrderDetails() {
             <Button 
               asChild 
               variant="outline" 
-              className="gap-1 group hover:bg-green-50 hover:text-green-700 hover:border-green-200 rounded-full shadow-sm"
+              className="gap-1 group hover:bg-green-50 hover:text-green-700 dark:hover:bg-green-950/40 dark:hover:text-green-400 hover:border-green-200 dark:hover:border-green-800 rounded-full shadow-sm dark:shadow-none"
             >
               <Link to={routes.store.account.orders}>
                 <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Quay lại danh sách
@@ -206,22 +263,22 @@ export default function OrderDetails() {
             <StatusBadge status={order.status} />
           </div>
 
-          <Card className="mb-6 overflow-hidden border-0 shadow-md rounded-xl">
-            <CardHeader className="bg-gradient-to-r from-green-50 to-green-50/50 py-6">
+          <Card className="mb-6 overflow-hidden border-0 dark:border dark:border-green-950/20 shadow-md dark:shadow-lg dark:shadow-green-950/10 rounded-xl">
+            <CardHeader className="bg-gradient-to-r from-green-50 to-green-50/50 dark:from-green-950/40 dark:to-green-950/20 py-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <CardTitle className="text-2xl text-green-700 flex items-center">
-                    <div className="w-1 h-8 bg-gradient-to-b from-green-600 to-green-400 rounded-full mr-3 shadow-sm"></div>
+                  <CardTitle className="text-2xl text-green-700 dark:text-green-400 flex items-center">
+                    <div className="w-1 h-8 bg-gradient-to-b from-green-600 to-green-400 dark:from-green-500 dark:to-green-600 rounded-full mr-3 shadow-sm dark:shadow-green-900/30"></div>
                     Đơn hàng #{id?.slice(-6)}
                   </CardTitle>
-                  <p className="text-gray-500 text-sm flex items-center mt-2 ml-4">
-                    <CalendarIcon className="mr-1.5 h-4 w-4 text-green-500" /> {formattedDate}
+                  <p className="text-gray-500 dark:text-gray-400 text-sm flex items-center mt-2 ml-4">
+                    <CalendarIcon className="mr-1.5 h-4 w-4 text-green-500 dark:text-green-400" /> {formattedDate}
                   </p>
                 </div>
                 <div className="flex flex-col sm:items-end">
-                  <p className="text-sm font-medium text-gray-700">Phương thức thanh toán</p>
-                  <p className="text-sm text-gray-500 flex items-center mt-1">
-                    <BanknoteIcon className="h-3.5 w-3.5 mr-1.5 text-green-500" />
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Phương thức thanh toán</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center mt-1">
+                    <BanknoteIcon className="h-3.5 w-3.5 mr-1.5 text-green-500 dark:text-green-400" />
                     {formatPaymentMethod(order.paymentMethod)}
                   </p>
                 </div>
@@ -233,16 +290,16 @@ export default function OrderDetails() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 <div>
-                  <h3 className="font-medium text-gray-700 mb-3 flex items-center">
-                    <MapPinIcon className="h-4 w-4 mr-2 text-green-500" />
+                  <h3 className="font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                    <MapPinIcon className="h-4 w-4 mr-2 text-green-500 dark:text-green-400" />
                     Địa chỉ giao hàng
                   </h3>
-                  <Card className="bg-gradient-to-r from-green-50/50 to-white border-0 shadow-sm rounded-xl overflow-hidden">
+                  <Card className="bg-gradient-to-r from-green-50/50 to-white dark:from-green-950/20 dark:to-transparent border-0 dark:border dark:border-green-950/20 shadow-sm dark:shadow-none rounded-xl overflow-hidden">
                     <CardContent className="p-4">
-                      <div className="border-l-2 border-green-200 pl-3">
-                        <p className="font-medium text-gray-800">{order.shippingAddress.name}</p>
-                        <p className="text-sm text-gray-500 mt-1.5">{order.shippingAddress.phone}</p>
-                        <p className="text-sm text-gray-500 mt-1.5">
+                      <div className="border-l-2 border-green-200 dark:border-green-800 pl-3">
+                        <p className="font-medium text-gray-800 dark:text-gray-200">{order.shippingAddress.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">{order.shippingAddress.phone}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
                           {order.shippingAddress.addressLine1}, 
                           {order.shippingAddress.addressLine2 ? `${order.shippingAddress.addressLine2}, ` : ''}
                           <br />
@@ -254,23 +311,23 @@ export default function OrderDetails() {
                 </div>
 
                 <div>
-                  <h3 className="font-medium text-gray-700 mb-3 flex items-center">
-                    <BanknoteIcon className="h-4 w-4 mr-2 text-green-500" />
+                  <h3 className="font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                    <BanknoteIcon className="h-4 w-4 mr-2 text-green-500 dark:text-green-400" />
                     Tổng quan đơn hàng
                   </h3>
-                  <Card className="bg-gradient-to-r from-green-50/50 to-white border-0 shadow-sm rounded-xl overflow-hidden">
+                  <Card className="bg-gradient-to-r from-green-50/50 to-white dark:from-green-950/20 dark:to-transparent border-0 dark:border dark:border-green-950/20 shadow-sm dark:shadow-none rounded-xl overflow-hidden">
                     <CardContent className="p-4">
                       <div className="space-y-2.5">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-500">Tạm tính</span>
-                          <span className="font-medium text-gray-700">{formatCurrency(order.subTotal)}</span>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">Tạm tính</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">{formatCurrency(order.subTotal)}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-500">Phí vận chuyển</span>
-                          <span className="font-medium text-gray-700">{formatCurrency(order.shippingFee)}</span>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">Phí vận chuyển</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">{formatCurrency(order.shippingFee)}</span>
                         </div>
                         {order.discount > 0 && (
-                          <div className="flex justify-between items-center text-green-600">
+                          <div className="flex justify-between items-center text-green-600 dark:text-green-400">
                             <span className="text-sm flex items-center">
                               <CheckCircle2Icon className="h-3.5 w-3.5 mr-1.5" />
                               Giảm giá
@@ -278,10 +335,10 @@ export default function OrderDetails() {
                             <span className="font-medium">-{formatCurrency(order.discount)}</span>
                           </div>
                         )}
-                        <Separator className="my-3" />
+                        <Separator className="my-3 bg-gray-200 dark:bg-gray-700" />
                         <div className="flex justify-between items-center pt-1">
-                          <span className="font-medium text-gray-700">Tổng thanh toán</span>
-                          <span className="font-bold text-lg text-green-700">{formatCurrency(order.totalPrice)}</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">Tổng thanh toán</span>
+                          <span className="font-bold text-lg text-green-700 dark:text-green-400">{formatCurrency(order.totalPrice)}</span>
                         </div>
                       </div>
                     </CardContent>
@@ -290,15 +347,15 @@ export default function OrderDetails() {
               </div>
 
               <div className="mt-10">
-                <h3 className="font-medium text-gray-700 mb-5 flex items-center">
-                  <ShoppingBagIcon className="h-4 w-4 mr-2 text-green-500" />
+                <h3 className="font-medium text-gray-700 dark:text-gray-300 mb-5 flex items-center">
+                  <ShoppingBagIcon className="h-4 w-4 mr-2 text-green-500 dark:text-green-400" />
                   Chi tiết sản phẩm
                 </h3>
                 <div className="space-y-4">
                   {order.items.map((item, index) => (
                     <motion.div 
                       key={item.medicineId}
-                      className="flex items-center p-4 border border-green-100 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300"
+                      className="flex items-center p-4 border border-green-100 dark:border-green-900/50 rounded-xl bg-white dark:bg-gray-900/30 shadow-sm dark:shadow-md dark:shadow-green-950/10 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-green-950/20 transition-all duration-300"
                       initial={{ x: -10, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -307,7 +364,7 @@ export default function OrderDetails() {
                         boxShadow: "0 8px 30px rgba(0, 0, 0, 0.08)"
                       }}
                     >
-                      <div className="h-18 w-18 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center overflow-hidden p-1 shadow-sm">
+                      <div className="h-16 w-16 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-900/50 rounded-lg flex items-center justify-center overflow-hidden p-1 shadow-sm dark:shadow-green-950/30">
                         {item.medicine.thumbnail?.url ? (
                           <img 
                             src={item.medicine.thumbnail.url} 
@@ -315,22 +372,22 @@ export default function OrderDetails() {
                             className="h-full w-full object-cover rounded-lg"
                           />
                         ) : (
-                          <ShoppingBagIcon className="h-8 w-8 text-green-600" />
+                          <ShoppingBagIcon className="h-8 w-8 text-green-600 dark:text-green-400" />
                         )}
                       </div>
                       <div className="ml-5 flex-1">
-                        <div className="font-medium text-gray-800">{item.medicine.name}</div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{item.medicine.name}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           Mã sản phẩm: {item.medicineId.slice(0, 8)}...
                         </div>
-                        <div className="text-sm text-gray-500 mt-1.5 flex items-center">
-                          <span className="inline-block mr-3 px-2 py-0.5 rounded-full bg-green-50 text-green-700 text-xs">
+                        <div className="text-sm text-gray-500 dark:text-gray-400 mt-1.5 flex items-center">
+                          <span className="inline-block mr-3 px-2 py-0.5 rounded-full bg-green-50 dark:bg-green-900/50 text-green-700 dark:text-green-400 text-xs">
                             {formatCurrency(item.price)} × {item.quantity}
                           </span>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-medium text-green-700 bg-green-50/70 px-3 py-1.5 rounded-lg">{formatCurrency(item.itemTotal)}</div>
+                        <div className="font-medium text-green-700 dark:text-green-400 bg-green-50/70 dark:bg-green-900/40 px-3 py-1.5 rounded-lg">{formatCurrency(item.itemTotal)}</div>
                       </div>
                     </motion.div>
                   ))}
