@@ -1,0 +1,179 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { routes } from '@/config';
+import { OrderStatus } from '@/data/enum';
+import { Order } from '@/data/interfaces';
+import { formatCurrency } from '@/lib/utils';
+
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
+import { motion } from 'framer-motion';
+import { ArrowRight, Calendar, Check, Clock, CreditCard, Leaf, Package, ShoppingBag, TruckIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+export const OrderCard = ({ order }: { order: Order }) => {
+  const formattedDate = format(new Date(order.createdAt), "dd/MM/yyyy", { locale: vi });
+  const formattedTime = format(new Date(order.createdAt), "HH:mm", { locale: vi });
+
+  // Biểu tượng cho từng trạng thái đơn hàng
+  const OrderStatusIcon = ({ status }: { status: OrderStatus }) => {
+    switch (status) {
+      case OrderStatus.PENDING:
+        return <Clock className="h-5 w-5 text-green-600 dark:text-green-400" />;
+      case OrderStatus.PROCESSING:
+        return <Package className="h-5 w-5 text-blue-500 dark:text-blue-400" />;
+      case OrderStatus.SHIPPED:
+        return <TruckIcon className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />;
+      case OrderStatus.DELIVERED:
+      case OrderStatus.COMPLETED:
+        return <ShoppingBag className="h-5 w-5 text-green-600 dark:text-green-400" />;
+      case OrderStatus.CANCELLED:
+        return <Package className="h-5 w-5 text-rose-500 dark:text-rose-400" />;
+      default:
+        return <Package className="h-5 w-5 text-green-600 dark:text-green-400" />;
+    }
+  };
+
+  // Định dạng phương thức thanh toán
+  const formatPaymentMethod = (method: string) => {
+    switch (method) {
+      case "COD":
+        return "Thanh toán khi nhận hàng";
+      case "CREDIT-CARD":
+        return "Thẻ tín dụng";
+      case "BANK-TRANSFER":
+        return "Chuyển khoản ngân hàng";
+      default:
+        return method;
+    }
+  };
+
+  // Tạo badge với màu sắc tương ứng với trạng thái đơn hàng
+  const StatusBadge = ({ status }: { status: OrderStatus }) => {
+    const statusConfig = {
+      [OrderStatus.PENDING]: {
+        color: "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800",
+        label: "Chờ xác nhận",
+        icon: <Clock className="w-3 h-3 mr-1" />
+      },
+      [OrderStatus.PROCESSING]: {
+        color: "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-900",
+        label: "Đang xử lý",
+        icon: <Package className="w-3 h-3 mr-1" />
+      },
+      [OrderStatus.SHIPPED]: {
+        color: "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-900",
+        label: "Đang giao hàng",
+        icon: <TruckIcon className="w-3 h-3 mr-1" />
+      },
+      [OrderStatus.DELIVERED]: {
+        color: "bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border-teal-200 dark:border-teal-900",
+        label: "Đã giao hàng",
+        icon: <ShoppingBag className="w-3 h-3 mr-1" />
+      },
+      [OrderStatus.CANCELLED]: {
+        color: "bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-900",
+        label: "Đã hủy",
+        icon: <Package className="w-3 h-3 mr-1" />
+      },
+      [OrderStatus.COMPLETED]: {
+        color: "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800",
+        label: "Hoàn thành",
+        icon: <Check className="w-3 h-3 mr-1" />
+      },
+    };
+
+    const config = statusConfig[status];
+    return (
+      <Badge className={`${config.color} px-3 py-1.5 rounded-full text-xs font-medium flex items-center shadow-sm dark:shadow-none`}>
+        {config.icon} {config.label}
+      </Badge>
+    );
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      whileHover={{
+        scale: 1.01,
+        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.08)"
+      }}
+      className="rounded-xl overflow-hidden"
+    >
+      <Card className="overflow-hidden border-0 dark:border dark:border-green-900/50 shadow-sm dark:shadow-md dark:shadow-green-950/10 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-green-950/20 transition-all duration-300">
+        <div className="border-b border-border dark:border-green-900/30 p-4 flex justify-between items-center bg-gradient-to-r from-green-50 to-green-50/30 dark:from-green-950/40 dark:to-green-950/20">
+          <div className="flex items-center gap-4">
+            <div className="bg-gradient-to-br from-green-100 to-green-50 dark:from-green-800/40 dark:to-green-900/60 p-2.5 rounded-full shadow-sm dark:shadow-green-950/30 flex items-center justify-center">
+              <OrderStatusIcon status={order.status} />
+            </div>
+            <div>
+              <h3 className="font-medium text-base text-gray-800 dark:text-gray-100">Đơn hàng #{order.id.slice(-6)}</h3>
+              <div className="flex flex-wrap items-center text-xs text-muted-foreground dark:text-gray-400 gap-4 mt-1.5">
+                <span className="flex items-center">
+                  <Calendar className="h-3 w-3 mr-1.5 opacity-70" /> {formattedDate}
+                </span>
+                <span className="flex items-center">
+                  <Clock className="h-3 w-3 mr-1.5 opacity-70" /> {formattedTime}
+                </span>
+                <span className="flex items-center">
+                  <CreditCard className="h-3 w-3 mr-1.5 opacity-70" /> {formatPaymentMethod(order.paymentMethod)}
+                </span>
+              </div>
+            </div>
+          </div>
+          <StatusBadge status={order.status} />
+        </div>
+        <CardContent className="p-4 bg-white dark:bg-gray-900/30">
+          <div className="flex flex-col md:flex-row justify-between">
+            <div className="space-y-1 md:w-2/3">
+              <div className="text-sm text-gray-500 dark:text-gray-400 mb-3 flex items-center">
+                <ShoppingBag className="h-3.5 w-3.5 mr-1.5 opacity-70" />
+                {order.items.length} {order.items.length === 1 ? 'sản phẩm' : 'sản phẩm'}
+              </div>
+              <div className="space-y-3 border-l-2 border-green-100 dark:border-green-800 pl-3">
+                {order.items.slice(0, 2).map((item) => (
+                  <div key={item.medicineId} className="text-sm flex justify-between items-center">
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-green-500 to-green-400 dark:from-green-400 dark:to-green-500 mr-2.5 shadow-sm dark:shadow-green-900/30"></div>
+                      <span className="text-gray-700 dark:text-gray-200 font-medium">
+                        {item.medicineId.slice(0, 8)}...
+                      </span>
+                      <span className="text-gray-500 dark:text-gray-400 ml-2">
+                        × {item.quantity}
+                      </span>
+                    </div>
+                    <div className="font-medium text-green-700 dark:text-green-400">{formatCurrency(item.itemTotal)}</div>
+                  </div>
+                ))}
+                {order.items.length > 2 && (
+                  <div className="text-xs text-green-600 dark:text-green-400 font-medium ml-4 italic flex items-center">
+                    <Leaf className="h-3 w-3 mr-1.5 text-green-500 dark:text-green-400" />
+                    +{order.items.length - 2} sản phẩm khác
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="mt-4 md:mt-0 flex flex-col items-start md:items-end justify-between">
+              <div className="text-right px-4 py-2 bg-green-50/50 dark:bg-green-900/30 rounded-lg">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Tổng thanh toán</div>
+                <div className="font-bold text-lg text-green-700 dark:text-green-400">{formatCurrency(order.totalPrice)}</div>
+              </div>
+              <Button
+                asChild
+                className="mt-4 w-full md:w-auto group bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 text-white shadow-sm dark:shadow-green-900/20 hover:shadow"
+                size="sm"
+              >
+                <Link to={routes.store.account.orderDetails(order.id)}>
+                  Xem chi tiết <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
