@@ -1,15 +1,14 @@
 import { useOrdersDialog } from "@/atoms/dialog.atom";
 import { OrderStatus } from "@/data/enum";
 import { OrdersChangeStatusDialog } from "./orders.change-status-dialog";
+import { OrdersViewDetails } from "./orders.view-details";
 
 export default function OrdersDialogs() {
   const { open, setOpen, currentOrder, setCurrentOrder } = useOrdersDialog();
 
-  // Reset current order when dialog closes
   const handleOpenChange = (isOpen: boolean, type?: string) => {
     if (!isOpen) {
       setOpen(null);
-      // Only reset current order if dialog fully closes
       if (!type) {
         setTimeout(() => {
           setCurrentOrder(null);
@@ -20,7 +19,12 @@ export default function OrdersDialogs() {
 
   return (
     <>
-      {/* Dialog for confirming order (change to PROCESSING) */}
+      <OrdersViewDetails
+        orderId={currentOrder?.id}
+        open={open === "view"}
+        onOpenChange={(isOpen) => handleOpenChange(isOpen, "view")}
+      />
+
       <OrdersChangeStatusDialog
         currentOrder={currentOrder || undefined}
         open={open === "confirm"}
@@ -35,7 +39,6 @@ export default function OrdersDialogs() {
         mode={OrderStatus.COMPLETED}
       />
 
-      {/* Dialog for cancelling order (change to CANCELLED) */}
       <OrdersChangeStatusDialog
         currentOrder={currentOrder || undefined}
         open={open === "cancel"}
