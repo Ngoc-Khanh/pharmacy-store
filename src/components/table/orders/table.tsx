@@ -5,6 +5,8 @@ import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedR
 
 import { motion } from 'framer-motion';
 import { useState } from "react";
+import { DataTablePagination } from "../data-table-pagination";
+import { OrdersTableToolbar } from "./orders.table-toolbar";
 
 interface DataTableProps {
   columns: ColumnDef<OrderAdmin>[];
@@ -44,7 +46,7 @@ export default function OrdersDataTable({ columns, data }: DataTableProps) {
 
   return (
     <div className="space-y-4">
-      {/* <CategoriesTableToolbar table={table} /> */}
+      <OrdersTableToolbar table={table} />
       {/* Table */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
         <Table className="table-fixed w-full">
@@ -122,7 +124,7 @@ export default function OrdersDataTable({ columns, data }: DataTableProps) {
           </TableBody>
         </Table>
       </div>
-      {/* <DataTablePagination table={table} /> */}
+      <DataTablePagination table={table} />
     </div>
   );
 }
