@@ -6,22 +6,22 @@ export type SRO<T = unknown> = {
   error: string | null;
 };
 
-export interface Paginated<T> {
-  current_page: number;
+export interface Paginated<T = unknown> {
+  currentPage: number;
   data: T[];
-  first_page_url: string;
+  firstPageUrl: string;
   from: number;
-  last_page: number;
-  last_page_url: string;
+  lastPage: number;
+  lastPageUrl: string;
   links: {
     url: string | null;
     label: string;
     active: boolean;
   }[];
-  next_page_url: string | null;
+  nextPageUrl: string | null;
   path: string;
-  per_page: number;
-  prev_page_url: string | null;
+  perPage: number;
+  prevPageUrl: string | null;
   to: number;
   total: number;
 }

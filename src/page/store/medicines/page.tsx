@@ -50,10 +50,10 @@ export default function MedicinesPage() {
   // Handle Laravel pagination structure
   const medicinesData = medicines?.data?.data || [];
   const paginationInfo = medicines?.data ? {
-    currentPage: medicines.data.current_page,
-    lastPage: medicines.data.last_page,
+    currentPage: medicines.data.currentPage,
+    lastPage: medicines.data.lastPage,
     total: medicines.data.total,
-    perPage: medicines.data.per_page
+    perPage: medicines.data.perPage
   } : null;
 
   const { data: categories } = useQuery({
