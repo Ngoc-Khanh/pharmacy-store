@@ -1,6 +1,7 @@
 import { useOrdersDialog } from "@/atoms/dialog.atom";
 import { OrderStatus } from "@/data/enum";
 import { OrdersChangeStatusDialog } from "./orders.change-status-dialog";
+import { OrdersDeleteDialog } from "./orders.delete-dialog";
 import { OrdersViewDetails } from "./orders.view-details";
 
 export default function OrdersDialogs() {
@@ -19,6 +20,12 @@ export default function OrdersDialogs() {
 
   return (
     <>
+      <OrdersDeleteDialog
+        currentOrder={currentOrder || undefined}
+        open={open === "delete"}
+        onOpenChange={(isOpen) => handleOpenChange(isOpen, "delete")}
+      />
+
       <OrdersViewDetails
         orderId={currentOrder?.id}
         open={open === "view"}
