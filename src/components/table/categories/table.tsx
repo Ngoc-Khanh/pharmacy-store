@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Category } from "@/data/interfaces";
 import { cn } from "@/lib/utils";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, RowData, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
+
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { CategoriesTableToolbar } from "./categories.table-toolbar";
@@ -51,86 +52,98 @@ export default function CategoriesDataTable({ columns, data }: DataTableProps) {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <CategoriesTableToolbar table={table} />
       {/* Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <Table className="table-fixed w-full">
-          <TableHeader className="bg-slate-50 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      style={{ width: `${header.getSize()}px` }}
-                      colSpan={header.colSpan}
+      <div className="overflow-hidden rounded-xl border border-amber-100 dark:border-amber-800/30 bg-white dark:bg-slate-950 shadow-sm">
+        <motion.div
+          initial={{ opacity: 0.7 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="relative"
+        >
+          <div className="overflow-y-auto max-h-[calc(100vh-340px)]">
+            <Table>
+              <TableHeader className="bg-amber-50/70 dark:bg-amber-950/40 sticky top-0 z-10">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id} className="border-b border-amber-100 dark:border-amber-800/20 hover:bg-amber-50/80 dark:hover:bg-amber-950/50">
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          style={{ width: `${header.getSize()}px` }}
+                          colSpan={header.colSpan}
+                          className={cn(
+                            "font-semibold text-amber-800 dark:text-amber-300 text-sm py-4",
+                            header.column.columnDef.meta?.className
+                          )}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                        </TableHead>
+                      )
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row, index) => (
+                    <motion.tr
+                      key={row.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.2,
+                        delay: index * 0.05,
+                        ease: "easeOut"
+                      }}
                       className={cn(
-                        "font-medium text-sm h-12 text-slate-600 dark:text-slate-400",
-                        header.column.columnDef.meta?.className
+                        "transition-colors relative group",
+                        row.getIsSelected()
+                          ? "bg-amber-50/40 dark:bg-amber-950/20"
+                          : "odd:bg-white even:bg-amber-50/30 dark:odd:bg-slate-950 dark:even:bg-amber-950/10 hover:bg-amber-50/50 dark:hover:bg-amber-950/20"
                       )}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, index) => (
-                <motion.tr
-                  key={row.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.2,
-                    delay: index * 0.05,
-                    ease: "easeOut"
-                  }}
-                  className={cn(
-                    "transition-colors relative group",
-                    row.getIsSelected()
-                      ? "bg-teal-50/40 dark:bg-teal-950/20"
-                      : "odd:bg-white even:bg-slate-50/50 dark:odd:bg-slate-900 dark:even:bg-slate-800/20 hover:bg-teal-50/50 dark:hover:bg-teal-950/10"
-                  )}
-                >
-                  {row.getVisibleCells().map((cell) => (
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className={cn(
+                            "border-b border-amber-100/70 dark:border-amber-800/20 h-auto py-4 align-middle group-last:border-0",
+                            cell.column.columnDef.meta?.className
+                          )}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </motion.tr>
+                  ))
+                ) : (
+                  <TableRow>
                     <TableCell
-                      key={cell.id}
-                      className={cn(
-                        "border-b border-slate-100 dark:border-slate-800 h-auto py-4 align-middle group-last:border-0",
-                        cell.column.columnDef.meta?.className
-                      )}
+                      colSpan={columns.length}
+                      className="h-24 text-center text-amber-600 dark:text-amber-400"
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      Không có kết quả.
                     </TableCell>
-                  ))}
-                </motion.tr>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center text-muted-foreground"
-                >
-                  Không có kết quả.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </motion.div>
       </div>
-      <DataTablePagination table={table} />
+
+      <div className="bg-white dark:bg-slate-950 rounded-xl border border-amber-100 dark:border-amber-800/30 shadow-sm p-2">
+        <DataTablePagination table={table} />
+      </div>
     </div>
   )
 }
