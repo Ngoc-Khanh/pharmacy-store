@@ -4,6 +4,7 @@ import { MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, UsersAdm
 import CategoriesAdminPage from "@/page/admin/categories";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
+import DeliverPage from "@/page/deliver";
 import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, RootPage } from "@/page/store";
 import { AddressesPage, CartPage, ChangePasswordPage, OrderPage, RootAccountPage } from "@/page/store/account";
 import { OrderDetails } from "@/page/store/account/order";
@@ -145,6 +146,12 @@ export const reactRouter: RouteObject[] = [
         element: <div>Settings</div>,
       }
     ]
+  },
+
+  // DELIVER PAGES
+  {
+    path: routes.deliver.root,
+    element: <DeliverPage />,
   },
 
   // ERROR ROUTER

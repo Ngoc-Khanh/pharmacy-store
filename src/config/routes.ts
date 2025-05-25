@@ -41,6 +41,10 @@ const baseRoutes = {
     }
   },
 
+  deliver: {
+    root: "/deliver",
+  },
+
   // ERROR ROUTES
   generalError: "/500",
   notfoundError: "/404",
@@ -77,6 +81,9 @@ export const routeNames = {
   [baseRoutes.store.account.cart]: "Giỏ hàng",
   [baseRoutes.store.account.orders]: "Đơn hàng của tôi",
   [baseRoutes.store.account.invoices]: "Hóa đơn",
+
+  // DELIVER NAME ROUTES
+  [baseRoutes.deliver.root]: "Giao hàng",
 };
 
 export const routes = {
