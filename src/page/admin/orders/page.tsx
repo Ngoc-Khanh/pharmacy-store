@@ -99,7 +99,7 @@ export default function AdminOrdersPage() {
             <div>
               <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Báo cáo đơn hàng</h3>
               <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">Xuất báo cáo</p>
-            </div>
+          </div>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

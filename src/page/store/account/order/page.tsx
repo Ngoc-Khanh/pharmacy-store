@@ -47,8 +47,10 @@ export default function OrderPage() {
     o.status === OrderStatus.PROCESSING ||
     o.status === OrderStatus.SHIPPED
   );
+  const deliveredOrders = orders?.filter(o =>
+    o.status === OrderStatus.DELIVERED
+  );
   const completedOrders = orders?.filter(o =>
-    o.status === OrderStatus.DELIVERED ||
     o.status === OrderStatus.COMPLETED
   );
   const cancelledOrders = orders?.filter(o =>
@@ -209,22 +211,30 @@ export default function OrderPage() {
               ) : (
                 <div className="bg-white dark:bg-gray-900/30 p-1 rounded-2xl shadow-sm dark:shadow-md dark:shadow-green-950/10 border border-green-100/50 dark:border-green-900/50">
                   <Tabs defaultValue="all" className="w-full mt-2">
-                    <TabsList className="grid grid-cols-4 gap-1 w-full max-w-lg mx-auto mb-6 bg-green-50 dark:bg-green-950/30 p-1 rounded-xl">
-                      <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-600 data-[state=active]:to-green-500 dark:data-[state=active]:from-green-500 dark:data-[state=active]:to-green-600 data-[state=active]:text-white rounded-lg">
+                    <TabsList className="grid grid-cols-5 gap-1 w-full max-w-2xl mx-auto mb-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 p-1.5 rounded-xl shadow-inner">
+                      <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-600 data-[state=active]:to-green-500 dark:data-[state=active]:from-green-500 dark:data-[state=active]:to-green-600 data-[state=active]:text-white data-[state=active]:shadow-lg rounded-lg transition-all duration-200 font-medium">
                         Tất cả
                       </TabsTrigger>
-                      <TabsTrigger value="pending" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-600 data-[state=active]:to-green-500 dark:data-[state=active]:from-green-500 dark:data-[state=active]:to-green-600 data-[state=active]:text-white rounded-lg">
+                      <TabsTrigger value="pending" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-500 dark:data-[state=active]:from-blue-500 dark:data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg rounded-lg transition-all duration-200 font-medium">
                         Đang xử lý
                         {pendingOrders && pendingOrders.length > 0 && (
-                          <Badge variant="secondary" className="ml-1.5 bg-white dark:bg-gray-800 text-green-700 dark:text-green-400 shadow-sm dark:shadow-none">
+                          <Badge variant="secondary" className="ml-1.5 bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-400 shadow-sm dark:shadow-none">
                             {pendingOrders.length}
                           </Badge>
                         )}
                       </TabsTrigger>
-                      <TabsTrigger value="completed" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-600 data-[state=active]:to-green-500 dark:data-[state=active]:from-green-500 dark:data-[state=active]:to-green-600 data-[state=active]:text-white rounded-lg">
+                      <TabsTrigger value="delivered" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-teal-600 data-[state=active]:to-teal-500 dark:data-[state=active]:from-teal-500 dark:data-[state=active]:to-teal-600 data-[state=active]:text-white data-[state=active]:shadow-lg rounded-lg transition-all duration-200 font-medium">
+                        Đã giao
+                        {deliveredOrders && deliveredOrders.length > 0 && (
+                          <Badge variant="secondary" className="ml-1.5 bg-white dark:bg-gray-800 text-teal-700 dark:text-teal-400 shadow-sm dark:shadow-none">
+                            {deliveredOrders.length}
+                          </Badge>
+                        )}
+                      </TabsTrigger>
+                      <TabsTrigger value="completed" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-600 data-[state=active]:to-emerald-500 dark:data-[state=active]:from-emerald-500 dark:data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg rounded-lg transition-all duration-200 font-medium">
                         Hoàn thành
                       </TabsTrigger>
-                      <TabsTrigger value="cancelled" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-600 data-[state=active]:to-green-500 dark:data-[state=active]:from-green-500 dark:data-[state=active]:to-green-600 data-[state=active]:text-white rounded-lg">
+                      <TabsTrigger value="cancelled" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-red-500 dark:data-[state=active]:from-red-500 dark:data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg rounded-lg transition-all duration-200 font-medium">
                         Đã hủy
                       </TabsTrigger>
                     </TabsList>
@@ -253,7 +263,22 @@ export default function OrderPage() {
                             title="Không có đơn hàng đang xử lý"
                             description="Các đơn hàng đang chờ xác nhận, đang xử lý hoặc đang giao hàng sẽ xuất hiện ở đây"
                             icon={TruckIcon}
-                            className="bg-gradient-to-r from-green-50 to-green-50/30 dark:from-green-950/30 dark:to-green-950/10 rounded-xl py-16"
+                            className="bg-gradient-to-r from-blue-50 to-blue-50/30 dark:from-blue-950/30 dark:to-blue-950/10 rounded-xl py-16"
+                          />
+                        )}
+                      </motion.div>
+                    </TabsContent>
+
+                    <TabsContent value="delivered" className="space-y-4 px-2 pb-2">
+                      <motion.div variants={container} initial="hidden" animate="show">
+                        {deliveredOrders && deliveredOrders.length > 0 ? (
+                          deliveredOrders.map((order) => <OrderCard key={order.id} order={order} showConfirmButton={true} />)
+                        ) : (
+                          <Empty 
+                            title="Không có đơn hàng đã giao"
+                            description="Các đơn hàng đã được giao thành công sẽ xuất hiện ở đây"
+                            icon={ShoppingBag}
+                            className="bg-gradient-to-r from-teal-50 to-teal-50/30 dark:from-teal-950/30 dark:to-teal-950/10 rounded-xl py-16"
                           />
                         )}
                       </motion.div>
@@ -268,7 +293,7 @@ export default function OrderPage() {
                             title="Không có đơn hàng hoàn thành"
                             description="Các đơn hàng đã hoàn thành của bạn sẽ xuất hiện ở đây"
                             icon={ShoppingBag}
-                            className="bg-gradient-to-r from-green-50 to-green-50/30 dark:from-green-950/30 dark:to-green-950/10 rounded-xl py-16"
+                            className="bg-gradient-to-r from-emerald-50 to-emerald-50/30 dark:from-emerald-950/30 dark:to-emerald-950/10 rounded-xl py-16"
                           />
                         )}
                       </motion.div>

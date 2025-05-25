@@ -4,12 +4,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { routeNames, routes, siteConfig } from "@/config";
+import { OrderAdminChangeStatusDto } from "@/data/dto";
 import { OrderStatus } from "@/data/enum";
 import { OrderDeliverItem } from "@/data/interfaces";
 import { StoreAPI } from "@/services/api/store.api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle, Clock, LogOut, Package, Truck } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
 
@@ -79,6 +80,7 @@ function LoginForm({ onLogin }: { onLogin: () => void }) {
 
 export default function DeliverPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: orders = [], isLoading, isError, refetch } = useQuery({
     queryKey: ['orders', 'deliver'],
@@ -86,23 +88,16 @@ export default function DeliverPage() {
     enabled: isLoggedIn, // Only fetch when logged in
   });
 
-  // Thêm console.log để kiểm tra dữ liệu
-  useEffect(() => {
-    if (orders && orders.length > 0) {
-      console.log("Orders data:", orders);
-      console.log("Processing orders:", orders.filter(order => order.status === OrderStatus.PROCESSING));
-      console.log("Shipped orders:", orders.filter(order => order.status === OrderStatus.SHIPPED));
-      console.log("Delivered orders:", orders.filter(order => order.status === OrderStatus.DELIVERED));
-      console.log("First order example:", orders[0]);
-      console.log("Status type check:", typeof orders[0].status, orders[0].status);
-      
-      // Kiểm tra các giá trị status xuất hiện trong dữ liệu
-      const uniqueStatuses = [...new Set(orders.map(order => order.status))];
-      console.log("Unique statuses in data:", uniqueStatuses);
-    } else {
-      console.log("No orders data or empty array:", orders);
-    }
-  }, [orders]);
+  // Mutation for updating order status
+  const updateOrderMutation = useMutation({
+    mutationFn: ({ orderId, status }: { orderId: string; status: OrderStatus }) => {
+      const statusDto: OrderAdminChangeStatusDto = { status };
+      return StoreAPI.UpdateOrderStatus(orderId, statusDto);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders', 'deliver'] });
+    },
+  });
 
   // Hàm helper để chuyển đổi status string thành OrderStatus enum nếu cần
   const normalizeStatus = (status: string | OrderStatus): OrderStatus => {
@@ -132,23 +127,32 @@ export default function DeliverPage() {
     toast.success("Đã đăng xuất");
   };
 
-  const updateOrderStatus = async (orderId: string, newStatus: OrderStatus) => {
+  const updateOrderStatus = async (orderId: string, currentStatus: OrderStatus) => {
+    // Xác định trạng thái mới dựa trên trạng thái hiện tại
+    let newStatus: OrderStatus;
+    
+    if (currentStatus === OrderStatus.PROCESSING) {
+      newStatus = OrderStatus.SHIPPED;
+    } else if (currentStatus === OrderStatus.SHIPPED) {
+      newStatus = OrderStatus.DELIVERED;
+    } else {
+      toast.error("Không thể cập nhật trạng thái cho đơn hàng này");
+      return;
+    }
+
     try {
       // Hiển thị thông báo đang xử lý
       toast.loading("Đang cập nhật trạng thái đơn hàng...");
       
-      // Gọi API cập nhật trạng thái đơn hàng (Mock API call)
-      // Thay thế phần này bằng API call thực khi có
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Gọi mutation để cập nhật trạng thái
+      await updateOrderMutation.mutateAsync({ orderId, status: newStatus });
       
       // Cập nhật thành công
       toast.success(`Đơn hàng ${orderId} đã được chuyển sang ${
         newStatus === OrderStatus.SHIPPED ? "đang giao hàng" : "đã giao hàng"
       }`);
-      
-      // Refetch orders để cập nhật dữ liệu mới
-      await refetch();
-    } catch {
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái:", error);
       toast.error("Không thể cập nhật trạng thái đơn hàng");
     }
   };
@@ -364,10 +368,11 @@ export default function DeliverPage() {
                 <CardFooter className="bg-gray-50">
                   <Button 
                     className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
-                    onClick={() => updateOrderStatus(order.id, OrderStatus.SHIPPED)}
+                    onClick={() => updateOrderStatus(order.id, normalizeStatus(order.status))}
+                    disabled={updateOrderMutation.isPending}
                   >
                     <Truck className="w-4 h-4 mr-2" />
-                    Bắt đầu giao hàng
+                    {updateOrderMutation.isPending ? "Đang xử lý..." : "Bắt đầu giao hàng"}
                   </Button>
                 </CardFooter>
               </Card>
@@ -401,13 +406,14 @@ export default function DeliverPage() {
                   <div className="space-y-3">
                     <div className="bg-gray-50 p-3 rounded-lg">
                       <p className="font-medium text-gray-900">
-                        {order.use && (order.use.firstname || order.use.lastname) 
-                          ? `${order.use.firstname || ''} ${order.use.lastname || ''}`.trim()
-                          : "Khách hàng"}
+                        {order.shippingAddress?.name || 
+                          (order.use && (order.use.firstname || order.use.lastname) 
+                            ? `${order.use.firstname || ''} ${order.use.lastname || ''}`.trim()
+                            : "Khách hàng")}
                       </p>
                       <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
                         <span className="w-4 h-4 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] font-bold">☎</span> 
-                        {order.use?.phone || "Không có số điện thoại"}
+                        {order.shippingAddress?.phone || order.use?.phone || "Không có số điện thoại"}
                       </p>
                       <p className="text-sm text-gray-500 flex items-center gap-1 mt-0.5">
                         <span className="w-4 h-4 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] font-bold">📍</span>
@@ -439,10 +445,11 @@ export default function DeliverPage() {
                 <CardFooter className="bg-gray-50">
                   <Button 
                     className="w-full bg-amber-600 hover:bg-amber-700 text-white"
-                    onClick={() => updateOrderStatus(order.id, OrderStatus.DELIVERED)}
+                    onClick={() => updateOrderStatus(order.id, normalizeStatus(order.status))}
+                    disabled={updateOrderMutation.isPending}
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
-                    Xác nhận đã giao hàng
+                    {updateOrderMutation.isPending ? "Đang xử lý..." : "Xác nhận đã giao hàng"}
                   </Button>
                 </CardFooter>
               </Card>
@@ -476,13 +483,14 @@ export default function DeliverPage() {
                   <div className="space-y-3">
                     <div className="bg-gray-50 p-3 rounded-lg">
                       <p className="font-medium text-gray-900">
-                        {order.use && (order.use.firstname || order.use.lastname) 
-                          ? `${order.use.firstname || ''} ${order.use.lastname || ''}`.trim()
-                          : "Khách hàng"}
+                        {order.shippingAddress?.name || 
+                          (order.use && (order.use.firstname || order.use.lastname) 
+                            ? `${order.use.firstname || ''} ${order.use.lastname || ''}`.trim()
+                            : "Khách hàng")}
                       </p>
                       <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
                         <span className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-[10px] font-bold">☎</span> 
-                        {order.use?.phone || "Không có số điện thoại"}
+                        {order.shippingAddress?.phone || order.use?.phone || "Không có số điện thoại"}
                       </p>
                       <p className="text-sm text-gray-500 flex items-center gap-1 mt-0.5">
                         <span className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-[10px] font-bold">📍</span>
