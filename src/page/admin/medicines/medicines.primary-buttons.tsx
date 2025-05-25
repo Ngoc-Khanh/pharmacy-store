@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { motion } from "framer-motion";
-import { Download, FileSpreadsheet, MoreHorizontal, Plus, Upload } from "lucide-react";
+import { FileSpreadsheet, MoreHorizontal, PlusCircle, FileUp, FileDown } from "lucide-react";
 
 export function MedicinesPrimaryButtons() {
   const { setOpen } = useMedicinesDialog();
@@ -21,57 +21,55 @@ export function MedicinesPrimaryButtons() {
         transition={{ duration: 0.2 }}
       >
         <Button 
-          className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm border-0 font-medium px-4 transition-all duration-200" 
+          className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-md border-0 font-medium px-4 py-2.5 h-auto rounded-lg transition-all duration-200" 
           onClick={() => setOpen("add")}
         >
-          <Plus size={16} className="stroke-[2.5px]" />
+          <PlusCircle size={17} className="stroke-[2.5px]" />
           <span>Thêm Thuốc</span>
         </Button>
       </motion.div>
       
-      <div className="hidden">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="h-10 w-10 border-emerald-200 dark:border-emerald-800/30 hover:bg-emerald-50 hover:border-emerald-300 dark:hover:bg-emerald-900/20 transition-colors shadow-sm"
-              >
-                <MoreHorizontal className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-              </Button>
-            </motion.div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent 
-            align="end" 
-            className="w-[220px] rounded-md border border-emerald-100 dark:border-emerald-800/30 shadow-lg"
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
           >
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="h-10 w-10 border-emerald-200 dark:border-emerald-800/30 hover:bg-emerald-50 hover:border-emerald-300 dark:hover:bg-emerald-900/20 transition-colors shadow-sm rounded-lg"
             >
-              <DropdownMenuItem className="cursor-pointer gap-3 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
-                <Download className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
-                <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Xuất Thuốc</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer gap-3 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
-                <Upload className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
-                <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Nhập Thuốc</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-emerald-100/70 dark:bg-emerald-800/30" />
-              <DropdownMenuItem className="cursor-pointer gap-3 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
-                <FileSpreadsheet className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
-                <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Tạo Báo Cáo</span>
-              </DropdownMenuItem>
-            </motion.div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+              <MoreHorizontal className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+            </Button>
+          </motion.div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent 
+          align="end" 
+          className="w-[220px] rounded-md border border-emerald-100 dark:border-emerald-800/30 shadow-lg bg-white dark:bg-slate-900"
+        >
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <DropdownMenuItem className="cursor-pointer gap-3 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
+              <FileDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
+              <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Xuất Thuốc (Excel)</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer gap-3 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
+              <FileUp className="h-5 w-5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
+              <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Nhập Thuốc (Excel)</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-emerald-100/70 dark:bg-emerald-800/30 my-1" />
+            <DropdownMenuItem className="cursor-pointer gap-3 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
+              <FileSpreadsheet className="h-5 w-5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
+              <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Tạo Báo Cáo</span>
+            </DropdownMenuItem>
+          </motion.div>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

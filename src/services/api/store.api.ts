@@ -1,5 +1,5 @@
 import { PlaceOrderDto } from "@/data/dto";
-import { Category, Medicine, Order, OrderDetails } from "@/data/interfaces";
+import { Category, Medicine, Order, OrderDeliver, OrderDetails } from "@/data/interfaces";
 import { Paginated, SRO } from "@/data/sro";
 import { apiGet, apiPost } from "../api";
 
@@ -42,6 +42,11 @@ export const StoreAPI = {
 
   async PlaceOrder(data: PlaceOrderDto) {
     const res = await apiPost<PlaceOrderDto, SRO<Order>>("v1/store/orders/add", data);
+    return res.data.data;
+  },
+
+  async OrderDeliverList() {
+    const res = await apiGet<SRO<OrderDeliver[]>>("v1/store/deliver/orders");
     return res.data.data;
   },
 };

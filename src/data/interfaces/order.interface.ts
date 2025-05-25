@@ -1,6 +1,6 @@
 import { OrderStatus } from "../enum";
 import { Medicine } from "./medicine.interface";
-import { UserAddress } from "./user.interface";
+import { User, UserAddress } from "./user.interface";
 
 export interface Order {
   readonly id: string;
@@ -44,6 +44,30 @@ export interface OrderAdminDetails {
   paymentMethod: string;
   readonly createdAt: string;
   readonly updatedAt: string;
+}
+
+export interface OrderDeliver {
+  readonly id: string;
+  readonly userId: string;
+  status: OrderStatus;
+  items: OrderDeliverItem[];
+  subTotal: number;
+  shippingFee: number;
+  discount: number;
+  totalPrice: number;
+  shippingAddress: UserAddress;
+  paymentMethod: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+  use: User;
+}
+
+export interface OrderDeliverItem {
+  medicineId: string;
+  quantity: number;
+  price: number;
+  itemTotal: number;
+  medicine: Medicine;
 }
 
 export interface OrderAdminDetailsItem extends OrderItem {
