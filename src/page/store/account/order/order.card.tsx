@@ -3,18 +3,43 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { routes } from '@/config';
 import { OrderStatus } from '@/data/enum';
+import { OrderAdminChangeStatusDto } from '@/data/dto';
 import { Order } from '@/data/interfaces';
 import { formatCurrency } from '@/lib/utils';
+import { StoreAPI } from '@/services/api/store.api';
 
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, Check, Clock, CreditCard, Leaf, Package, ShoppingBag, TruckIcon } from 'lucide-react';
+import { ArrowRight, Calendar, Check, CheckCircle, Clock, CreditCard, Leaf, Package, ShoppingBag, TruckIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const OrderCard = ({ order }: { order: Order }) => {
+export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; showConfirmButton?: boolean }) => {
   const formattedDate = format(new Date(order.createdAt), "dd/MM/yyyy", { locale: vi });
   const formattedTime = format(new Date(order.createdAt), "HH:mm", { locale: vi });
+  const queryClient = useQueryClient();
+  // Mutation để xác nhận đơn hàng hoàn thành
+  const confirmOrderMutation = useMutation({
+    mutationFn: (orderId: string) => {
+      const statusData: OrderAdminChangeStatusDto = {
+        status: OrderStatus.COMPLETED
+      };
+      return StoreAPI.UpdateOrderStatus(orderId, statusData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      toast.success('Đơn hàng đã được xác nhận hoàn thành!');
+    },
+    onError: () => {
+      toast.error('Có lỗi xảy ra khi xác nhận đơn hàng');
+    }
+  });
+
+  const handleConfirmOrder = () => {
+    confirmOrderMutation.mutate(order.id);
+  };
 
   // Biểu tượng cho từng trạng thái đơn hàng
   const OrderStatusIcon = ({ status }: { status: OrderStatus }) => {
@@ -155,21 +180,44 @@ export const OrderCard = ({ order }: { order: Order }) => {
                   </div>
                 )}
               </div>
-            </div>
-            <div className="mt-4 md:mt-0 flex flex-col items-start md:items-end justify-between">
+            </div>            <div className="mt-4 md:mt-0 flex flex-col items-start md:items-end justify-between">
               <div className="text-right px-4 py-2 bg-green-50/50 dark:bg-green-900/30 rounded-lg">
                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Tổng thanh toán</div>
                 <div className="font-bold text-lg text-green-700 dark:text-green-400">{formatCurrency(order.totalPrice)}</div>
               </div>
-              <Button
-                asChild
-                className="mt-4 w-full md:w-auto group bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 text-white shadow-sm dark:shadow-green-900/20 hover:shadow"
-                size="sm"
-              >
-                <Link to={routes.store.account.orderDetails(order.id)}>
-                  Xem chi tiết <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
+              
+              <div className="mt-4 flex flex-col md:flex-row gap-2 w-full md:w-auto">
+                {showConfirmButton && order.status === OrderStatus.DELIVERED && (
+                  <Button
+                    onClick={handleConfirmOrder}
+                    disabled={confirmOrderMutation.isPending}
+                    className="group bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 dark:from-teal-500 dark:to-teal-600 dark:hover:from-teal-600 dark:hover:to-teal-700 text-white shadow-sm dark:shadow-teal-900/20 hover:shadow"
+                    size="sm"
+                  >
+                    {confirmOrderMutation.isPending ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Đang xử lý...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                        Xác nhận hoàn thành
+                      </>
+                    )}
+                  </Button>
+                )}
+                
+                <Button
+                  asChild
+                  className="group bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 text-white shadow-sm dark:shadow-green-900/20 hover:shadow"
+                  size="sm"
+                >
+                  <Link to={routes.store.account.orderDetails(order.id)}>
+                    Xem chi tiết <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </CardContent>
