@@ -5,9 +5,9 @@ export enum StockStatus {
 }
 
 export enum AccountRole {
-  ADMIN = "ADMIN",
-  PHARMACIST = "PHARMACIST",
-  CUSTOMER = "CUSTOMER",
+  ADMIN = "admin",
+  PHARMACIST = "pharmacist",
+  CUSTOMER = "customer",
 }
 
 export enum AccountStatus {

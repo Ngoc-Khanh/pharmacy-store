@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Download, FileSpreadsheet, MoreHorizontal, Upload, UserPlus } from "lucide-react";
+import { FileSpreadsheet, MoreHorizontal, UserPlus, FileDown, FileUp } from "lucide-react";
 import { motion } from "framer-motion";
 
 export function UsersPrimaryButtons() {
@@ -21,10 +21,10 @@ export function UsersPrimaryButtons() {
         transition={{ duration: 0.2 }}
       >
         <Button 
-          className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm border-0 font-medium px-4 transition-all duration-200" 
+          className="gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white shadow-md border-0 font-medium px-4 py-2.5 h-auto rounded-lg transition-all duration-200" 
           onClick={() => setOpen("add")}
         >
-          <UserPlus size={16} className="stroke-[2.5px]" />
+          <UserPlus size={17} className="stroke-[2.5px]" />
           <span>Thêm Người Dùng</span>
         </Button>
       </motion.div>
@@ -39,33 +39,33 @@ export function UsersPrimaryButtons() {
             <Button 
               variant="outline" 
               size="icon" 
-              className="h-10 w-10 border-emerald-200 dark:border-emerald-800/30 hover:bg-emerald-50 hover:border-emerald-300 dark:hover:bg-emerald-900/20 transition-colors shadow-sm"
+              className="h-10 w-10 border-cyan-200 dark:border-cyan-800/30 hover:bg-cyan-50 hover:border-cyan-300 dark:hover:bg-cyan-900/20 transition-colors shadow-sm rounded-lg"
             >
-              <MoreHorizontal className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <MoreHorizontal className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
             </Button>
           </motion.div>
         </DropdownMenuTrigger>
         <DropdownMenuContent 
           align="end" 
-          className="w-[220px] rounded-md border border-emerald-100 dark:border-emerald-800/30 shadow-lg"
+          className="w-[220px] rounded-md border border-cyan-100 dark:border-cyan-800/30 shadow-lg bg-white dark:bg-slate-900"
         >
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <DropdownMenuItem className="cursor-pointer gap-3 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
-              <Download className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
-              <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Xuất Người Dùng</span>
+            <DropdownMenuItem className="cursor-pointer gap-3 py-3 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 group">
+              <FileDown className="h-5 w-5 text-cyan-600 dark:text-cyan-400 group-hover:text-cyan-700 dark:group-hover:text-cyan-300" />
+              <span className="font-medium text-sm group-hover:text-cyan-700 dark:group-hover:text-cyan-300">Xuất Người Dùng (Excel)</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer gap-3 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
-              <Upload className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
-              <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Nhập Người Dùng</span>
+            <DropdownMenuItem className="cursor-pointer gap-3 py-3 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 group">
+              <FileUp className="h-5 w-5 text-cyan-600 dark:text-cyan-400 group-hover:text-cyan-700 dark:group-hover:text-cyan-300" />
+              <span className="font-medium text-sm group-hover:text-cyan-700 dark:group-hover:text-cyan-300">Nhập Người Dùng (Excel)</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-emerald-100/70 dark:bg-emerald-800/30" />
-            <DropdownMenuItem className="cursor-pointer gap-3 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
-              <FileSpreadsheet className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
-              <span className="font-medium text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Tạo Báo Cáo</span>
+            <DropdownMenuSeparator className="bg-cyan-100/70 dark:bg-cyan-800/30 my-1" />
+            <DropdownMenuItem className="cursor-pointer gap-3 py-3 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 group">
+              <FileSpreadsheet className="h-5 w-5 text-cyan-600 dark:text-cyan-400 group-hover:text-cyan-700 dark:group-hover:text-cyan-300" />
+              <span className="font-medium text-sm group-hover:text-cyan-700 dark:group-hover:text-cyan-300">Tạo Báo Cáo</span>
             </DropdownMenuItem>
           </motion.div>
         </DropdownMenuContent>
