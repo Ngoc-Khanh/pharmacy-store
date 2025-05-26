@@ -1,6 +1,6 @@
 import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
-import { MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, UsersAdminPage } from "@/page/admin";
+import { MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, SuppliersAdminPage, UsersAdminPage } from "@/page/admin";
 import CategoriesAdminPage from "@/page/admin/categories";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
@@ -127,7 +127,7 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: routes.admin.suppliers,
-        element: <div>Suppliers</div>,
+        element: <SuppliersAdminPage />,
       },
       {
         path: routes.admin.orders,
