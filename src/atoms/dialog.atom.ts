@@ -49,7 +49,7 @@ export const useOrdersDialog = () => {
   return { open, setOpen, currentOrder, setCurrentOrder };
 }
 
-type SuppliersDialogType = "add" | "edit" | "delete"
+type SuppliersDialogType = "add" | "edit" | "delete" | "view"
 
 export const openSuppliersDialogAtom = atom<SuppliersDialogType | null>(null);
 export const currentSupplierAtom = atom<Supplier | null>(null);

@@ -1,14 +1,17 @@
+import { useSuppliersDialog } from '@/atoms/dialog.atom';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import { BadgePlus, Building2, FilePlus2, FlaskConical, Import, Plus, ScanBarcode } from 'lucide-react';
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { motion } from 'framer-motion';
+import { BadgePlus, Building2, FilePlus2, FlaskConical, Import, Plus, ScanBarcode } from 'lucide-react';
 
 export default function SuppliersPrimaryButtons() {
+  const { setOpen } = useSuppliersDialog();
+  
   return (
     <div className="flex flex-wrap items-center gap-3">
       <motion.div
@@ -18,6 +21,7 @@ export default function SuppliersPrimaryButtons() {
       >
         <Button
           className="gap-2 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-medium px-5 py-2.5 rounded-lg transition-all duration-300 border-0 shadow-md hover:shadow-lg"
+          onClick={() => setOpen("add")}
         >
           <BadgePlus size={16} className="stroke-[2.5px]" />
           <span>Thêm nhà cung cấp</span>
