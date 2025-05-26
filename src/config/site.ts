@@ -1,4 +1,4 @@
-import { FileText, FolderIcon, HeartPlus, LayoutDashboardIcon, Package, PillIcon, SettingsIcon, UsersIcon } from "lucide-react";
+import { Building2, FileText, FolderIcon, LayoutDashboardIcon, Package, PillIcon, SettingsIcon, UsersIcon } from "lucide-react";
 import { routeNames, routes } from "./routes";
 
 export const siteConfig = {
@@ -68,7 +68,7 @@ export const sidebarItem = {
     {
       title: routeNames[routes.admin.suppliers],
       url: routes.admin.suppliers,
-      icon: HeartPlus,
+      icon: Building2,
     },
     {
       title: routeNames[routes.admin.orders],
