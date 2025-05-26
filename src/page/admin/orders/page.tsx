@@ -51,7 +51,7 @@ export default function AdminOrdersPage() {
           </p>
         </motion.div>
 
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -90,25 +90,27 @@ export default function AdminOrdersPage() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-            className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-blue-100 dark:border-blue-800/20 shadow-md flex flex-col md:flex-row justify-between items-center gap-4"
-          >
-            <div>
-              <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Báo cáo đơn hàng</h3>
-              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">Xuất báo cáo</p>
-          </div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-4 py-2.5 rounded-lg border border-blue-200 dark:border-blue-800/30 font-medium transition-all shadow-sm w-full md:w-auto justify-center"
+          <div className="hidden">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+              className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-blue-100 dark:border-blue-800/20 shadow-md flex flex-col md:flex-row justify-between items-center gap-4"
             >
-              <FileSpreadsheet size={18} />
-              <span>Tải xuống</span>
-            </motion.button>
-          </motion.div>
+              <div>
+                <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Báo cáo đơn hàng</h3>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">Xuất báo cáo</p>
+            </div>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-4 py-2.5 rounded-lg border border-blue-200 dark:border-blue-800/30 font-medium transition-all shadow-sm w-full md:w-auto justify-center"
+              >
+                <FileSpreadsheet size={18} />
+                <span>Tải xuống</span>
+              </motion.button>
+            </motion.div>
+          </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-1">
