@@ -70,7 +70,11 @@ export interface OrderDeliverItem {
   medicine: Medicine;
 }
 
-export interface OrderAdminDetailsItem extends OrderItem {
+export interface OrderAdminDetailsItem {
+  medicineId: string;
+  quantity: number;
+  price: number;
+  itemTotal: number;
   medicine: Medicine;
 }
 
@@ -79,6 +83,14 @@ export interface OrderItem {
   quantity: number;
   price: number;
   itemTotal: number;
+  medicine: {
+    name: string;
+    thumbnail: {
+      publicId: string;
+      url: string;
+      alt: string;
+    };
+  };
 }
 
 export interface OrderDetails {

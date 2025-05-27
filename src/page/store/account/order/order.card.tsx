@@ -164,7 +164,7 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
                     <div className="flex items-center">
                       <div className="w-2 h-2 rounded-full bg-gradient-to-r from-green-500 to-green-400 dark:from-green-400 dark:to-green-500 mr-2.5 shadow-sm dark:shadow-green-900/30"></div>
                       <span className="text-gray-700 dark:text-gray-200 font-medium">
-                        {item.medicineId.slice(0, 8)}...
+                        {item.medicine.name}
                       </span>
                       <span className="text-gray-500 dark:text-gray-400 ml-2">
                         × {item.quantity}
