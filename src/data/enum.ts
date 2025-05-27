@@ -30,3 +30,9 @@ export enum OrderStatus {
   CANCELLED = "CANCELLED",
   COMPLETED = "COMPLETED",
 }
+
+export enum InvoiceStatus {
+  PENDING = "pending",
+  PAID = "paid",
+  CANCELLED = "cancelled",
+}
