@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AccountRole, AccountStatus } from "@/data/enum";
 import { User } from "@/data/interfaces";
 import { UserSchema, usersSchema } from "@/data/schemas";
 import { cn } from "@/lib/utils";
@@ -38,8 +39,8 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
       firstname: "",
       lastname: "",
       phone: "",
-      role: "customer",
-      status: "active",
+      role: AccountRole.CUSTOMER,
+      status: AccountStatus.ACTIVE,
       password: "",
       passwordConfirmation: "",
       isEdit,
