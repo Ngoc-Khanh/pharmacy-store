@@ -9,6 +9,8 @@ import { Calendar, Clipboard, Download, Receipt, ShieldCheck, Info, CheckCircle2
 import { cn, formatCurrency } from "@/lib/utils";
 import { InvoiceDetails } from "@/data/interfaces";
 import { InvoiceStatus, PaymentMethod } from "@/data/enum";
+import { Link } from "react-router-dom";
+import { routes } from "@/config";
 
 // Created additional component for better reuse
 const InfoItem = ({
@@ -176,7 +178,9 @@ export default function InvoiceSummary({ invoice }: InvoiceSummaryProps) {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{invoice.orderId}</p>
+                    <Link to={routes.store.account.orderDetails(invoice.orderId)}>
+                      <p>{invoice.orderId}</p>
+                    </Link>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

@@ -99,9 +99,9 @@ export default function OrderDetails() {
             </div>
 
             <OrderTimeline status={order.status} />
-            
+
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <motion.div 
+              <motion.div
                 className="space-y-3"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -115,14 +115,14 @@ export default function OrderDetails() {
                   <div className="font-medium text-gray-800 dark:text-gray-200">{order.shippingAddress.name}</div>
                   <div className="text-gray-600 dark:text-gray-300 mt-2">{order.shippingAddress.phone}</div>
                   <div className="text-gray-500 dark:text-gray-400 mt-1">
-                    {order.shippingAddress.addressLine1}, 
-                    {order.shippingAddress.addressLine2 ? ` ${order.shippingAddress.addressLine2}, ` : ''} 
-                    {order.shippingAddress.city}, {order.shippingAddress.country}
+                    {order.shippingAddress.addressLine1},{" "}
+                    {order.shippingAddress.addressLine2 ? ` ${order.shippingAddress.addressLine2}, ` : ''}
+                    {order.shippingAddress.city}, {order.shippingAddress.state}, {order.shippingAddress.country}
                   </div>
                 </div>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 className="space-y-3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -163,7 +163,7 @@ export default function OrderDetails() {
               </h3>
               <div className="space-y-4">
                 {order.items.map((item, index) => (
-                  <motion.div 
+                  <motion.div
                     key={item.medicineId}
                     className="flex flex-col sm:flex-row justify-between gap-4 p-4 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800/60 shadow-sm"
                     initial={{ opacity: 0, y: 20 }}
@@ -173,9 +173,9 @@ export default function OrderDetails() {
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-16 h-16 bg-white dark:bg-gray-700 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm flex items-center justify-center">
                         {item.medicine.thumbnail ? (
-                          <img 
-                            src={item.medicine.thumbnail.url} 
-                            alt={item.medicine.thumbnail.alt} 
+                          <img
+                            src={item.medicine.thumbnail.url}
+                            alt={item.medicine.thumbnail.alt}
                             className="w-full h-full object-cover"
                           />
                         ) : (
@@ -187,8 +187,8 @@ export default function OrderDetails() {
                       <div>
                         <h4 className="font-medium text-gray-800 dark:text-gray-200">{item.medicine.name}</h4>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          {item.medicine.description ? 
-                            item.medicine.description.slice(0, 50) + (item.medicine.description.length > 50 ? '...' : '') : 
+                          {item.medicine.description ?
+                            item.medicine.description.slice(0, 50) + (item.medicine.description.length > 50 ? '...' : '') :
                             "Thuốc chính hãng"}
                         </p>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
