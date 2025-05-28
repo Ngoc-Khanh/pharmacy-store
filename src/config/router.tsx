@@ -8,6 +8,7 @@ import DeliverPage from "@/page/deliver";
 import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, RootPage } from "@/page/store";
 import { AddressesPage, CartPage, ChangePasswordPage, InvoicePage, OrderPage, RootAccountPage } from "@/page/store/account";
 import { OrderDetails } from "@/page/store/account/order";
+import { InvoiceDetailsPage } from "@/page/store/account/invoice";
 
 import { Navigate, RouteObject } from "react-router-dom";
 
@@ -95,6 +96,10 @@ export const reactRouter: RouteObject[] = [
           {
             path: routes.store.account.invoices,
             element: <InvoicePage />,
+          },
+          {
+            path: routes.store.account.invoiceDetails(":id"),
+            element: <InvoiceDetailsPage />,
           }
         ]
       }

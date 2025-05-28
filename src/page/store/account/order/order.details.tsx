@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { routes, siteConfig } from "@/config";
-import { OrderStatus } from "@/data/enum";
 import { OrderDetails as OrderDetailsType } from "@/data/interfaces";
 import { formatPaymentMethod } from "@/lib/format-payment-method";
 import { StatusBadge } from "@/lib/status-badge";
@@ -13,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { motion } from "framer-motion";
-import { ArrowLeft, BanknoteIcon, CalendarIcon, CheckCircle2Icon, MapPinIcon, ShoppingBagIcon } from "lucide-react";
+import { ArrowLeft, BanknoteIcon, CalendarIcon, MapPinIcon, ShoppingBagIcon } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import { OrderDetailsSkeleton } from "./order.details-skeleton";
@@ -27,6 +26,8 @@ export default function OrderDetails() {
     queryFn: () => StoreAPI.OrderDetails(id || ""),
     enabled: !!id,
   });
+
+  console.log(order);
 
   if (isLoading) {
     return <OrderDetailsSkeleton />;
@@ -171,10 +172,10 @@ export default function OrderDetails() {
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-16 h-16 bg-white dark:bg-gray-700 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm flex items-center justify-center">
-                        {item.medicine.thumbnail?.url ? (
+                        {item.medicine.thumbnail ? (
                           <img 
                             src={item.medicine.thumbnail.url} 
-                            alt={item.medicine.name} 
+                            alt={item.medicine.thumbnail.alt} 
                             className="w-full h-full object-cover"
                           />
                         ) : (
@@ -191,7 +192,7 @@ export default function OrderDetails() {
                             "Thuốc chính hãng"}
                         </p>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
-                          <Badge variant="outline" className="bg-green-50/80 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800/50 px-2.5 py-0.5">
+                          <Badge variant="outline" className="bg-green-50/80 hover:bg-green-100/80 dark:bg-green-900/30 dark:hover:bg-green-900/40 text-green-700 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 border-green-200 hover:border-green-300 dark:border-green-800/50 dark:hover:border-green-700/60 px-2.5 py-0.5 transition-colors duration-200">
                             {formatCurrency(item.price)} / đơn vị
                           </Badge>
                           <span className="text-gray-500 dark:text-gray-400 text-sm">
@@ -211,28 +212,6 @@ export default function OrderDetails() {
               </div>
             </div>
           </Card>
-          
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8">
-            <Button
-              asChild
-              variant="outline"
-              className="border-green-200 dark:border-green-800/50 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-full w-full sm:w-auto"
-            >
-              <Link to={routes.store.account.orders}>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Quay lại danh sách đơn hàng
-              </Link>
-            </Button>
-            
-            {order.status === OrderStatus.DELIVERED && (
-              <Button 
-                className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 text-white shadow-md hover:shadow-lg rounded-full w-full sm:w-auto"
-              >
-                <CheckCircle2Icon className="mr-2 h-4 w-4" />
-                Xác nhận đã nhận hàng
-              </Button>
-            )}
-          </div>
         </motion.div>
       </div>
     </>

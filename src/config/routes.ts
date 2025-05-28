@@ -23,6 +23,7 @@ const baseRoutes = {
       orders: "/store/account/orders",
       orderDetails: (id: string) => `/store/account/orders/${id}/details`,
       invoices: "/store/account/invoices",
+      invoiceDetails: (id: string) => `/store/account/invoice/${id}/details`,
     },
   },
 
@@ -81,6 +82,7 @@ export const routeNames = {
   [baseRoutes.store.account.cart]: "Giỏ hàng",
   [baseRoutes.store.account.orders]: "Đơn hàng của tôi",
   [baseRoutes.store.account.invoices]: "Hóa đơn",
+  [baseRoutes.store.account.invoiceDetails(":id")]: "Chi tiết hóa đơn",
 
   // DELIVER NAME ROUTES
   [baseRoutes.deliver.root]: "Giao hàng",
