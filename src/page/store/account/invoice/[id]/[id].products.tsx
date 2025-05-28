@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { InvoiceDetails, InvoiceDetailsItem } from "@/data/interfaces";
 import { cn, formatCurrency } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Pill, ShoppingBag } from "lucide-react";
+import { MapPin, Pill, ShoppingBag } from "lucide-react";
 
 // Extract product item to its own component
 const InvoiceProductItem = ({ item, index }: { item: InvoiceDetailsItem; index: number }) => (
@@ -71,15 +71,15 @@ const InvoiceTotals = ({ invoice }: { invoice: InvoiceDetails }) => (
     <div className="space-y-3 max-w-md ml-auto">
       <div className="flex justify-between items-center text-gray-700">
         <span className="font-medium">Tạm tính</span>
-        <span className="font-semibold">{formatCurrency(invoice.totalPrice)}</span>
+        <span className="font-semibold">{formatCurrency(invoice.items.reduce((sum, item) => sum + item.itemTotal, 0))}</span>
       </div>
       <div className="flex justify-between items-center text-gray-700">
         <span className="font-medium">Phí vận chuyển</span>
-        <span className="font-semibold">0 ₫</span>
+        <span className="font-semibold">{formatCurrency(Number(invoice.order.shippingFee))}</span>
       </div>
       <div className="flex justify-between items-center text-gray-700">
         <span className="font-medium">Khuyến mãi</span>
-        <span className="font-semibold text-rose-600">0 ₫</span>
+        <span className="font-semibold text-rose-600">{formatCurrency(Number(invoice.order.discount))}</span>
       </div>
 
       <Separator className="my-3 bg-gray-300/50" />
@@ -88,6 +88,21 @@ const InvoiceTotals = ({ invoice }: { invoice: InvoiceDetails }) => (
         <span className="font-bold text-gray-900">Tổng cộng</span>
         <div className="font-bold text-white bg-gradient-to-r from-teal-500 to-emerald-500 px-4 py-2 rounded-lg shadow-sm">
           {formatCurrency(invoice.totalPrice)}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// Customer address component
+const CustomerAddress = ({ invoice }: { invoice: InvoiceDetails }) => (
+  <div className="p-4 bg-gray-50 border-b border-gray-200">
+    <div className="flex items-start">
+      <MapPin className="h-5 w-5 text-teal-600 mt-0.5 mr-2 flex-shrink-0" />
+      <div>
+        <h3 className="font-medium text-gray-800 mb-1">Địa Chỉ Giao Hàng</h3>
+        <div className="text-sm text-gray-600">
+          <p className="font-medium">{invoice.order.shippingAddress.name || "Khách hàng"}, {invoice.order.shippingAddress.phone || "Không có số điện thoại"}, {[invoice.order.shippingAddress.addressLine1, invoice.order.shippingAddress.addressLine2, invoice.order.shippingAddress.city, invoice.order.shippingAddress.state, invoice.order.shippingAddress.country, invoice.order.shippingAddress.postalCode].filter(Boolean).join(", ") || "Không có địa chỉ giao hàng"}</p>
         </div>
       </div>
     </div>
@@ -115,6 +130,9 @@ export default function InvoiceProducts({ invoice }: InvoiceProductsProps) {
         </div>
       </CardHeader>
       <CardContent className="p-0">
+        {/* Customer Address Section */}
+        <CustomerAddress invoice={invoice} />
+
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>

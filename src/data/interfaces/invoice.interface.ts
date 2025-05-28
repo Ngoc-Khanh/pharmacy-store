@@ -33,6 +33,22 @@ export interface InvoiceDetails {
   status: InvoiceStatus;
   readonly createdAt: string;
   readonly updatedAt: string;
+  order: {
+    shippingFee: string;
+    discount: string;
+    shippingAddress: {
+      readonly id: string;
+      name: string;
+      phone: string;
+      addressLine1: string;
+      addressLine2: string;
+      city: string;
+      state: string;
+      country: string;
+      postalCode: string;
+      isDefault: boolean;
+    };
+  };
 }
 
 export interface InvoiceDetailsItem {
