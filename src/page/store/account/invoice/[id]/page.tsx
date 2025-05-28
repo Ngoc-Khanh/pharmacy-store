@@ -38,19 +38,20 @@ export default function InvoiceDetailsPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.15,
+        delayChildren: 0.1
       }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 10, opacity: 0 },
+    hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 100,
+        stiffness: 80,
         damping: 12
       }
     }
@@ -65,14 +66,14 @@ export default function InvoiceDetailsPage() {
         <title>{`Hóa đơn #${invoice.invoiceNumber} | ${siteConfig.name}`}</title>
       </Helmet>
 
-      <div className="py-6 px-4 max-w-7xl mx-auto">
+      <div className="py-8 px-4 max-w-7xl mx-auto min-h-screen bg-gradient-to-b from-white to-gray-50/50">
         <InvoiceHeader invoiceNumber={invoice.invoiceNumber} onBack={goBack} />
 
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
         >
           {/* Left Column - Invoice Summary */}
           <motion.div variants={itemVariants} className="lg:col-span-1 space-y-6">

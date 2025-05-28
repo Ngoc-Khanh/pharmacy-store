@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { InvoiceDetails, InvoiceDetailsItem } from "@/data/interfaces";
 import { cn, formatCurrency } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Package, Pill } from "lucide-react";
+import { Pill, ShoppingBag } from "lucide-react";
 
 // Extract product item to its own component
 const InvoiceProductItem = ({ item, index }: { item: InvoiceDetailsItem; index: number }) => (
@@ -14,16 +14,16 @@ const InvoiceProductItem = ({ item, index }: { item: InvoiceDetailsItem; index: 
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    transition={{ duration: 0.2 }}
+    transition={{ duration: 0.2, delay: index * 0.05 }}
     className={cn(
-      "group hover:bg-gray-50 transition-colors",
+      "group hover:bg-teal-50/30 transition-colors",
       index % 2 === 0 ? "bg-white" : "bg-gray-50/30"
     )}
   >
-    <TableCell className="py-3">
+    <TableCell className="py-4">
       <div className="flex items-center">
         {item.medicine.thumbnail ? (
-          <div className="h-14 w-14 mr-3 rounded-md border border-gray-200 overflow-hidden flex-shrink-0 shadow-sm">
+          <div className="h-16 w-16 mr-4 rounded-xl border border-gray-200 overflow-hidden flex-shrink-0 shadow-sm hover:shadow-md transition-shadow duration-200">
             <img
               src={item.medicine.thumbnail.url || ""}
               alt={item.medicine.thumbnail.alt}
@@ -32,22 +32,27 @@ const InvoiceProductItem = ({ item, index }: { item: InvoiceDetailsItem; index: 
             />
           </div>
         ) : (
-          <div className="h-14 w-14 mr-3 rounded-md bg-gradient-to-r from-teal-100 to-teal-200 flex items-center justify-center flex-shrink-0">
-            <Pill className="h-6 w-6 text-teal-600" />
+          <div className="h-16 w-16 mr-4 rounded-xl bg-gradient-to-br from-teal-100 to-emerald-200 flex items-center justify-center flex-shrink-0 shadow-sm">
+            <Pill className="h-7 w-7 text-teal-600" />
           </div>
         )}
         <div className="min-w-0 flex-1">
           <h4 className="font-medium text-gray-900 truncate group-hover:text-teal-700 transition-colors">
             {item.medicine.name}
           </h4>
-          <p className="text-xs text-gray-500 truncate mt-1">
-            {item.medicine.description?.substring(0, 40) || "Không có mô tả"}
-          </p>
+          <div className="flex items-center mt-1">
+            <Badge variant="outline" className="mr-2 px-1.5 py-0 text-xs border-teal-100 bg-teal-50 text-teal-600">
+              Thuốc
+            </Badge>
+            <p className="text-xs text-gray-500 truncate mt-0.5">
+              {item.medicine.description?.substring(0, 40) || "Không có mô tả"}
+            </p>
+          </div>
         </div>
       </div>
     </TableCell>
     <TableCell className="text-center">
-      <span className="inline-flex items-center justify-center px-2.5 py-1 bg-gray-100 rounded-full text-gray-800 text-sm font-medium min-w-[32px]">
+      <span className="inline-flex items-center justify-center px-3 py-1.5 bg-gray-100 rounded-full text-gray-800 text-sm font-medium min-w-[38px] shadow-sm">
         {item.quantity}
       </span>
     </TableCell>
@@ -62,7 +67,7 @@ const InvoiceProductItem = ({ item, index }: { item: InvoiceDetailsItem; index: 
 
 // Extract total calculation to its own component
 const InvoiceTotals = ({ invoice }: { invoice: InvoiceDetails }) => (
-  <div className="p-5 bg-gray-50 border-t border-gray-200">
+  <div className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-200 rounded-b-xl">
     <div className="space-y-3 max-w-md ml-auto">
       <div className="flex justify-between items-center text-gray-700">
         <span className="font-medium">Tạm tính</span>
@@ -74,14 +79,14 @@ const InvoiceTotals = ({ invoice }: { invoice: InvoiceDetails }) => (
       </div>
       <div className="flex justify-between items-center text-gray-700">
         <span className="font-medium">Khuyến mãi</span>
-        <span className="font-semibold">0 ₫</span>
+        <span className="font-semibold text-rose-600">0 ₫</span>
       </div>
 
-      <Separator className="my-2" />
+      <Separator className="my-3 bg-gray-300/50" />
 
       <div className="flex justify-between items-center text-base">
         <span className="font-bold text-gray-900">Tổng cộng</span>
-        <div className="font-bold text-teal-700 bg-teal-50 px-3 py-1 rounded-lg border border-teal-100">
+        <div className="font-bold text-white bg-gradient-to-r from-teal-500 to-emerald-500 px-4 py-2 rounded-lg shadow-sm">
           {formatCurrency(invoice.totalPrice)}
         </div>
       </div>
@@ -97,14 +102,14 @@ export default function InvoiceProducts({ invoice }: InvoiceProductsProps) {
   const totalItems = invoice.items.reduce((sum: number, item: InvoiceDetailsItem) => sum + item.quantity, 0);
 
   return (
-    <Card className="shadow-sm border-0 rounded-xl overflow-hidden h-full bg-white">
-      <CardHeader className="border-b pb-4 pt-5">
+    <Card className="shadow-md border-0 rounded-xl overflow-hidden h-full bg-white/90 backdrop-blur-sm">
+      <CardHeader className="border-b pb-4 pt-5 bg-gradient-to-r from-teal-50 to-emerald-50">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold flex items-center">
-            <Package className="h-5 w-5 text-teal-600 mr-2" />
+            <ShoppingBag className="h-5 w-5 text-teal-600 mr-2" />
             Chi Tiết Sản Phẩm
           </CardTitle>
-          <Badge variant="outline" className="bg-gray-50 border-gray-200 px-2.5 py-1">
+          <Badge className="bg-teal-100 text-teal-700 border-teal-200 px-3 py-1 rounded-full">
             {totalItems} sản phẩm
           </Badge>
         </div>
@@ -113,11 +118,11 @@ export default function InvoiceProducts({ invoice }: InvoiceProductsProps) {
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="border-b border-gray-200 bg-gray-50">
-                <TableHead className="w-[50%] py-3 text-gray-700 font-medium">Sản Phẩm</TableHead>
-                <TableHead className="py-3 text-gray-700 text-center font-medium">Số Lượng</TableHead>
-                <TableHead className="py-3 text-gray-700 text-right font-medium">Đơn Giá</TableHead>
-                <TableHead className="py-3 text-gray-700 text-right font-medium">Thành Tiền</TableHead>
+              <TableRow className="border-b border-gray-200 bg-gray-50/70">
+                <TableHead className="w-[50%] py-3.5 text-gray-700 font-medium">Sản Phẩm</TableHead>
+                <TableHead className="py-3.5 text-gray-700 text-center font-medium">Số Lượng</TableHead>
+                <TableHead className="py-3.5 text-gray-700 text-right font-medium">Đơn Giá</TableHead>
+                <TableHead className="py-3.5 text-gray-700 text-right font-medium">Thành Tiền</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
