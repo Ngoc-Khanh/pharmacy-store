@@ -15,8 +15,8 @@ import { motion } from "framer-motion";
 import { ArrowLeft, BanknoteIcon, CalendarIcon, MapPinIcon, ShoppingBagIcon } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
-import { OrderDetailsSkeleton } from "./order.details-skeleton";
-import { OrderTimeline } from "./order.timeline";
+import { OrderDetailsSkeleton } from "./[id].details-skeleton";
+import { OrderTimeline } from "./[id].timeline";
 
 export default function OrderDetails() {
   const { id } = useParams<{ id: string }>();
