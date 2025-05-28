@@ -1,19 +1,18 @@
 import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
-import { MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, SuppliersAdminPage, UsersAdminPage } from "@/page/admin";
+import { DashboardAdminPage, InvoicesAdminPage, MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, SuppliersAdminPage, UsersAdminPage } from "@/page/admin";
 import CategoriesAdminPage from "@/page/admin/categories";
 import { LoginPage, RegisterPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
 import DeliverPage from "@/page/deliver";
 import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, RootPage } from "@/page/store";
-import { AddressesPage, CartPage, ChangePasswordPage, InvoiceDetailsPage, InvoicePage, OrderPage, RootAccountPage } from "@/page/store/account";
-import { OrderDetails } from "@/page/store/account/order";
+import { AddressesPage, CartPage, ChangePasswordPage, InvoiceDetailsPage, InvoicePage, OrderDetailsPage, OrderPage, RootAccountPage } from "@/page/store/account";
 
 import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
   {
-    path: "/",
+    path: routes.root,
     element: <Navigate to={routes.store.root} />,
   },
   {
@@ -24,6 +23,7 @@ export const reactRouter: RouteObject[] = [
     path: routes.store.account.settings,
     element: <Navigate to={routes.store.account.root} />,
   },
+  
   // AUTHENTICATION PAGES
   {
     path: routes.auth.login,
@@ -90,7 +90,7 @@ export const reactRouter: RouteObject[] = [
           },
           {
             path: routes.store.account.orderDetails(":id"),
-            element: <OrderDetails />,
+            element: <OrderDetailsPage />,
           },
           {
             path: routes.store.account.invoices,
@@ -111,7 +111,7 @@ export const reactRouter: RouteObject[] = [
     children: [
       {
         path: routes.admin.dashboard,
-        element: <div>Dashboard</div>,
+        element: <DashboardAdminPage />,
       },
       {
         path: routes.admin.users,
@@ -139,7 +139,7 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: routes.admin.invoices,
-        element: <div>Invoices</div>,
+        element: <InvoicesAdminPage />,
       },
       {
         path: "/admin/test",

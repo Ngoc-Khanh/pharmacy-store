@@ -28,7 +28,7 @@ const InfoItem = ({
 
 // Created additional component for better reuse
 const SupportCard = () => (
-  <Card className="shadow-sm border-0 rounded-xl overflow-hidden bg-white/80 backdrop-blur-sm border border-gray-100">
+  <Card className="shadow-sm border-0 rounded-xl overflow-hidden bg-white/80 backdrop-blur-sm border-gray-100">
     <CardContent className="p-5">
       <div className="flex items-start">
         <div className="bg-blue-100 rounded-full p-2.5 mr-3 flex-shrink-0">

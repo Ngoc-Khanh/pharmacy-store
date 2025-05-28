@@ -1,3 +1,5 @@
+export { default as DashboardAdminPage } from "./dashboard";
+export { default as InvoicesAdminPage } from "./invoice";
 export { default as MedicinesAdminPage } from "./medicines";
 export { default as MedicinesAdminDetailPage } from "./medicines/[id]";
 export { default as OrdersAdminPage } from "./orders";
