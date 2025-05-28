@@ -1,2 +1,2 @@
 export { default } from './page';
-export { default as InvoiceDetailsPage } from './details';
+export { default as InvoiceDetailsPage } from './[id]/page';
