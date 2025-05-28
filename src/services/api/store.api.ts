@@ -1,5 +1,5 @@
 import { OrderAdminChangeStatusDto, PlaceOrderDto } from "@/data/dto";
-import { Category, Invoice, Medicine, Order, OrderDeliver, OrderDetails } from "@/data/interfaces";
+import { Category, Invoice, InvoiceDetails, Medicine, Order, OrderDeliver, OrderDetails } from "@/data/interfaces";
 import { Paginated, SRO } from "@/data/sro";
 import { apiGet, apiPost } from "../api";
 
@@ -58,5 +58,11 @@ export const StoreAPI = {
   async InvoiceList() {
     const res = await apiGet<SRO<Invoice[]>>('v1/store/invoices/list');
     return res.data.data;
+  },
+
+  async InvoiceDetails(id: string) {
+    const res = await apiGet<SRO<InvoiceDetails>>(`v1/store/invoices/${id}/details`);
+    return res.data.data;
   }
+  
 };

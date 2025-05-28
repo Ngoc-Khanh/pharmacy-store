@@ -17,6 +17,7 @@ import { InvoiceStatus, PaymentMethod } from "@/data/enum";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { routes } from "@/config/routes";
 
 export default function InvoicePage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -121,7 +122,7 @@ export default function InvoicePage() {
   };
 
   const viewInvoiceDetails = (invoiceId: string) => {
-    navigate(`/account/invoice/${invoiceId}`);
+    navigate(routes.store.account.invoiceDetails(invoiceId));
   };
 
   const downloadInvoice = (invoice: Invoice) => {
