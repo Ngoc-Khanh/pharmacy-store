@@ -1,20 +1,21 @@
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { routes } from '@/config';
-import { OrderStatus } from '@/data/enum';
 import { OrderAdminChangeStatusDto } from '@/data/dto';
+import { OrderStatus } from '@/data/enum';
 import { Order } from '@/data/interfaces';
 import { formatCurrency } from '@/lib/utils';
 import { StoreAPI } from '@/services/api/store.api';
 
+import { formatPaymentMethod } from '@/lib/format-payment-method';
+import { OrderStatusIcon, StatusBadge } from '@/lib/status-badge';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, Check, CheckCircle, Clock, CreditCard, Leaf, Package, ShoppingBag, TruckIcon } from 'lucide-react';
+import { ArrowRight, Calendar, CheckCircle, Clock, CreditCard, Leaf, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; showConfirmButton?: boolean }) => {
   const formattedDate = format(new Date(order.createdAt), "dd/MM/yyyy", { locale: vi });
@@ -39,82 +40,6 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
 
   const handleConfirmOrder = () => {
     confirmOrderMutation.mutate(order.id);
-  };
-
-  // Biểu tượng cho từng trạng thái đơn hàng
-  const OrderStatusIcon = ({ status }: { status: OrderStatus }) => {
-    switch (status) {
-      case OrderStatus.PENDING:
-        return <Clock className="h-5 w-5 text-green-600 dark:text-green-400" />;
-      case OrderStatus.PROCESSING:
-        return <Package className="h-5 w-5 text-blue-500 dark:text-blue-400" />;
-      case OrderStatus.SHIPPED:
-        return <TruckIcon className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />;
-      case OrderStatus.DELIVERED:
-      case OrderStatus.COMPLETED:
-        return <ShoppingBag className="h-5 w-5 text-green-600 dark:text-green-400" />;
-      case OrderStatus.CANCELLED:
-        return <Package className="h-5 w-5 text-rose-500 dark:text-rose-400" />;
-      default:
-        return <Package className="h-5 w-5 text-green-600 dark:text-green-400" />;
-    }
-  };
-
-  // Định dạng phương thức thanh toán
-  const formatPaymentMethod = (method: string) => {
-    switch (method) {
-      case "COD":
-        return "Thanh toán khi nhận hàng";
-      case "CREDIT-CARD":
-        return "Thẻ tín dụng";
-      case "BANK-TRANSFER":
-        return "Chuyển khoản ngân hàng";
-      default:
-        return method;
-    }
-  };
-
-  // Tạo badge với màu sắc tương ứng với trạng thái đơn hàng
-  const StatusBadge = ({ status }: { status: OrderStatus }) => {
-    const statusConfig = {
-      [OrderStatus.PENDING]: {
-        color: "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800",
-        label: "Chờ xác nhận",
-        icon: <Clock className="w-3 h-3 mr-1" />
-      },
-      [OrderStatus.PROCESSING]: {
-        color: "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-900",
-        label: "Đang xử lý",
-        icon: <Package className="w-3 h-3 mr-1" />
-      },
-      [OrderStatus.SHIPPED]: {
-        color: "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-900",
-        label: "Đang giao hàng",
-        icon: <TruckIcon className="w-3 h-3 mr-1" />
-      },
-      [OrderStatus.DELIVERED]: {
-        color: "bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border-teal-200 dark:border-teal-900",
-        label: "Đã giao hàng",
-        icon: <ShoppingBag className="w-3 h-3 mr-1" />
-      },
-      [OrderStatus.CANCELLED]: {
-        color: "bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-900",
-        label: "Đã hủy",
-        icon: <Package className="w-3 h-3 mr-1" />
-      },
-      [OrderStatus.COMPLETED]: {
-        color: "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800",
-        label: "Hoàn thành",
-        icon: <Check className="w-3 h-3 mr-1" />
-      },
-    };
-
-    const config = statusConfig[status];
-    return (
-      <Badge className={`${config.color} px-3 py-1.5 rounded-full text-xs font-medium flex items-center shadow-sm dark:shadow-none`}>
-        {config.icon} {config.label}
-      </Badge>
-    );
   };
 
   return (
