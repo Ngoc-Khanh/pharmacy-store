@@ -16,7 +16,7 @@ export const OrderCardSkeleton = () => (
         </div>
         <Skeleton className="h-7 w-28 rounded-full bg-emerald-100/60 dark:bg-emerald-900/30" />
       </div>
-
+      
       <div className="mt-6 space-y-3">
         {[1, 2].map((i) => (
           <div key={i} className="flex justify-between items-center">
@@ -31,7 +31,7 @@ export const OrderCardSkeleton = () => (
           </div>
         ))}
       </div>
-
+      
       <div className="mt-6 pt-4 border-t border-emerald-100/60 dark:border-emerald-900/40 flex justify-end gap-3">
         <Skeleton className="h-9 w-28 rounded-full bg-emerald-100/60 dark:bg-emerald-900/30" />
       </div>

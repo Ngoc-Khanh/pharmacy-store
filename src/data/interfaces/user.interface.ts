@@ -1,3 +1,5 @@
+import { AccountRole, AccountStatus } from "../enum";
+
 export interface User {
   readonly id: string;
   firstname: string;
@@ -6,8 +8,8 @@ export interface User {
   email: string;
   phone: string;
   profileImage: ProfileImage;
-  role: "admin" | "pharmacist" | "customer";
-  status: "active" | "suspended" | "pending";
+  role: AccountRole;
+  status: AccountStatus;
   addresses: UserAddress[];
   lastLoginAt?: string;
   readonly createdAt: string;
