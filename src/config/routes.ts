@@ -60,8 +60,6 @@ export const routeNames = {
   [baseRoutes.store.medicines]: "Dược phẩm",
   [baseRoutes.store.checkout]: "Thanh toán",
   [baseRoutes.store.checkoutSuccess(":id")]: "Thanh toán thành công",
-  [baseRoutes.store.account.orders]: "Đơn hàng của tôi",
-  [baseRoutes.store.account.orderDetails(":id")]: "Chi tiết đơn hàng",
 
   // ADMIN NAME ROUTES
   [baseRoutes.admin.root]: "Admin",
@@ -81,7 +79,8 @@ export const routeNames = {
   [baseRoutes.store.account.changePwd]: "Đổi mật khẩu",
   [baseRoutes.store.account.cart]: "Giỏ hàng",
   [baseRoutes.store.account.orders]: "Đơn hàng của tôi",
-  [baseRoutes.store.account.invoices]: "Hóa đơn",
+  [baseRoutes.store.account.orderDetails(":id")]: "Chi tiết đơn hàng",
+  [baseRoutes.store.account.invoices]: "Hóa đơn của tôi",
   [baseRoutes.store.account.invoiceDetails(":id")]: "Chi tiết hóa đơn",
 
   // DELIVER NAME ROUTES

@@ -105,12 +105,13 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
                   </div>
                 )}
               </div>
-            </div>            <div className="mt-4 md:mt-0 flex flex-col items-start md:items-end justify-between">
+            </div>
+            <div className="mt-4 md:mt-0 flex flex-col items-start md:items-end justify-between">
               <div className="text-right px-4 py-2 bg-green-50/50 dark:bg-green-900/30 rounded-lg">
                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Tổng thanh toán</div>
                 <div className="font-bold text-lg text-green-700 dark:text-green-400">{formatCurrency(order.totalPrice)}</div>
               </div>
-              
+
               <div className="mt-4 flex flex-col md:flex-row gap-2 w-full md:w-auto">
                 {showConfirmButton && order.status === OrderStatus.DELIVERED && (
                   <Button
@@ -132,7 +133,7 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
                     )}
                   </Button>
                 )}
-                
+
                 <Button
                   asChild
                   className="group bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 text-white shadow-sm dark:shadow-green-900/20 hover:shadow"
