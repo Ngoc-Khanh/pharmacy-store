@@ -11,9 +11,9 @@ export enum AccountRole {
 }
 
 export enum AccountStatus {
-  ACTIVE = "ACTIVE",
-  SUSPENDED = "SUSPENDED",
-  PENDING = "PENDING",
+  ACTIVE = "active",
+  SUSPENDED = "suspended",
+  PENDING = "pending",
 }
 
 export enum PaymentMethod {

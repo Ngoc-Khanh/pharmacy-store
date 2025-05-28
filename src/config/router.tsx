@@ -6,9 +6,8 @@ import { LoginPage, RegisterPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
 import DeliverPage from "@/page/deliver";
 import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, RootPage } from "@/page/store";
-import { AddressesPage, CartPage, ChangePasswordPage, InvoicePage, OrderPage, RootAccountPage } from "@/page/store/account";
+import { AddressesPage, CartPage, ChangePasswordPage, InvoiceDetailsPage, InvoicePage, OrderPage, RootAccountPage } from "@/page/store/account";
 import { OrderDetails } from "@/page/store/account/order";
-import { InvoiceDetailsPage } from "@/page/store/account/invoice";
 
 import { Navigate, RouteObject } from "react-router-dom";
 

@@ -1,41 +1,42 @@
 "use client";
 
-import { InvoiceStatus, PaymentMethod } from "@/data/enum";
-import { StoreAPI } from "@/services/api/store.api";
-import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  ArrowLeft,
-  BadgeCheck,
-  Calendar,
-  Clipboard,
-  FileDown,
-  Info,
-  Package,
-  Pill,
-  Receipt,
-  ShieldCheck,
-  Truck,
-} from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "sonner";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { InvoiceDetailsItem } from "@/data/interfaces/invoice.interface";
-import { cn } from "@/lib/utils";
+import { routes, siteConfig } from "@/config";
+import { InvoiceStatus, PaymentMethod } from "@/data/enum";
+import { InvoiceDetails, InvoiceDetailsItem } from "@/data/interfaces";
+import { cn, formatCurrency } from "@/lib/utils";
+import { StoreAPI } from "@/services/api/store.api";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
+import { AnimatePresence, motion } from "framer-motion";
+import { 
+  ArrowLeft, 
+  BadgeCheck, 
+  Calendar, 
+  Clipboard, 
+  FileDown, 
+  Info, 
+  Package, 
+  Pill, 
+  Receipt, 
+  ShieldCheck, 
+  Truck
+} from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function InvoiceDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const { data: invoice, isLoading, error } = useQuery({
+  const { data: invoice, isLoading, error } = useQuery<InvoiceDetails>({
     queryKey: ['invoice', id],
     queryFn: () => StoreAPI.InvoiceDetails(id || ''),
     enabled: !!id,
@@ -48,13 +49,13 @@ export default function InvoiceDetailsPage() {
   const getStatusColor = (status: InvoiceStatus) => {
     switch (status) {
       case InvoiceStatus.PAID:
-        return "bg-emerald-100 text-emerald-800 border-emerald-200";
+        return "bg-emerald-100 text-emerald-700 border-emerald-200";
       case InvoiceStatus.PENDING:
-        return "bg-amber-100 text-amber-800 border-amber-200";
+        return "bg-amber-100 text-amber-700 border-amber-200";
       case InvoiceStatus.CANCELLED:
-        return "bg-rose-100 text-rose-800 border-rose-200";
+        return "bg-rose-100 text-rose-700 border-rose-200";
       default:
-        return "bg-blue-100 text-blue-800 border-blue-200";
+        return "bg-blue-100 text-blue-700 border-blue-200";
     }
   };
 
@@ -117,13 +118,6 @@ export default function InvoiceDetailsPage() {
     }
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(amount);
-  };
-
   const downloadInvoice = () => {
     if (!invoice) return;
     toast.success(`Hóa đơn ${invoice.invoiceNumber} đang được tải xuống.`);
@@ -131,12 +125,12 @@ export default function InvoiceDetailsPage() {
   };
 
   const goBack = () => {
-    navigate(-1);
+    navigate(routes.store.account.invoices);
   };
 
   // Animation variants
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 10, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
@@ -150,7 +144,7 @@ export default function InvoiceDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="py-4 px-2">
+      <div className="py-8 px-4 max-w-6xl mx-auto">
         <div className="mb-6 flex items-center">
           <Button
             variant="ghost"
@@ -161,10 +155,13 @@ export default function InvoiceDetailsPage() {
           </Button>
           <Skeleton className="h-8 w-48" />
         </div>
-        <div className="space-y-6">
-          <Skeleton className="h-40 w-full rounded-xl" />
-          <Skeleton className="h-80 w-full rounded-xl" />
-          <Skeleton className="h-40 w-full rounded-xl" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-1 space-y-6">
+            <Skeleton className="h-[500px] w-full rounded-xl" />
+          </div>
+          <div className="md:col-span-2">
+            <Skeleton className="h-[600px] w-full rounded-xl" />
+          </div>
         </div>
       </div>
     );
@@ -172,28 +169,32 @@ export default function InvoiceDetailsPage() {
 
   if (error || !invoice) {
     return (
-      <div className="py-4 px-2">
+      <div className="py-8 px-4 max-w-6xl mx-auto">
         <div className="mb-6 flex items-center">
           <Button
             variant="ghost"
-            className="mr-4 rounded-full p-2 h-9 w-9"
+            className="mr-4 rounded-full p-2 h-9 w-9 hover:bg-rose-50 text-rose-600"
             onClick={goBack}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <h1 className="text-2xl font-bold">Chi Tiết Hóa Đơn</h1>
         </div>
-        <Card className="shadow-lg border-0 rounded-xl bg-white relative">
-          <CardContent className="p-12 text-center">
-            <Info className="h-16 w-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+        <Card className="shadow-lg border-0 rounded-xl bg-white relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-rose-500 to-rose-400"></div>
+          <CardContent className="p-10 text-center">
+            <div className="rounded-full bg-rose-100 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
+              <Info className="h-8 w-8 text-rose-500" />
+            </div>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">
               Đã xảy ra lỗi
             </h2>
-            <p className="text-gray-600 mb-6">{error instanceof Error ? error.message : "Không thể tải thông tin hóa đơn"}</p>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">{error instanceof Error ? error.message : "Không thể tải thông tin hóa đơn"}</p>
             <Button
-              className="bg-teal-600 hover:bg-teal-700 text-white"
+              className="bg-rose-600 hover:bg-rose-700 text-white font-medium px-6 py-2 rounded-full"
               onClick={goBack}
             >
+              <ArrowLeft className="h-4 w-4 mr-2" />
               Quay lại
             </Button>
           </CardContent>
@@ -203,127 +204,136 @@ export default function InvoiceDetailsPage() {
   }
 
   return (
-    <div className="py-4 px-2">
-      {/* Pharmacy-themed decorative elements */}
-      <div className="absolute top-0 right-0 opacity-5 pointer-events-none">
-        <svg width="400" height="400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L4 5V11.09C4 16.14 7.41 20.85 12 22C16.59 20.85 20 16.14 20 11.09V5L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M12 8V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8 12H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </div>
+    <>
+      <Helmet>
+        <title>{`Hóa đơn #${invoice.invoiceNumber} | ${siteConfig.name}`}</title>
+      </Helmet>
 
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="mb-6 flex items-center"
-      >
-        <Button
-          variant="ghost"
-          className="mr-4 rounded-full p-2 h-9 w-9 hover:bg-teal-50 text-teal-700"
-          onClick={goBack}
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <div className="flex items-center">
-          <Receipt className="h-6 w-6 text-teal-600 mr-2" />
-          <h1 className="text-2xl font-bold text-gray-900">Chi Tiết Hóa Đơn #{invoice.invoiceNumber}</h1>
-        </div>
-      </motion.div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left Column - Invoice Summary */}
+      <div className="py-8 px-4 max-w-6xl mx-auto">
         <motion.div
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="md:col-span-1"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-8 flex items-center"
         >
-          <Card className="shadow-md border-0 rounded-xl bg-white">
-            <CardHeader className="bg-gradient-to-r from-teal-50 to-cyan-50 border-b border-teal-100">
-              <div className="flex items-center">
-                <Receipt className="h-5 w-5 text-teal-600 mr-2" />
-                <CardTitle className="text-lg text-teal-800">Thông Tin Hóa Đơn</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <div>
+          <Button
+            variant="ghost"
+            className="mr-4 rounded-full p-2 h-10 w-10 hover:bg-teal-50 text-teal-600 shadow-sm"
+            onClick={goBack}
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="flex items-center">
+            <div className="mr-4 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full h-12 w-12 flex items-center justify-center text-white shadow-md">
+              <Receipt className="h-6 w-6" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Chi Tiết Hóa Đơn</h1>
+              <p className="text-sm font-medium text-teal-600">#{invoice.invoiceNumber}</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Left Column - Invoice Summary */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={itemVariants}
+            className="md:col-span-1 space-y-6"
+          >
+            <Card className="shadow-md border-0 rounded-xl overflow-hidden">
+              <div className="h-2 bg-gradient-to-r from-teal-500 to-teal-400"></div>
+              <CardHeader className="bg-gradient-to-b from-teal-50 to-white border-b border-teal-100 pb-4 pt-5">
+                <div className="flex items-center">
+                  <div className="bg-white rounded-full p-2 shadow-sm mr-3">
+                    <Receipt className="h-5 w-5 text-teal-600" />
+                  </div>
+                  <CardTitle className="text-lg font-semibold text-teal-800">Thông Tin Hóa Đơn</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6 space-y-5">
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
                   <p className="text-sm font-medium text-gray-500 mb-1">Mã hóa đơn</p>
-                  <p className="text-lg font-semibold text-teal-700">#{invoice.invoiceNumber}</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-lg font-semibold text-gray-900">#{invoice.invoiceNumber}</p>
+                    <Badge
+                      className={cn(
+                        "font-medium px-3 py-1.5 text-sm rounded-full shadow-sm",
+                        getStatusColor(invoice.status),
+                        invoice.status === InvoiceStatus.PAID ? "hover:bg-emerald-50 hover:text-emerald-700" : 
+                        invoice.status === InvoiceStatus.PENDING ? "hover:bg-amber-50 hover:text-amber-700" :
+                        "hover:bg-rose-50 hover:text-rose-700"
+                      )}
+                    >
+                      {getStatusLabel(invoice.status)}
+                    </Badge>
+                  </div>
                 </div>
                 
                 <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">Mã đơn hàng</p>
-                  <p className="text-lg font-semibold text-gray-900">{invoice.orderId}</p>
+                  <p className="text-sm font-medium text-gray-500 mb-2">Mã đơn hàng</p>
+                  <div className="flex items-center bg-white rounded-lg p-3 border border-gray-100 shadow-sm">
+                    <Clipboard className="h-4 w-4 text-teal-600 mr-2" />
+                    <p className="text-base font-medium text-gray-900">
+                      {invoice.orderId || "Mua trực tiếp"}
+                    </p>
+                  </div>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">Ngày phát hành</p>
-                  <div className="flex items-center">
+                  <p className="text-sm font-medium text-gray-500 mb-2">Ngày phát hành</p>
+                  <div className="flex items-center bg-white rounded-lg p-3 border border-gray-100 shadow-sm">
                     <Calendar className="h-4 w-4 text-teal-600 mr-2" />
                     <p className="text-gray-800">{formatDate(invoice.issuedAt)}</p>
                   </div>
                 </div>
 
-                <Separator />
+                <Separator className="bg-gray-200" />
 
                 <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">Trạng thái</p>
-                  <Badge
-                    className={cn(
-                      "font-medium px-3 py-1.5 text-sm border",
-                      getStatusColor(invoice.status)
-                    )}
-                  >
-                    {getStatusLabel(invoice.status)}
-                  </Badge>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">Phương thức thanh toán</p>
-                  <div className="flex items-center mt-1 text-gray-800">
-                    {getPaymentIcon(invoice.paymentMethod)}
-                    <span>{getPaymentMethodLabel(invoice.paymentMethod)}</span>
+                  <p className="text-sm font-medium text-gray-500 mb-2">Phương thức thanh toán</p>
+                  <div className="flex items-center bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg shadow-sm">
+                    <div className="bg-white p-2.5 rounded-lg shadow-sm mr-3 border border-blue-100">
+                      {getPaymentIcon(invoice.paymentMethod)}
+                    </div>
+                    <span className="text-gray-900 font-medium">{getPaymentMethodLabel(invoice.paymentMethod)}</span>
                   </div>
                 </div>
 
-                <Separator />
+                <Separator className="bg-gray-200" />
 
-                <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">Tổng tiền</p>
-                  <p className="text-2xl font-bold text-teal-700">{formatCurrency(invoice.totalPrice)}</p>
+                <div className="bg-gradient-to-br from-teal-50 to-emerald-50 rounded-lg p-4 shadow-sm border border-teal-100">
+                  <p className="text-sm font-medium text-teal-700 mb-1">Tổng tiền</p>
+                  <p className="text-3xl font-bold text-teal-700">{formatCurrency(invoice.totalPrice)}</p>
                 </div>
 
                 <Button
-                  className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-md hover:shadow-lg transition-all"
+                  className="w-full bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-medium shadow-md rounded-full h-12 transition-all duration-200"
                   onClick={downloadInvoice}
                 >
-                  <FileDown className="h-4 w-4 mr-2" />
+                  <FileDown className="h-5 w-5 mr-2" />
                   Tải Xuống Hóa Đơn
                 </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Additional Information Card */}
-          <motion.div 
-            variants={itemVariants}
-            className="mt-6"
-          >
-            <Card className="shadow-md border-0 rounded-xl bg-white">
-              <CardHeader className="bg-blue-50 border-b border-blue-100 py-4">
+              </CardContent>
+            </Card>
+            
+            {/* Additional Information Card */}
+            <Card className="shadow-md border-0 rounded-xl overflow-hidden">
+              <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+              <CardHeader className="bg-gradient-to-b from-blue-50 to-white border-b border-blue-100 pb-4 pt-5">
                 <div className="flex items-center">
-                  <Info className="h-5 w-5 text-blue-600 mr-2" />
-                  <CardTitle className="text-lg text-blue-800">Thông Tin Bổ Sung</CardTitle>
+                  <div className="bg-white rounded-full p-2 shadow-sm mr-3">
+                    <Info className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <CardTitle className="text-lg font-semibold text-blue-800">Thông Tin Bổ Sung</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="bg-blue-50 p-2 rounded-full mr-3">
-                      <ShieldCheck className="h-4 w-4 text-blue-600" />
+                  <div className="flex items-start p-3 rounded-lg transition-colors duration-200 hover:bg-blue-50 border border-transparent hover:border-blue-100">
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-2.5 rounded-full mr-3 flex-shrink-0 shadow-sm">
+                      <ShieldCheck className="h-5 w-5 text-white" />
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-900">Bảo mật thanh toán</h4>
@@ -333,9 +343,9 @@ export default function InvoiceDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start">
-                    <div className="bg-blue-50 p-2 rounded-full mr-3">
-                      <Truck className="h-4 w-4 text-blue-600" />
+                  <div className="flex items-start p-3 rounded-lg transition-colors duration-200 hover:bg-blue-50 border border-transparent hover:border-blue-100">
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-2.5 rounded-full mr-3 flex-shrink-0 shadow-sm">
+                      <Truck className="h-5 w-5 text-white" />
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-900">Theo dõi đơn hàng</h4>
@@ -345,9 +355,9 @@ export default function InvoiceDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start">
-                    <div className="bg-blue-50 p-2 rounded-full mr-3">
-                      <BadgeCheck className="h-4 w-4 text-blue-600" />
+                  <div className="flex items-start p-3 rounded-lg transition-colors duration-200 hover:bg-blue-50 border border-transparent hover:border-blue-100">
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-2.5 rounded-full mr-3 flex-shrink-0 shadow-sm">
+                      <BadgeCheck className="h-5 w-5 text-white" />
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-900">Sản phẩm chất lượng</h4>
@@ -360,136 +370,141 @@ export default function InvoiceDetailsPage() {
               </CardContent>
             </Card>
           </motion.div>
-        </motion.div>
 
-        {/* Right Column - Invoice Items & Details */}
-        <motion.div 
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="md:col-span-2"
-        >
-          <Card className="shadow-md border-0 rounded-xl bg-white h-full">
-            <CardHeader className="bg-gradient-to-r from-teal-50 to-cyan-50 border-b border-teal-100">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Package className="h-5 w-5 text-teal-600 mr-2" />
-                  <CardTitle className="text-lg text-teal-800">Chi Tiết Sản Phẩm</CardTitle>
+          {/* Right Column - Invoice Items & Details */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={itemVariants}
+            className="md:col-span-2"
+          >
+            <Card className="shadow-md border-0 rounded-xl overflow-hidden h-full">
+              <div className="h-2 bg-gradient-to-r from-teal-500 to-emerald-500"></div>
+              <CardHeader className="bg-gradient-to-b from-teal-50 to-white border-b border-teal-100 pb-4 pt-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-white rounded-full p-2 shadow-sm mr-3">
+                      <Package className="h-5 w-5 text-teal-600" />
+                    </div>
+                    <CardTitle className="text-lg font-semibold text-teal-800">Chi Tiết Sản Phẩm</CardTitle>
+                  </div>
+                  <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 px-3 py-1.5 rounded-full shadow-sm">
+                    {invoice.items.reduce((sum: number, item: InvoiceDetailsItem) => sum + item.quantity, 0)} sản phẩm
+                  </Badge>
                 </div>
-                <p className="text-sm text-teal-700">
-                  Tổng: {invoice.items.reduce((sum: number, item: InvoiceDetailsItem) => sum + item.quantity, 0)} sản phẩm
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-b border-gray-200 bg-gray-50">
+                        <TableHead className="w-[50%] py-4 text-gray-700 font-medium">Sản Phẩm</TableHead>
+                        <TableHead className="py-4 text-gray-700 text-center font-medium">Số Lượng</TableHead>
+                        <TableHead className="py-4 text-gray-700 text-right font-medium">Đơn Giá</TableHead>
+                        <TableHead className="py-4 text-gray-700 text-right font-medium">Thành Tiền</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <AnimatePresence>
+                        {invoice.items.map((item: InvoiceDetailsItem, index: number) => (
+                          <motion.tr
+                            key={item.medicineId}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className={cn(
+                              "group hover:bg-gray-50 transition-colors duration-150",
+                              index % 2 === 0 ? "bg-white" : "bg-gray-50/30"
+                            )}
+                          >
+                            <TableCell className="py-4">
+                              <div className="flex items-center">
+                                {item.medicine.thumbnail ? (
+                                  <div className="h-14 w-14 mr-4 rounded-lg border border-gray-200 overflow-hidden flex-shrink-0 shadow-sm">
+                                    <img 
+                                      src={item.medicine.thumbnail.url || ""} 
+                                      alt={item.medicine.thumbnail.alt} 
+                                      className="h-full w-full object-cover"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="h-14 w-14 mr-4 rounded-lg bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center flex-shrink-0 shadow-sm">
+                                    <Pill className="h-6 w-6 text-teal-600" />
+                                  </div>
+                                )}
+                                <div className="min-w-0 flex-1">
+                                  <h4 className="font-medium text-gray-900 truncate mb-1 group-hover:text-teal-700 transition-colors">
+                                    {item.medicine.name}
+                                  </h4>
+                                  <p className="text-sm text-gray-500 truncate">
+                                    {item.medicine.description?.substring(0, 50) || "Không có mô tả"}
+                                  </p>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <span className="inline-flex items-center justify-center px-3 py-1.5 bg-gray-100 rounded-full text-gray-800 border border-gray-200 shadow-sm font-medium min-w-[40px]">
+                                {item.quantity}
+                              </span>
+                            </TableCell>
+                            <TableCell className="text-right font-medium text-gray-800">
+                              {formatCurrency(item.price)}
+                            </TableCell>
+                            <TableCell className="text-right font-semibold text-teal-700">
+                              {formatCurrency(item.itemTotal)}
+                            </TableCell>
+                          </motion.tr>
+                        ))}
+                      </AnimatePresence>
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Total Calculation */}
+                <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 border-t border-gray-200">
+                  <div className="space-y-4 max-w-md ml-auto">
+                    <div className="flex justify-between items-center text-gray-700 bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+                      <span className="font-medium">Tạm tính</span>
+                      <span className="font-semibold">{formatCurrency(invoice.totalPrice)}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-gray-700 bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+                      <span className="font-medium">Phí vận chuyển</span>
+                      <span className="font-semibold">0 ₫</span>
+                    </div>
+                    <div className="flex justify-between items-center text-gray-700 bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+                      <span className="font-medium">Khuyến mãi</span>
+                      <span className="font-semibold">0 ₫</span>
+                    </div>
+                    <div className="flex justify-between items-center text-lg font-bold bg-teal-50 p-4 rounded-lg shadow-sm border border-teal-200">
+                      <span className="text-gray-900">Tổng cộng</span>
+                      <span className="text-teal-700">{formatCurrency(invoice.totalPrice)}</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Help Note */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
+              className="mt-6 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 flex items-start shadow-sm"
+            >
+              <div className="p-3 bg-white rounded-full mr-4 flex-shrink-0 shadow-sm border border-blue-200">
+                <Clipboard className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h4 className="font-medium text-blue-800 mb-2">Cần hỗ trợ hoặc hoàn trả?</h4>
+                <p className="text-sm text-blue-700">
+                  Nếu bạn có thắc mắc về hóa đơn, sản phẩm, hoặc cần hỗ trợ hoàn trả, vui lòng liên hệ đội ngũ chăm sóc khách hàng của chúng tôi qua email <span className="font-semibold">hotro@pharmacity.vn</span> hoặc gọi số <span className="font-semibold">1800 6821</span> trong vòng 7 ngày kể từ ngày mua hàng.
                 </p>
               </div>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div>
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-gray-50 border-b border-gray-200">
-                      <TableHead className="w-[50%] py-4 text-teal-800">Sản Phẩm</TableHead>
-                      <TableHead className="py-4 text-teal-800 text-center">Số Lượng</TableHead>
-                      <TableHead className="py-4 text-teal-800 text-right">Đơn Giá</TableHead>
-                      <TableHead className="py-4 text-teal-800 text-right">Thành Tiền</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <AnimatePresence>
-                      {invoice.items.map((item: InvoiceDetailsItem) => (
-                        <motion.tr
-                          key={item.medicineId}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="group hover:bg-teal-50/40 transition-colors duration-150"
-                        >
-                          <TableCell>
-                            <div className="flex items-center">
-                              {item.medicine.thumbnail ? (
-                                <div className="h-12 w-12 mr-3 rounded border border-gray-200 overflow-hidden flex-shrink-0">
-                                  <img 
-                                    src={item.medicine.thumbnail.url || ""} 
-                                    alt={item.medicine.thumbnail.alt} 
-                                    className="h-full w-full object-cover"
-                                  />
-                                </div>
-                              ) : (
-                                <div className="h-12 w-12 mr-3 rounded bg-teal-100 flex items-center justify-center flex-shrink-0">
-                                  <Pill className="h-6 w-6 text-teal-600" />
-                                </div>
-                              )}
-                              <div>
-                                <h4 className="font-medium text-gray-900 line-clamp-1">
-                                  {item.medicine.name}
-                                </h4>
-                                <p className="text-sm text-gray-500 line-clamp-1">
-                                  {/* {item.medicine.supplier.name || "Không có thông tin nhà sản xuất"} */}
-                                </p>
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-center font-medium">
-                            <span className="px-2.5 py-1 bg-gray-100 rounded text-gray-800">
-                              {item.quantity}
-                            </span>
-                          </TableCell>
-                          <TableCell className="text-right font-medium text-gray-800">
-                            {formatCurrency(item.price)}
-                          </TableCell>
-                          <TableCell className="text-right font-semibold text-teal-700">
-                            {formatCurrency(item.itemTotal)}
-                          </TableCell>
-                        </motion.tr>
-                      ))}
-                    </AnimatePresence>
-                  </TableBody>
-                </Table>
-              </div>
-
-              {/* Total Calculation */}
-              <div className="p-6 bg-gray-50 border-t border-gray-100">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-gray-700">
-                    <span>Tạm tính</span>
-                    <span>{formatCurrency(invoice.totalPrice)}</span>
-                  </div>
-                  <div className="flex justify-between text-gray-700">
-                    <span>Phí vận chuyển</span>
-                    <span>0 ₫</span>
-                  </div>
-                  <div className="flex justify-between text-gray-700">
-                    <span>Khuyến mãi</span>
-                    <span>0 ₫</span>
-                  </div>
-                  <Separator className="my-2" />
-                  <div className="flex justify-between text-lg font-bold">
-                    <span className="text-gray-900">Tổng cộng</span>
-                    <span className="text-teal-700">{formatCurrency(invoice.totalPrice)}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Help Note */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100 flex items-start"
-          >
-            <div className="p-2 bg-blue-100 rounded-full mr-3 mt-0.5">
-              <Clipboard className="h-5 w-5 text-blue-600" />
-            </div>
-            <div>
-              <h4 className="font-medium text-blue-800 mb-1">Cần hỗ trợ hoặc hoàn trả?</h4>
-              <p className="text-sm text-blue-700">
-                Nếu bạn có thắc mắc về hóa đơn, sản phẩm, hoặc cần hỗ trợ hoàn trả, vui lòng liên hệ đội ngũ chăm sóc khách hàng của chúng tôi qua email <strong>hotro@pharmacity.vn</strong> hoặc gọi số <strong>1800 6821</strong> trong vòng 7 ngày kể từ ngày mua hàng.
-              </p>
-            </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
-    </div>
+    </>
   );
 } 
