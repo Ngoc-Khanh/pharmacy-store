@@ -1,11 +1,11 @@
 import { AddMedicineDto } from "@/data/dto";
 import { Medicine } from "@/data/interfaces";
-import { SRO } from "@/data/sro";
+import { Paginated, SRO } from "@/data/sro";
 import { apiDelete, apiGet, apiPatch, apiPost } from "../api";
 
 export const MedicineAPI = {
-  async MedicineList() {
-    const res = await apiGet<SRO<Medicine[]>>("/v1/admin/medicines");
+  async MedicineList(page = 1, limit = 10) {
+    const res = await apiGet<SRO<Paginated<Medicine>>>(`/v1/admin/medicines?page=${page}&per_page=${limit}`);
     return res.data.data;
   },
 

@@ -226,7 +226,7 @@ export function CategoriesView() {
                 
               return (
                 <motion.div key={category.id} variants={itemVariants}>
-                  <Link to={`${routes.store.root}?category=${category.slug}`} className="block h-full">
+                  <Link to={`${routes.store.medicines}?category=${category.slug}`} className="block h-full">
                     <Card className="bg-white dark:bg-gray-950 border-0 shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer overflow-hidden h-full">
                       <CardContent className="p-6 flex flex-col items-center text-center">
                         <div className="p-4 rounded-full bg-emerald-100 dark:bg-emerald-900/30 mb-4 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-800/40 transition-colors duration-300">
@@ -261,7 +261,7 @@ export function CategoriesView() {
               
               return (
                 <motion.div key={category.id} variants={itemVariants}>
-                  <Link to={`${routes.store.root}?category=${category.slug}`} className="block w-full">
+                  <Link to={`${routes.store.medicines}?category=${category.slug}`} className="block w-full">
                     <Card className="bg-white dark:bg-gray-950 border-0 shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer overflow-hidden">
                       <CardContent className="p-6 flex flex-row items-center">
                         <div className="p-4 rounded-full bg-emerald-100 dark:bg-emerald-900/30 mr-6 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-800/40 transition-colors duration-300">

@@ -9,17 +9,114 @@ import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpDown, FileSpreadsheet, PillIcon } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { MedicinesPrimaryButtons } from "./medicines.primary-buttons";
+import { useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Medicine } from "@/data/interfaces";
 
 export default function MedicinesPage() {
-  const { data: medicinesList, isLoading } = useQuery({
-    queryKey: ["medicines"],
-    queryFn: MedicineAPI.MedicineList,
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const currentPage = parseInt(queryParams.get("page") || "1", 10);
+  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10", 10));
+  
+  // Track if we're loading additional data
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  // Store accumulated medicines data
+  const [accumulatedData, setAccumulatedData] = useState<Medicine[]>([]);
+
+  // Get medicines data with pagination from URL
+  const { data: medicinesList, isLoading, refetch } = useQuery({
+    queryKey: ["medicines", currentPage, limit],
+    queryFn: () => MedicineAPI.MedicineList(currentPage, limit),
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
   });
 
-  const medicinesData = medicinesList || [];
+  // Update accumulated data when primary data changes
+  useEffect(() => {
+    if (medicinesList?.data && !isLoadingMore) {
+      setAccumulatedData(medicinesList.data);
+    }
+  }, [medicinesList, isLoadingMore]);
+
+  // Function to handle page change
+  const handlePageChange = useCallback((page: number) => {
+    queryParams.set("page", page.toString());
+    // Keep the current limit if it exists
+    if (limit !== 10) {
+      queryParams.set("limit", limit.toString());
+    }
+    navigate(`${location.pathname}?${queryParams.toString()}`);
+  }, [location.pathname, navigate, queryParams, limit]);
+
+  // Function to handle page size change with smooth loading
+  const handlePageSizeChange = useCallback(async (pageSize: number) => {
+    if (pageSize <= limit) {
+      // If reducing page size, just update the URL
+      setLimit(pageSize);
+      queryParams.set("limit", pageSize.toString());
+      queryParams.set("page", "1");
+      navigate(`${location.pathname}?${queryParams.toString()}`);
+      return;
+    }
+    
+    // If increasing page size, load additional data smoothly
+    setIsLoadingMore(true);
+    
+    try {
+      // Calculate how many more items we need
+      const additionalItemsNeeded = pageSize - limit;
+      const additionalPages = Math.ceil(additionalItemsNeeded / limit);
+      const newData = [...accumulatedData];
+      
+      // Load additional pages
+      for (let i = 1; i <= additionalPages; i++) {
+        const nextPage = currentPage + i;
+        const result = await MedicineAPI.MedicineList(nextPage, limit);
+        if (result.data && result.data.length > 0) {
+          newData.push(...result.data);
+          // Stop if we've reached the end of data
+          if (result.data.length < limit) break;
+        } else {
+          break;
+        }
+      }
+      
+      // Update state and URL silently
+      setAccumulatedData(newData);
+      setLimit(pageSize);
+      
+      // Update URL without triggering a navigation-based refresh
+      queryParams.set("limit", pageSize.toString());
+      window.history.replaceState(
+        {},
+        '',
+        `${location.pathname}?${queryParams.toString()}`
+      );
+      
+      // Refetch main data to ensure consistency
+      refetch();
+    } catch (error) {
+      console.error("Error loading more data:", error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [accumulatedData, currentPage, limit, location.pathname, navigate, queryParams, refetch]);
+
+  // Use this effect to initialize pagination controls
+  useEffect(() => {
+    // If no page parameter is in URL, add it
+    if (!queryParams.has("page")) {
+      queryParams.set("page", "1");
+      navigate(`${location.pathname}?${queryParams.toString()}`, { replace: true });
+    }
+  }, [location.pathname, navigate, queryParams]);
+
+  // Extract medicines data from paginated response or use accumulated data
+  const medicinesData = isLoadingMore ? accumulatedData : (medicinesList?.data || []);
+  const totalMedicines = medicinesList?.total || 0;
 
   return (
     <div className="flex-col md:flex">
@@ -56,7 +153,7 @@ export default function MedicinesPage() {
               <ArrowUpDown size={16} className="text-emerald-500" />
             </div>
             <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
-              {isLoading ? "..." : medicinesData.length}
+              {isLoading ? "..." : totalMedicines}
             </p>
             <div className="mt-3 text-xs text-emerald-600/80 dark:text-emerald-500/80 font-medium flex items-center gap-1">
               <ArrowDown size={14} className="text-rose-500" />
@@ -93,7 +190,7 @@ export default function MedicinesPage() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-1">
-          {isLoading ? (
+          {isLoading && !isLoadingMore ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -104,7 +201,18 @@ export default function MedicinesPage() {
               <Skeleton className="h-10 w-full rounded-lg" />
             </motion.div>
           ) : (
-            <MedicinesDataTable columns={medicinesColumns} data={medicinesData} />
+            <MedicinesDataTable 
+              columns={medicinesColumns} 
+              data={medicinesData} 
+              isLoadingMore={isLoadingMore}
+              pagination={{
+                currentPage,
+                totalPages: medicinesList?.lastPage || 1,
+                onPageChange: handlePageChange,
+                onPageSizeChange: handlePageSizeChange,
+                pageSize: limit
+              }}
+            />
           )}
         </div>
         <MedicinesDialogs />
