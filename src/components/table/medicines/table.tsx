@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Medicine } from "@/data/interfaces";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, RowData, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { DataTablePagination } from "../data-table-pagination";
 import { MedicinesTableToolbar } from "./medicines.table-toolbar";
@@ -14,12 +15,22 @@ declare module "@tanstack/react-table" {
   }
 }
 
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
+  pageSize?: number;
+}
+
 interface DataTableProps {
   columns: ColumnDef<Medicine>[];
   data: Medicine[];
+  pagination?: PaginationProps;
+  isLoadingMore?: boolean;
 }
 
-export default function MedicinesDataTable({ columns, data }: DataTableProps) {
+export default function MedicinesDataTable({ columns, data, pagination, isLoadingMore = false }: DataTableProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -35,6 +46,12 @@ export default function MedicinesDataTable({ columns, data }: DataTableProps) {
       rowSelection,
       columnFilters,
       globalFilter,
+      ...(pagination && {
+        pagination: {
+          pageIndex: pagination.currentPage - 1,
+          pageSize: pagination.pageSize || 10,
+        },
+      }),
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -42,9 +59,15 @@ export default function MedicinesDataTable({ columns, data }: DataTableProps) {
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
+    // Only enable internal pagination if no external pagination is provided
+    ...(pagination ? {
+      manualPagination: true,
+      pageCount: pagination.totalPages,
+    } : {
+      getPaginationRowModel: getPaginationRowModel(),
+    }),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
@@ -100,38 +123,51 @@ export default function MedicinesDataTable({ columns, data }: DataTableProps) {
               </TableHeader>
               <TableBody>
                 {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row, index) => (
-                    <motion.tr
-                      key={row.id}
-                      custom={index}
-                      initial="hidden"
-                      animate="visible"
-                      variants={fadeInUpVariants}
-                      className={`transition-all hover:bg-teal-50/70 dark:hover:bg-teal-900/20 border-b border-teal-100/60 dark:border-teal-900/20 ${
-                        index % 2 === 0 ? 'bg-white dark:bg-gray-950/80' : 'bg-teal-50/40 dark:bg-teal-950/10'
-                      } ${row.getIsSelected() ? 'bg-teal-100/70 dark:bg-teal-900/30 hover:bg-teal-100/90 dark:hover:bg-teal-900/40' : ''}`}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          key={cell.id}
-                          style={{ width: cell.column.getSize() !== 0 ? `${cell.column.getSize()}px` : 'auto' }}
-                          className={`${cell.column.columnDef.meta?.className ?? ""} h-16 px-4 align-middle text-slate-700 dark:text-slate-300 ${
-                            cell.column.id === 'select' ? 'text-center' : 
-                            cell.column.id === 'thumbnail' ? 'text-center' : 
-                            cell.column.id === 'name' ? 'text-left font-medium text-teal-700 dark:text-teal-400' : 
-                            cell.column.id === 'description' ? 'text-left' : 
-                            cell.column.id === 'variants' ? 'text-center' : 
-                            cell.column.id === 'actions' ? 'text-center' : ''
-                          }`}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </motion.tr>
-                  ))
+                  <>
+                    {table.getRowModel().rows.map((row, index) => (
+                      <motion.tr
+                        key={row.id}
+                        custom={index}
+                        initial="hidden"
+                        animate="visible"
+                        variants={fadeInUpVariants}
+                        className={`transition-all hover:bg-teal-50/70 dark:hover:bg-teal-900/20 border-b border-teal-100/60 dark:border-teal-900/20 ${
+                          index % 2 === 0 ? 'bg-white dark:bg-gray-950/80' : 'bg-teal-50/40 dark:bg-teal-950/10'
+                        } ${row.getIsSelected() ? 'bg-teal-100/70 dark:bg-teal-900/30 hover:bg-teal-100/90 dark:hover:bg-teal-900/40' : ''}`}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell
+                            key={cell.id}
+                            style={{ width: cell.column.getSize() !== 0 ? `${cell.column.getSize()}px` : 'auto' }}
+                            className={`${cell.column.columnDef.meta?.className ?? ""} h-16 px-4 align-middle text-slate-700 dark:text-slate-300 ${
+                              cell.column.id === 'select' ? 'text-center' : 
+                              cell.column.id === 'thumbnail' ? 'text-center' : 
+                              cell.column.id === 'name' ? 'text-left font-medium text-teal-700 dark:text-teal-400' : 
+                              cell.column.id === 'description' ? 'text-left' : 
+                              cell.column.id === 'variants' ? 'text-center' : 
+                              cell.column.id === 'actions' ? 'text-center' : ''
+                            }`}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </motion.tr>
+                    ))}
+                    {/* Loading more indicator */}
+                    {isLoadingMore && (
+                      <tr>
+                        <td colSpan={columns.length} className="py-6">
+                          <div className="flex justify-center items-center gap-2 text-teal-600 dark:text-teal-400">
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                            <span className="font-medium">Đang tải thêm thuốc...</span>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 ) : (
                   <TableRow>
                     <TableCell
@@ -154,7 +190,11 @@ export default function MedicinesDataTable({ columns, data }: DataTableProps) {
         </CardContent>
       </Card>
       <div className="bg-white dark:bg-gray-950/80 rounded-xl border border-teal-100/80 dark:border-teal-800/20 p-3 shadow-md">
-        <DataTablePagination table={table} />
+        <DataTablePagination 
+          table={table} 
+          onPageChange={pagination?.onPageChange}
+          onPageSizeChange={pagination?.onPageSizeChange}
+        />
       </div>
     </motion.div>
   )

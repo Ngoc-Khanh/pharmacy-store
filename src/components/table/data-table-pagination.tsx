@@ -6,11 +6,37 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-r
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  onPageChange?: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
 }
 
 export function DataTablePagination<TData>({
   table,
+  onPageChange,
+  onPageSizeChange,
 }: DataTablePaginationProps<TData>) {
+  // Handler for page changes that supports both internal and external pagination
+  const handlePageChange = (pageIndex: number) => {
+    if (onPageChange) {
+      // For external pagination (1-indexed)
+      onPageChange(pageIndex + 1);
+    } else {
+      // For internal pagination (0-indexed)
+      table.setPageIndex(pageIndex);
+    }
+  };
+
+  // Handler for page size changes
+  const handlePageSizeChange = (size: number) => {
+    if (onPageSizeChange) {
+      // External page size handling
+      onPageSizeChange(size);
+    } else {
+      // Internal page size handling
+      table.setPageSize(size);
+    }
+  };
+
   return (
     <div className="flex items-center justify-between overflow-auto px-2">
       <div className="hidden flex-1 text-sm text-muted-foreground sm:block">
@@ -22,9 +48,8 @@ export function DataTablePagination<TData>({
           <p className="hidden text-sm font-medium sm:block">Số hàng mỗi trang</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onValueChange={(value: any) => {
-              table.setPageSize(Number(value));
+            onValueChange={(value) => {
+              handlePageSizeChange(Number(value));
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -47,7 +72,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
+            onClick={() => handlePageChange(0)}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Đi đến trang đầu tiên</span>
@@ -56,7 +81,10 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => table.previousPage()}
+            onClick={() => {
+              const prevPage = Math.max(0, table.getState().pagination.pageIndex - 1);
+              handlePageChange(prevPage);
+            }}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Đi đến trang trước</span>
@@ -65,7 +93,10 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => table.nextPage()}
+            onClick={() => {
+              const nextPage = Math.min(table.getPageCount() - 1, table.getState().pagination.pageIndex + 1);
+              handlePageChange(nextPage);
+            }}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Đi đến trang tiếp theo</span>
@@ -74,7 +105,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            onClick={() => handlePageChange(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Đi đến trang cuối cùng</span>
