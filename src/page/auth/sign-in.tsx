@@ -1,21 +1,21 @@
-import { BriefcaseMedical, Loader2, Mail, Lock } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { BriefcaseMedical, Loader2, Lock, Mail } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { AxiosError } from "axios";
-import { useState } from "react";
 import { toast } from "sonner";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { CredentialsForm, credentialsSchema } from "@/data/schemas";
 import { PasswordInput } from "@/components/custom/password-input";
 import { TextAnimate } from "@/components/magicui/text-animate";
-import { AuthAPI } from "@/services/api/auth.api";
 import { Button } from "@/components/ui/button";
-import AuthLayout from "@/layouts/auth.layout";
-import { routes, siteConfig } from "@/config";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { routeNames, routes, siteConfig } from "@/config";
+import { CredentialsForm, credentialsSchema } from "@/data/schemas";
+import AuthLayout from "@/layouts/auth.layout";
+import { AuthAPI } from "@/services/api/auth.api";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +59,7 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthLayout title="Đăng nhập">
+    <AuthLayout title={routeNames[routes.auth.login]}>
       <div className="flex flex-col gap-6 relative z-10">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -85,7 +85,7 @@ export default function LoginPage() {
                   Đăng nhập để truy cập tài khoản của bạn và quản lý nhu cầu sức khỏe của bạn
                 </div>
               </div>
-              
+
               <div className="space-y-5 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800/50 backdrop-blur-sm">
                 <FormField
                   control={form.control}
@@ -152,7 +152,7 @@ export default function LoginPage() {
                     <span className="text-white text-base">Đăng nhập</span>
                   )}
                 </Button>
-                
+
                 <div className="flex items-center justify-center gap-2 pt-2">
                   <div className="text-gray-500 dark:text-gray-400">
                     Không có tài khoản?{" "}

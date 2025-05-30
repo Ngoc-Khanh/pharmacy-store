@@ -15,3 +15,7 @@ export type registrationDto = {
   password: string;
   passwordConfirmation: string;
 }
+
+export type verifyAccountDto = {
+  verificationCode: string;
+}

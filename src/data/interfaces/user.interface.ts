@@ -12,6 +12,7 @@ export interface User {
   status: AccountStatus;
   addresses: UserAddress[];
   lastLoginAt?: string;
+  emailVerifiedAt?: string;
   readonly createdAt: string;
   readonly updatedAt: string;
 }

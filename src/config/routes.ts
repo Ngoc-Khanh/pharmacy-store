@@ -6,6 +6,7 @@ const baseRoutes = {
   auth: {
     login: "/sign-in",
     register: "/sign-up",
+    verifyAccount: (id: string) => `/${id}/verify-account`,
     forgotPassword: "/forgot-password",
   },
 
@@ -57,6 +58,12 @@ const baseRoutes = {
 };
 
 export const routeNames = {
+  // AUTH NAME ROUTES
+  [baseRoutes.auth.login]: "Đăng nhập",
+  [baseRoutes.auth.register]: "Đăng ký",
+  [baseRoutes.auth.verifyAccount]: "Xác thực tài khoản",
+  [baseRoutes.auth.forgotPassword]: "Quên mật khẩu",
+  
   // MAIN NAME ROUTES
   [baseRoutes.store.root]: "Trang chủ",
   [baseRoutes.store.categories]: "Danh mục",

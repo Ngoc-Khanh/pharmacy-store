@@ -1,7 +1,7 @@
-import { credentialsDto, registrationDto } from "@/data/dto";
+import { credentialsDto, registrationDto, verifyAccountDto } from "@/data/dto";
 import { Credential, User } from "@/data/interfaces";
-import { apiGet, apiPost } from "../api";
 import { SRO } from "@/data/sro";
+import { apiGet, apiPost } from "../api";
 
 export const AuthAPI = {
   async fetchLogin(credential: credentialsDto) {
@@ -16,6 +16,16 @@ export const AuthAPI = {
 
   async fetchUserProfile() {
     const res = await apiGet<SRO<User>>("/v1/auth/me");
+    return res.data.data;
+  },
+
+  async fetchVerifyAccount(otp: verifyAccountDto) {
+    const res = await apiPost<verifyAccountDto, SRO<Credential>>("/v1/auth/verify-email", otp);
+    return res.data.data;
+  },
+
+  async fetchResendVerifyAccount() {
+    const res = await apiPost<object, SRO<Credential>>("/v1/auth/resend-verification-email", {});
     return res.data.data;
   }
 }
