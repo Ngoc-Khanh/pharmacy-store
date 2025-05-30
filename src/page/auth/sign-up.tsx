@@ -1,20 +1,20 @@
-import { Loader2, Mail, Lock, User, Phone, Users } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { Loader2, Lock, Mail, Phone, User, Users } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { AxiosError } from "axios";
-import { useState } from "react";
 import { toast } from "sonner";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { RegistrationForm, registrationSchema } from "@/data/schemas";
 import { PasswordInput } from "@/components/custom/password-input";
-import { AuthAPI } from "@/services/api/auth.api";
 import { Button } from "@/components/ui/button";
-import AuthLayout from "@/layouts/auth.layout";
-import { routes, siteConfig } from "@/config";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { routeNames, routes, siteConfig } from "@/config";
+import { RegistrationForm, registrationSchema } from "@/data/schemas";
+import AuthLayout from "@/layouts/auth.layout";
+import { AuthAPI } from "@/services/api/auth.api";
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,9 +24,9 @@ export default function RegisterPage() {
     onSuccess: (res) => {
       localStorage.setItem(siteConfig.auth.jwt_key, res.accessToken);
       setIsLoading(false);
-      toast.success("Đăng ký thành công!", { description: "Đang chuyển hướng đến trang chủ..." });
+      toast.success("Đăng ký thành công!", { description: "Đang chuyển hướng..." });
       setTimeout(() => {
-        window.location.href = routes.store.root;
+        window.location.href = routes.auth.verifyAccount(res.user.id);
       }, 1000);
     },
     onError: (err: AxiosError) => {
@@ -60,7 +60,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthLayout title="Đăng ký" useModernLayout={true}>
+    <AuthLayout title={routeNames[routes.auth.register]} useModernLayout={true}>
       <div className="flex flex-col gap-5 max-w-sm mx-auto">
         <div className="text-center mb-1">
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Đăng ký tài khoản</h1>

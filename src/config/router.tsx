@@ -2,7 +2,7 @@ import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { DashboardAdminPage, InvoicesAdminPage, MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, SuppliersAdminPage, UsersAdminPage } from "@/page/admin";
 import CategoriesAdminPage from "@/page/admin/categories";
-import { LoginPage, RegisterPage } from "@/page/auth";
+import { LoginPage, RegisterPage, VerifyAccountPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
 import DeliverPage from "@/page/deliver";
 import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, RootPage } from "@/page/store";
@@ -32,6 +32,10 @@ export const reactRouter: RouteObject[] = [
   {
     path: routes.auth.register,
     element: <RegisterPage />,
+  },
+  {
+    path: routes.auth.verifyAccount(":id"),
+    element: <VerifyAccountPage />,
   },
   {
     path: routes.auth.forgotPassword,
