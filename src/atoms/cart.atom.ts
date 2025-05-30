@@ -2,6 +2,7 @@ import { CartItem, Medicine } from "@/data/interfaces";
 import { atom } from "jotai";
 import { AccountAPI } from "@/services/api/account.api";
 import { toast } from "sonner";
+import { isAuthenticatedAtom } from "./auth.atom";
 
 // Atom để theo dõi state gọi API (chỉ sử dụng nội bộ, không dùng cho loading UI)
 export const cartApiLoadingAtom = atom(false);
@@ -16,6 +17,14 @@ export const cartAtom = atom<CartItem[]>([]);
 export const initCartAtom = atom(
   null,
   async (get, set) => {
+    // Kiểm tra người dùng đã đăng nhập hay chưa
+    const isAuthenticated = get(isAuthenticatedAtom);
+    if (!isAuthenticated) {
+      // Nếu chưa đăng nhập, không thực hiện bất kỳ API call nào
+      set(cartAtom, []);
+      return;
+    }
+
     // Chỉ cần loading khi lần đầu khởi tạo
     const isLoading = get(cartApiLoadingAtom);
     if (isLoading) return; // Tránh gọi API nhiều lần
@@ -56,6 +65,13 @@ export const cartTotalPriceAtom = atom((get) => {
 export const addToCartAtom = atom(
   null,
   async (get, set, { medicine, quantity }: { medicine: Medicine; quantity: number }) => {
+    // Kiểm tra người dùng đã đăng nhập hay chưa
+    const isAuthenticated = get(isAuthenticatedAtom);
+    if (!isAuthenticated) {
+      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      return;
+    }
+
     if (!medicine?.id) {
       console.error("Đối tượng sản phẩm không hợp lệ", medicine);
       toast.error("Không thể thêm vào giỏ hàng do dữ liệu không hợp lệ");
@@ -108,6 +124,13 @@ export const addToCartAtom = atom(
 export const updateCartItemQuantityAtom = atom(
   null,
   async (get, set, update: { medicineId: string; quantity: number }) => {
+    // Kiểm tra người dùng đã đăng nhập hay chưa
+    const isAuthenticated = get(isAuthenticatedAtom);
+    if (!isAuthenticated) {
+      toast.error("Vui lòng đăng nhập để cập nhật giỏ hàng");
+      return;
+    }
+
     if (!update?.medicineId) {
       console.error("ID sản phẩm không hợp lệ", update);
       toast.error("Không thể cập nhật giỏ hàng do dữ liệu không hợp lệ");
@@ -162,6 +185,13 @@ export const updateCartItemQuantityAtom = atom(
 export const removeFromCartAtom = atom(
   null,
   async (get, set, medicineId: string) => {
+    // Kiểm tra người dùng đã đăng nhập hay chưa
+    const isAuthenticated = get(isAuthenticatedAtom);
+    if (!isAuthenticated) {
+      toast.error("Vui lòng đăng nhập để xóa sản phẩm khỏi giỏ hàng");
+      return;
+    }
+
     if (!medicineId) {
       console.error("ID sản phẩm không hợp lệ");
       toast.error("Không thể xóa khỏi giỏ hàng do dữ liệu không hợp lệ");
@@ -198,6 +228,13 @@ export const removeFromCartAtom = atom(
 export const clearCartAtom = atom(
   null,
   async (get, set) => {
+    // Kiểm tra người dùng đã đăng nhập hay chưa
+    const isAuthenticated = get(isAuthenticatedAtom);
+    if (!isAuthenticated) {
+      toast.error("Vui lòng đăng nhập để xóa giỏ hàng");
+      return;
+    }
+    
     // Lưu lại trạng thái hiện tại để có thể hoàn tác nếu API lỗi
     const currentCart = get(cartAtom);
     
