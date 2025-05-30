@@ -16,6 +16,7 @@ import { Medicine } from "@/data/interfaces";
 export default function MedicinesPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const queryParams = new URLSearchParams(location.search);
   const currentPage = parseInt(queryParams.get("page") || "1", 10);
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10", 10));

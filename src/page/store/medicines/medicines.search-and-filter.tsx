@@ -56,10 +56,13 @@ export function MedicinesSearchAndFilter({
             <SelectValue placeholder="Sắp xếp" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="relevance">Phổ biến</SelectItem>
+            <SelectItem value="newest">Mới nhất</SelectItem>
+            <SelectItem value="oldest">Cũ nhất</SelectItem>
             <SelectItem value="price-asc">Giá: Thấp đến cao</SelectItem>
             <SelectItem value="price-desc">Giá: Cao đến thấp</SelectItem>
-            <SelectItem value="rating">Đánh giá</SelectItem>
+            <SelectItem value="name-asc">Tên: A-Z</SelectItem>
+            <SelectItem value="name-desc">Tên: Z-A</SelectItem>
+            <SelectItem value="rating">Đánh giá cao nhất</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -102,10 +105,13 @@ export function MedicinesSearchAndFilter({
           <SelectValue placeholder="Sắp xếp" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="relevance">Phổ biến</SelectItem>
+          <SelectItem value="newest">Mới nhất</SelectItem>
+          <SelectItem value="oldest">Cũ nhất</SelectItem>
           <SelectItem value="price-asc">Giá: Thấp đến cao</SelectItem>
           <SelectItem value="price-desc">Giá: Cao đến thấp</SelectItem>
-          <SelectItem value="rating">Đánh giá</SelectItem>
+          <SelectItem value="name-asc">Tên: A-Z</SelectItem>
+          <SelectItem value="name-desc">Tên: Z-A</SelectItem>
+          <SelectItem value="rating">Đánh giá cao nhất</SelectItem>
         </SelectContent>
       </Select>
 

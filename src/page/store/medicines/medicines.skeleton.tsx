@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export function MedicinesSkeleton() {
   return (
-    Array(8).fill(0).map((_, index) => (
+    Array(12).fill(0).map((_, index) => (
       <Card key={index} className="overflow-hidden h-full flex flex-col bg-background/50 backdrop-blur-sm border-muted animate-pulse">
         <div className="relative pt-[100%] bg-gray-100 dark:bg-gray-800/50 overflow-hidden">
           <div className="absolute inset-0 flex items-center justify-center">
