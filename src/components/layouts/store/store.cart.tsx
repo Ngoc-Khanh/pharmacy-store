@@ -1,4 +1,5 @@
 import { cartAtom, cartItemCountAtom, cartTotalPriceAtom, clearCartAtom, removeFromCartAtom, updateCartItemQuantityAtom, initCartAtom, cartApiLoadingAtom, cartErrorAtom } from "@/atoms/cart.atom";
+import { isAuthenticatedAtom } from "@/atoms/auth.atom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -14,6 +15,7 @@ import { useEffect } from "react";
 
 export default function StoreCart() {
   const navigate = useNavigate();
+  const [isAuthenticated] = useAtom(isAuthenticatedAtom);
   const [cart] = useAtom(cartAtom);
   const [itemCount] = useAtom(cartItemCountAtom);
   const [totalPrice] = useAtom(cartTotalPriceAtom);
@@ -24,16 +26,18 @@ export default function StoreCart() {
   const [isInitializing] = useAtom(cartApiLoadingAtom);
   const [error] = useAtom(cartErrorAtom);
 
-  // Khởi tạo giỏ hàng khi component mount
   useEffect(() => {
-    const loadCart = async () => {
-      await initCart();
-    };
-    loadCart();
-  }, [initCart]);
+    if (isAuthenticated) {
+      const loadCart = async () => {
+        await initCart();
+      };
+      loadCart();
+    }
+  }, [initCart, isAuthenticated]);
+
+  if (!isAuthenticated) return null;
 
   const handleCheckout = () => {
-    // Chuyển đến trang thanh toán
     navigate(routes.store.checkout);
     toast.success("Đang chuyển đến trang thanh toán...");
   };
@@ -45,7 +49,6 @@ export default function StoreCart() {
     }
   };
 
-  // Lọc các item không hợp lệ
   const validCartItems = cart.filter(item => item?.medicine?.id);
 
   return (
@@ -188,8 +191,8 @@ export default function StoreCart() {
                           <div className="flex items-center border rounded-full overflow-hidden shadow-sm">
                             <button
                               className={`px-2 py-0.5 text-gray-700 dark:text-gray-300 ${(item.quantity <= 1 || !item.medicine?.id)
-                                  ? 'opacity-50 cursor-not-allowed'
-                                  : 'hover:bg-green-50 dark:hover:bg-green-900/20'
+                                ? 'opacity-50 cursor-not-allowed'
+                                : 'hover:bg-green-50 dark:hover:bg-green-900/20'
                                 }`}
                               onClick={() => {
                                 if (item.quantity > 1 && item.medicine?.id) {
@@ -205,8 +208,8 @@ export default function StoreCart() {
                             </span>
                             <button
                               className={`px-2 py-0.5 text-gray-700 dark:text-gray-300 ${(item.quantity >= (item.medicine.variants?.limitQuantity ?? Infinity) || !item.medicine?.id)
-                                  ? 'opacity-50 cursor-not-allowed'
-                                  : 'hover:bg-green-50 dark:hover:bg-green-900/20'
+                                ? 'opacity-50 cursor-not-allowed'
+                                : 'hover:bg-green-50 dark:hover:bg-green-900/20'
                                 }`}
                               onClick={() => {
                                 if (item.medicine?.id) {

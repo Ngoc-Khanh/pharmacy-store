@@ -61,7 +61,7 @@ export const routeNames = {
   // AUTH NAME ROUTES
   [baseRoutes.auth.login]: "Đăng nhập",
   [baseRoutes.auth.register]: "Đăng ký",
-  [baseRoutes.auth.verifyAccount]: "Xác thực tài khoản",
+  [baseRoutes.auth.verifyAccount(":id")]: "Xác thực tài khoản",
   [baseRoutes.auth.forgotPassword]: "Quên mật khẩu",
   
   // MAIN NAME ROUTES
