@@ -1,5 +1,5 @@
 export type { AddAddressDto, CartItemDto, ChangePasswordDto, UpdateProfileDto } from "./account.dto";
-export type { credentialsDto, registrationDto, verifyAccountDto } from "./auth.dto";
+export type { credentialsDto, forgotPasswordDto, registrationDto, resetPasswordDto, verifyAccountDto } from "./auth.dto";
 export type { AddCategoryDto } from "./category.dto";
 export type { InvoiceCreateWithNoOrderDto, InvoiceUpdateStatusDto } from "./invoice.dto";
 export type { AddMedicineDto } from "./medicine.dto";

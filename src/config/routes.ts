@@ -8,6 +8,7 @@ const baseRoutes = {
     register: "/sign-up",
     verifyAccount: (id: string) => `/${id}/verify-account`,
     forgotPassword: "/forgot-password",
+    resetPassword: (token: string) => `/store/${token}/reset-password`,
   },
 
   // MAIN ROUTES
