@@ -1,5 +1,5 @@
 import { InvoiceCreateWithNoOrderDto, InvoiceUpdateStatusDto } from "@/data/dto"
-import { Invoice } from "@/data/interfaces"
+import { Invoice, InvoiceDetails } from "@/data/interfaces"
 import { SRO } from "@/data/sro"
 import { apiDelete, apiGet, apiPost, apiPut } from "../api"
 
@@ -18,9 +18,8 @@ export const InvoiceAPI = {
     const res = await apiDelete<SRO<Invoice>>(`v1/admin/invoices/${id}/delete`)
     return res.data.data;
   },
-
   async InvoiceGetById(id: string) {
-    const res = await apiGet<SRO<Invoice>>(`v1/admin/invoices/${id}/details`)
+    const res = await apiGet<SRO<InvoiceDetails>>(`v1/admin/invoices/${id}/details`)
     return res.data.data;
   },
 

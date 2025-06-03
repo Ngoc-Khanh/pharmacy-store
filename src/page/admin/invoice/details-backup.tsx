@@ -1,34 +1,46 @@
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { siteConfig } from "@/config";
-import { InvoiceStatus, PaymentMethod } from "@/data/enum";
 import { InvoiceUpdateStatusDto } from "@/data/dto";
-import { InvoiceDetails, InvoiceDetailsItem } from "@/data/interfaces";
-import { InvoiceAPI } from "@/services/api/invoice.api";
+import { InvoiceStatus, PaymentMethod } from "@/data/enum";
+import { InvoiceDetails } from "@/data/interfaces";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { InvoiceAPI } from "@/services/api/invoice.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowLeft, Receipt, Clock, Ban, FileText, CheckCircle2, 
-  RefreshCw, PackageCheck, User, CreditCard, Calendar, Edit, Save,
-  Download, Copy, AlertTriangle, Info, Phone, Mail, MapPin,
-  Package, DollarSign, Hash, X
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  Ban,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  Copy,
+  CreditCard,
+  DollarSign,
+  Download,
+  Edit,
+  FileText,
+  Hash,
+  Info,
+  Mail,
+  MapPin,
+  Package,
+  PackageCheck,
+  Phone,
+  Receipt,
+  RefreshCw,
+  Save,
+  User,
+  X
 } from "lucide-react";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -39,19 +51,13 @@ export default function InvoiceDetailsPage() {
   const queryClient = useQueryClient();
   const [editingStatus, setEditingStatus] = useState(false);
   const [newStatus, setNewStatus] = useState<InvoiceStatus | null>(null);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  
+
   // Fetch invoice details
-  const { data: invoice, isLoading, error, refetch } = useQuery<InvoiceDetails>({
+  const { data: invoice, isLoading, error } = useQuery<InvoiceDetails>({
     queryKey: ["invoice", id],
-    queryFn: () => {
-      if (!id) throw new Error("No ID provided");
-      return InvoiceAPI.InvoiceGetById(id);
-    },
+    queryFn: () => id ? InvoiceAPI.InvoiceGetById(id) : Promise.reject("No ID"),
     enabled: !!id,
     refetchOnWindowFocus: false,
-    retry: 2,
-    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   // Update status mutation
@@ -65,61 +71,29 @@ export default function InvoiceDetailsPage() {
       queryClient.invalidateQueries({ queryKey: ["invoices"] });
       toast.success("Cập nhật trạng thái hóa đơn thành công!");
       setEditingStatus(false);
-      setShowConfirmDialog(false);
-    },    onError: (error: Error) => {
-      toast.error("Lỗi khi cập nhật trạng thái: " + (error?.message || "Vui lòng thử lại"));
+    },
+    onError: (error) => {
+      toast.error("Lỗi khi cập nhật trạng thái: " + error.message);
     }
   });
 
-  // Handle status update with confirmation
-  const handleStatusUpdate = useCallback(() => {
+  // Handle status update
+  const handleStatusUpdate = () => {
     if (!newStatus) {
       toast.error("Vui lòng chọn trạng thái mới");
       return;
     }
 
-    // Show confirmation for critical status changes
-    if (newStatus === InvoiceStatus.CANCELLED || newStatus === InvoiceStatus.REFUNDED) {
-      setShowConfirmDialog(true);
-      return;
-    }
-
     updateStatusMutation.mutate({ status: newStatus });
-  }, [newStatus, updateStatusMutation]);
-
-  // Confirm status update
-  const confirmStatusUpdate = useCallback(() => {
-    if (newStatus) {
-      updateStatusMutation.mutate({ status: newStatus });
-    }
-  }, [newStatus, updateStatusMutation]);
+  };
 
   // Start editing status
-  const startEditingStatus = useCallback(() => {
+  const startEditingStatus = () => {
     if (invoice) {
       setNewStatus(invoice.status);
       setEditingStatus(true);
     }
-  }, [invoice]);
-
-  // Cancel editing
-  const cancelEditing = useCallback(() => {
-    setEditingStatus(false);
-    setNewStatus(null);
-  }, []);
-
-  // Copy invoice ID to clipboard
-  const copyInvoiceId = useCallback(() => {
-    if (invoice?.id) {
-      navigator.clipboard.writeText(invoice.id);
-      toast.success("Đã sao chép ID hóa đơn");
-    }
-  }, [invoice?.id]);
-
-  // Print invoice
-  const printInvoice = useCallback(() => {
-    window.print();
-  }, []);
+  };
 
   // Get status badge style with improved design
   const getStatusBadge = (status: InvoiceStatus) => {
@@ -250,7 +224,9 @@ export default function InvoiceDetailsPage() {
                 {error ? "Có lỗi xảy ra khi tải hóa đơn" : `Không thể tìm thấy hóa đơn với ID: ${id}`}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button variant="outline" onClick={() => refetch()} className="gap-2">
+                <Button variant="outline"
+                  // onClick={() => refetch()}
+                  className="gap-2">
                   <RefreshCw className="h-4 w-4" />
                   Thử lại
                 </Button>
@@ -282,16 +258,16 @@ export default function InvoiceDetailsPage() {
             transition={{ duration: 0.2 }}
             className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
           >
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => navigate("/admin/invoices")}
               className="gap-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 self-start"
             >
               <ArrowLeft className="h-4 w-4" />
               Quay lại danh sách
             </Button>
-            
+
             <div className="flex flex-wrap items-center gap-3">
               <AnimatePresence mode="wait">
                 {!editingStatus ? (
@@ -304,9 +280,9 @@ export default function InvoiceDetailsPage() {
                   >
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={startEditingStatus}
                           className="gap-2 border-emerald-200 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800/40 dark:text-emerald-400 dark:hover:text-emerald-300 dark:hover:bg-emerald-900/20"
                         >
@@ -328,18 +304,18 @@ export default function InvoiceDetailsPage() {
                     transition={{ duration: 0.2 }}
                     className="flex gap-2"
                   >
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={cancelEditing}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      // onClick={cancelEditing}
                       className="gap-2"
                     >
                       <X className="h-4 w-4" />
                       Hủy
                     </Button>
-                    <Button 
-                      variant="default" 
-                      size="sm" 
+                    <Button
+                      variant="default"
+                      size="sm"
                       onClick={handleStatusUpdate}
                       disabled={updateStatusMutation.isPending || !newStatus}
                       className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
@@ -353,10 +329,10 @@ export default function InvoiceDetailsPage() {
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
-                    onClick={printInvoice}
+                    // onClick={printInvoice}
                     className="gap-2 border-blue-200 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:border-blue-800/40 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20"
                   >
                     <Download className="h-4 w-4" />
@@ -395,7 +371,7 @@ export default function InvoiceDetailsPage() {
                           variant="ghost"
                           size="sm"
                           className="h-6 w-6 p-0 hover:bg-emerald-100 dark:hover:bg-emerald-800/30"
-                          onClick={copyInvoiceId}
+                        // onClick={copyInvoiceId}
                         >
                           <Copy className="h-3 w-3" />
                         </Button>
@@ -462,7 +438,7 @@ export default function InvoiceDetailsPage() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-                
+
                 <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                   <Calendar className="h-4 w-4" />
                   <span>Phát hành: {formatDate(new Date(invoice.issuedAt))}</span>
@@ -517,12 +493,12 @@ export default function InvoiceDetailsPage() {
                           </p>
                         </div>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400">Mã đơn hàng</h4>
                         <p className="text-base font-medium">{invoice.orderId || "N/A"}</p>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400">Ngày phát hành</h4>
                         <div className="flex items-center gap-2">
@@ -530,7 +506,7 @@ export default function InvoiceDetailsPage() {
                           <p className="font-medium">{formatDate(new Date(invoice.issuedAt))}</p>
                         </div>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400">Phương thức thanh toán</h4>
                         {getPaymentMethodDisplay(invoice.paymentMethod)}
@@ -538,7 +514,7 @@ export default function InvoiceDetailsPage() {
                     </div>
 
                     <Separator />
-                    
+
                     <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-4">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Tổng tiền hóa đơn</span>
@@ -586,8 +562,8 @@ export default function InvoiceDetailsPage() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                          {invoice.items.map((item: InvoiceDetailsItem, index: number) => (
-                            <motion.tr 
+                          {invoice.items.map((item, index) => (
+                            <motion.tr
                               key={index}
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
@@ -661,7 +637,7 @@ export default function InvoiceDetailsPage() {
                             {invoice.user.fullName}
                           </p>
                         </div>
-                        
+
                         <div>
                           <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Email</h4>
                           <div className="flex items-center gap-2">
@@ -669,7 +645,7 @@ export default function InvoiceDetailsPage() {
                             <p className="text-base">{invoice.user.email}</p>
                           </div>
                         </div>
-                        
+
                         <div>
                           <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Số điện thoại</h4>
                           <div className="flex items-center gap-2">
@@ -677,7 +653,7 @@ export default function InvoiceDetailsPage() {
                             <p className="text-base">{invoice.user.phone || "Chưa cập nhật"}</p>
                           </div>
                         </div>
-                        
+
                         {invoice.user.address && (
                           <div>
                             <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Địa chỉ</h4>
@@ -688,11 +664,11 @@ export default function InvoiceDetailsPage() {
                           </div>
                         )}
                       </div>
-                      
+
                       <Separator />
-                      
-                      <Button 
-                        variant="outline" 
+
+                      <Button
+                        variant="outline"
                         size="sm"
                         className="w-full gap-2 hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:border-emerald-800 dark:hover:text-emerald-400"
                         asChild
@@ -718,9 +694,9 @@ export default function InvoiceDetailsPage() {
             </motion.div>
           </div>
         </div>
-        
+
         {/* Enhanced Confirmation Dialog */}
-        <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        {/* <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -739,7 +715,7 @@ export default function InvoiceDetailsPage() {
               <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20">
                 <AlertTriangle className="h-4 w-4 text-amber-600" />
                 <AlertDescription className="text-amber-700 dark:text-amber-400">
-                  {newStatus === InvoiceStatus.CANCELLED 
+                  {newStatus === InvoiceStatus.CANCELLED
                     ? "Hủy hóa đơn sẽ đánh dấu giao dịch này là không hợp lệ."
                     : "Hoàn tiền sẽ yêu cầu xử lý bổ sung từ phòng kế toán."
                   }
@@ -750,7 +726,7 @@ export default function InvoiceDetailsPage() {
               <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
                 Hủy bỏ
               </Button>
-              <Button 
+              <Button
                 onClick={confirmStatusUpdate}
                 disabled={updateStatusMutation.isPending}
                 className="bg-amber-600 hover:bg-amber-700 text-white"
@@ -759,10 +735,10 @@ export default function InvoiceDetailsPage() {
               </Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
 
         {/* Simple Status Update Dialog */}
-        <Dialog open={editingStatus && !showConfirmDialog} onOpenChange={setEditingStatus}>
+        {/* <Dialog open={editingStatus && !showConfirmDialog} onOpenChange={setEditingStatus}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Cập nhật trạng thái hóa đơn</DialogTitle>
@@ -805,7 +781,7 @@ export default function InvoiceDetailsPage() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={cancelEditing}>Hủy</Button>
-              <Button 
+              <Button
                 onClick={handleStatusUpdate}
                 disabled={updateStatusMutation.isPending || !newStatus}
                 className="bg-emerald-600 hover:bg-emerald-700"
@@ -814,7 +790,7 @@ export default function InvoiceDetailsPage() {
               </Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
     </TooltipProvider>
   );

@@ -33,6 +33,13 @@ export interface InvoiceDetails {
   status: InvoiceStatus;
   readonly createdAt: string;
   readonly updatedAt: string;
+  user?: {
+    id: string;
+    fullName: string;
+    email: string;
+    phone: string;
+    address?: string;
+  };
   order: {
     shippingFee: string;
     discount: string;

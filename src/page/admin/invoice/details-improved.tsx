@@ -17,7 +17,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { siteConfig } from "@/config";
 import { InvoiceStatus, PaymentMethod } from "@/data/enum";
 import { InvoiceUpdateStatusDto } from "@/data/dto";
-import { InvoiceDetails, InvoiceDetailsItem } from "@/data/interfaces";
+import { InvoiceDetails } from "@/data/interfaces";
 import { InvoiceAPI } from "@/services/api/invoice.api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -66,7 +66,9 @@ export default function InvoiceDetailsPage() {
       toast.success("Cập nhật trạng thái hóa đơn thành công!");
       setEditingStatus(false);
       setShowConfirmDialog(false);
-    },    onError: (error: Error) => {
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
       toast.error("Lỗi khi cập nhật trạng thái: " + (error?.message || "Vui lòng thử lại"));
     }
   });
@@ -586,7 +588,7 @@ export default function InvoiceDetailsPage() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                          {invoice.items.map((item: InvoiceDetailsItem, index: number) => (
+                          {invoice.items.map((item, index) => (
                             <motion.tr 
                               key={index}
                               initial={{ opacity: 0, x: -10 }}

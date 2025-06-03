@@ -38,7 +38,11 @@ export default function InvoicesDialogs() {
   // Fetch invoice details when view dialog is opened with an ID
   const { data: invoiceDetails, isLoading } = useQuery<InvoiceDetails | null>({
     queryKey: ["invoice", currentInvoice?.id],
-    queryFn: () => currentInvoice?.id ? InvoiceAPI.InvoiceGetById(currentInvoice.id) : null,
+    queryFn: async () => {
+      if (!currentInvoice?.id) return null;
+      const invoice = await InvoiceAPI.InvoiceGetById(currentInvoice.id);
+      return invoice as InvoiceDetails;
+    },
     enabled: open === "view" && !!currentInvoice?.id,
     refetchOnWindowFocus: false,
   });
