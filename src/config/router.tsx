@@ -2,11 +2,12 @@ import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { DashboardAdminPage, InvoicesAdminPage, MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, SuppliersAdminPage, UsersAdminPage } from "@/page/admin";
 import CategoriesAdminPage from "@/page/admin/categories";
+import { InvoiceDetailsPage } from "@/page/admin/invoice";
 import { LoginPage, RegisterPage, VerifyAccountPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
 import DeliverPage from "@/page/deliver";
 import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, RootPage } from "@/page/store";
-import { AddressesPage, CartPage, ChangePasswordPage, InvoiceDetailsPage, InvoicePage, OrderDetailsPage, OrderPage, RootAccountPage } from "@/page/store/account";
+import { AddressesPage, CartPage, ChangePasswordPage, InvoiceDetailsPage as StoreInvoiceDetailsPage, InvoicePage, OrderDetailsPage, OrderPage, RootAccountPage } from "@/page/store/account";
 
 import { Navigate, RouteObject } from "react-router-dom";
 
@@ -102,7 +103,7 @@ export const reactRouter: RouteObject[] = [
           },
           {
             path: routes.store.account.invoiceDetails(":id"),
-            element: <InvoiceDetailsPage />,
+            element: <StoreInvoiceDetailsPage />,
           }
         ]
       }
@@ -144,6 +145,10 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.admin.invoices,
         element: <InvoicesAdminPage />,
+      },
+      {
+        path: routes.admin.invoiceDetails(":id"),
+        element: <InvoiceDetailsPage />,
       },
       {
         path: "/admin/test",

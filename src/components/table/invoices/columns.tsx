@@ -53,7 +53,11 @@ export const invoicesColumns: ColumnDef<Invoice>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Order ID" />
     ),
-    cell: ({ row }) => <div>{row.getValue("orderId")}</div>,
+    cell: ({ row }) => (
+      <div className="text-sm font-normal text-gray-600 dark:text-gray-400 max-w-[180px] truncate">
+        {row.getValue("orderId")}
+      </div>
+    ),
     enableSorting: true,
     enableHiding: true,
   },
@@ -63,7 +67,7 @@ export const invoicesColumns: ColumnDef<Invoice>[] = [
       <DataTableColumnHeader column={column} title="Amount" />
     ),
     cell: ({ row }) => (
-      <div className="font-medium">
+      <div className="font-medium text-emerald-800 dark:text-emerald-300">
         {formatCurrency(row.getValue("totalPrice"))}
       </div>
     ),
@@ -79,7 +83,11 @@ export const invoicesColumns: ColumnDef<Invoice>[] = [
       const paymentMethod: PaymentMethod = row.getValue("paymentMethod");
       const label = getPaymentMethodLabel(paymentMethod);
       
-      return <div>{label}</div>;
+      return (
+        <div className="text-gray-700 dark:text-gray-300">
+          {label}
+        </div>
+      );
     },
     enableSorting: true,
     enableHiding: true,
@@ -97,6 +105,7 @@ export const invoicesColumns: ColumnDef<Invoice>[] = [
       
       return (
         <Badge 
+          variant="outline"
           className={getStatusStyle(status)}
         >
           {getStatusLabel(status)}
@@ -116,7 +125,11 @@ export const invoicesColumns: ColumnDef<Invoice>[] = [
     ),
     cell: ({ row }) => {
       const date = new Date(row.getValue("issuedAt"));
-      return <div>{format(date, "dd/MM/yyyy")}</div>;
+      return (
+        <div className="text-gray-700 dark:text-gray-300">
+          {format(date, "dd/MM/yyyy")}
+        </div>
+      );
     },
     enableSorting: true,
     enableHiding: true,
@@ -127,14 +140,14 @@ export const invoicesColumns: ColumnDef<Invoice>[] = [
       const invoice = row.original;
 
       return (
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-end">
           <Button
             variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+            size="icon"
+            className="h-8 w-8 p-0 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-full"
             asChild
           >
-            <Link to={`/admin/invoices/${invoice.id}`}>
+            <Link to={`/admin/invoice/${invoice.id}`}>
               <Eye className="h-4 w-4" />
               <span className="sr-only">View invoice details</span>
             </Link>
@@ -148,13 +161,15 @@ export const invoicesColumns: ColumnDef<Invoice>[] = [
 function getStatusStyle(status: InvoiceStatus): string {
   switch (status) {
     case InvoiceStatus.PAID:
-      return "bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400";
+      return "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800/40 min-w-[120px] justify-center";
     case InvoiceStatus.PENDING:
-      return "bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400";
+      return "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800/40 min-w-[120px] justify-center";
     case InvoiceStatus.CANCELLED:
-      return "bg-rose-100 text-rose-700 hover:bg-rose-200 dark:bg-rose-900/30 dark:text-rose-400";
+      return "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/20 dark:text-rose-400 dark:border-rose-800/40 min-w-[120px] justify-center";
+    case InvoiceStatus.REFUNDED:
+      return "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800/40 min-w-[120px] justify-center";
     default:
-      return "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300";
+      return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 min-w-[120px] justify-center";
   }
 }
 
@@ -166,6 +181,8 @@ function getStatusLabel(status: InvoiceStatus): string {
       return "Chờ thanh toán";
     case InvoiceStatus.CANCELLED:
       return "Đã hủy";
+    case InvoiceStatus.REFUNDED:
+      return "Đã hoàn tiền";
     default:
       return status;
   }
