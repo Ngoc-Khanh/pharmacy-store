@@ -47,3 +47,32 @@ export const registrationSchema = z
   });
 
 export type RegistrationForm = z.infer<typeof registrationSchema>;
+
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email("Vui lòng nhập địa chỉ email hợp lệ")
+    .min(1, "Email không được để trống"),
+})
+
+export type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = z
+  .object({
+    resetToken: z.string().min(1, "Token đặt lại mật khẩu không hợp lệ"),
+    password: z
+      .string()
+      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa, 1 chữ cái viết thường, 1 chữ số và 1 ký tự đặc biệt"
+      ),
+    passwordConfirmation: z.string(),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Mật khẩu không khớp",
+    path: ["passwordConfirmation"],
+  });
+
+export type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;

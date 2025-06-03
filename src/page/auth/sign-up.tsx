@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Loader2, Lock, Mail, Phone, User, Users } from "lucide-react";
-import { useState } from "react";
+import { CheckCircle2, Loader2, Lock, Mail, Phone, User, Users } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -16,8 +16,27 @@ import { RegistrationForm, registrationSchema } from "@/data/schemas";
 import AuthLayout from "@/layouts/auth.layout";
 import { AuthAPI } from "@/services/api/auth.api";
 
+const passwordRequirements = [
+  { id: "length", label: "Ít nhất 8 ký tự", regex: /.{8,}/, weight: 2 },
+  { id: "lowercase", label: "Ít nhất 1 chữ cái thường", regex: /[a-z]/, weight: 1 },
+  { id: "uppercase", label: "Ít nhất 1 chữ cái in hoa", regex: /[A-Z]/, weight: 1 },
+  { id: "digit", label: "Ít nhất 1 chữ số", regex: /\d/, weight: 1 },
+  { id: "special", label: "Ít nhất 1 ký tự đặc biệt (@$!%*?&)", regex: /[@$!%*?&]/, weight: 2 },
+  { id: "noSpaces", label: "Không chứa khoảng trắng", regex: /^\S*$/, weight: 1 },
+];
+
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordValue, setPasswordValue] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const [requirements, setRequirements] = useState<{ [key: string]: boolean }>({
+    length: false,
+    lowercase: false,
+    uppercase: false,
+    digit: false,
+    special: false,
+    noSpaces: false,
+  });
 
   const registerMutation = useMutation({
     mutationFn: AuthAPI.fetchRegister,
@@ -40,6 +59,34 @@ export default function RegisterPage() {
     }
   });
 
+  // Calculate password strength and validate requirements
+  useEffect(() => {
+    if (!passwordValue) {
+      setPasswordStrength(0);
+      setRequirements({
+        length: false,
+        lowercase: false,
+        uppercase: false,
+        digit: false,
+        special: false,
+        noSpaces: false,
+      });
+      return;
+    }
+
+    const newRequirements = {} as { [key: string]: boolean };
+    let metCount = 0;
+
+    passwordRequirements.forEach(req => {
+      const isMet = req.regex.test(passwordValue);
+      newRequirements[req.id] = isMet;
+      if (isMet) metCount++;
+    });
+
+    setRequirements(newRequirements);
+    setPasswordStrength((metCount / passwordRequirements.length) * 100);
+  }, [passwordValue]);
+
   const form = useForm<RegistrationForm>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
@@ -54,6 +101,16 @@ export default function RegisterPage() {
   });
 
   const onSubmit = (data: RegistrationForm) => {
+    // Check if password meets all requirements
+    const allRequirementsMet = Object.values(requirements).every(req => req);
+    
+    if (!allRequirementsMet) {
+      toast.error("Mật khẩu không đủ yêu cầu!", { 
+        description: "Vui lòng đảm bảo mật khẩu đáp ứng tất cả các yêu cầu." 
+      });
+      return;
+    }
+
     setIsLoading(true);
     console.log(data);
     registerMutation.mutate(data);
@@ -184,7 +241,7 @@ export default function RegisterPage() {
             />
 
             {/* Password fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-4">
               <FormField
                 control={form.control}
                 name="password"
@@ -198,10 +255,59 @@ export default function RegisterPage() {
                           {...field}
                           placeholder="********"
                           className="h-10 pl-9 border-gray-200 dark:border-gray-800 bg-transparent dark:bg-transparent focus:ring-2 focus:ring-green-500/20 focus:border-green-500 dark:focus:border-green-400 rounded-lg text-gray-800 dark:text-gray-200 text-sm"
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setPasswordValue(e.target.value);
+                          }}
                         />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs font-medium" />
+
+                    {/* Password requirements */}
+                    {passwordValue && (
+                      <div className="mt-3 space-y-3">
+                        {/* Progress bar */}
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">Độ mạnh mật khẩu</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {Math.round(passwordStrength)}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div 
+                              className={`h-full rounded-full transition-all duration-300 ${
+                                passwordStrength >= 100 ? 'bg-green-500' :
+                                passwordStrength >= 67 ? 'bg-blue-500' :
+                                passwordStrength >= 34 ? 'bg-yellow-500' : 'bg-red-500'
+                              }`}
+                              style={{ width: `${passwordStrength}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Requirements checklist */}
+                        <div className="space-y-2">
+                          {passwordRequirements.map((req) => (
+                            <div key={req.id} className="flex items-center gap-2">
+                              {requirements[req.id] ? (
+                                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                              ) : (
+                                <div className="h-4 w-4 rounded-full border-2 border-gray-300 dark:border-gray-600" />
+                              )}
+                              <span className={`text-xs ${
+                                requirements[req.id] 
+                                  ? 'text-green-600 dark:text-green-400' 
+                                  : 'text-gray-500 dark:text-gray-400'
+                              }`}>
+                                {req.label}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </FormItem>
                 )}
               />
@@ -244,8 +350,8 @@ export default function RegisterPage() {
             {/* Submit button */}
             <Button
               type="submit"
-              className="w-full h-10 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-md font-medium transition-all duration-200 ease-in-out transform hover:translate-y-[-1px] hover:shadow-lg text-sm"
-              disabled={isLoading}
+              className="w-full h-10 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-md font-medium transition-all duration-200 ease-in-out transform hover:translate-y-[-1px] hover:shadow-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              disabled={isLoading || !Object.values(requirements).every(req => req)}
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">

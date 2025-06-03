@@ -19,3 +19,13 @@ export type registrationDto = {
 export type verifyAccountDto = {
   verificationCode: string;
 }
+
+export type forgotPasswordDto = {
+  email: string;
+}
+
+export type resetPasswordDto = {
+  resetToken: string;
+  password: string;
+  passwordConfirmation: string;
+}
