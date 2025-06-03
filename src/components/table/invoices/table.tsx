@@ -51,13 +51,13 @@ export default function InvoicesDataTable({ columns, data }: DataTableProps) {
   });
 
   const fadeInUpVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: (i: number) => ({ 
       opacity: 1, 
       y: 0, 
       transition: { 
-        delay: i * 0.05, 
-        duration: 0.4,
+        delay: i * 0.03, 
+        duration: 0.25,
         ease: "easeOut" 
       } 
     })
@@ -74,19 +74,26 @@ export default function InvoicesDataTable({ columns, data }: DataTableProps) {
           transition={{ duration: 0.3 }}
           className="relative"
         >
-          <div className="overflow-y-auto max-h-[calc(100vh-340px)]">
-            <Table>
-              <TableHeader className="bg-emerald-50/70 dark:bg-emerald-950/40 sticky top-0 z-10">
+          <div className="overflow-x-auto">
+            <Table className="w-full">
+              <TableHeader className="bg-emerald-50/80 dark:bg-emerald-950/40 sticky top-0 z-10">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id} className="border-b border-emerald-100 dark:border-emerald-800/20 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/50">
+                  <TableRow key={headerGroup.id} className="border-b border-emerald-100 dark:border-emerald-800/20">
                     {headerGroup.headers.map((header) => {
                       return (
                         <TableHead
                           key={header.id}
-                          style={{ width: `${header.getSize()}px` }}
                           colSpan={header.colSpan}
                           className={cn(
-                            "font-semibold text-emerald-800 dark:text-emerald-300 text-sm py-4",
+                            "h-11 font-medium text-emerald-800 dark:text-emerald-300 text-sm px-4 py-3",
+                            header.column.id === "select" && "w-[40px]",
+                            header.column.id === "invoiceNumber" && "w-[180px]",
+                            header.column.id === "orderId" && "w-[200px]",
+                            header.column.id === "totalPrice" && "w-[120px]",
+                            header.column.id === "paymentMethod" && "w-[200px]",
+                            header.column.id === "status" && "w-[150px]",
+                            header.column.id === "issuedAt" && "w-[120px]",
+                            header.column.id === "actions" && "w-[60px] text-right",
                             header.column.columnDef.meta?.className
                           )}
                         >
@@ -111,13 +118,19 @@ export default function InvoicesDataTable({ columns, data }: DataTableProps) {
                       initial="hidden"
                       animate="visible"
                       variants={fadeInUpVariants}
-                      className="border-b border-emerald-50 dark:border-emerald-800/10 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 data-[state=selected]:bg-emerald-100 dark:data-[state=selected]:bg-emerald-800/20"
+                      className="group border-b border-emerald-50 dark:border-emerald-800/10 hover:bg-emerald-50/70 dark:hover:bg-emerald-900/20 data-[state=selected]:bg-emerald-100 dark:data-[state=selected]:bg-emerald-800/30 transition-colors"
                       data-state={row.getIsSelected() && "selected"}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell 
                           key={cell.id}
-                          className="py-3 px-4"
+                          className={cn(
+                            "h-14 px-4 py-3 align-middle",
+                            cell.column.id === "totalPrice" && "font-medium",
+                            cell.column.id === "invoiceNumber" && "text-emerald-700 dark:text-emerald-400 font-medium",
+                            cell.column.id === "status" && "w-[150px]",
+                            cell.column.id === "actions" && "text-right"
+                          )}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
