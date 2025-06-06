@@ -6,6 +6,7 @@ import { InvoiceDetailsPage } from "@/page/admin/invoice";
 import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, VerifyAccountPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
 import DeliverPage from "@/page/deliver";
+import { NotActivePage } from "@/page/error";
 import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, RootPage } from "@/page/store";
 import { AddressesPage, CartPage, ChangePasswordPage, InvoicePage, OrderDetailsPage, OrderPage, RootAccountPage, InvoiceDetailsPage as StoreInvoiceDetailsPage } from "@/page/store/account";
 
@@ -172,10 +173,10 @@ export const reactRouter: RouteObject[] = [
   },
 
   // ERROR ROUTER
-  { path: routes.generalError, element: <div>General Error Page's</div> },
-  { path: routes.notfoundError, element: <div>Not Found Error Page's</div> },
-  { path: routes.maintenanceError, element: <div>Maintenance Error Page's</div> },
-  { path: routes.unauthorizedError, element: <div>Unanthorized Error Page's</div> },
+  { path: routes.errors.general, element: <div>General Error Page's</div> },
+  { path: routes.errors.notfound, element: <div>Not Found Error Page's</div> },
+  { path: routes.errors.maintenance, element: <div>Maintenance Error Page's</div> },
+  { path: routes.errors.notActive, element: <NotActivePage /> },
 
   // FALLBACK 404 ROUTER
   { path: "*", element: <div>Not Found Error Page's</div> },
