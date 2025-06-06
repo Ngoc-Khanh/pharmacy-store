@@ -1,6 +1,7 @@
 export type { Cart, CartItem } from "./account.interface";
 export type { CheckTokenResetPassword, Credential } from "./auth.interface";
 export type { Category } from "./category.interface";
+export type { DashboardStats, Overview, TodayStats } from "./dashboard.interface";
 export type { Invoice, InvoiceDetails, InvoiceDetailsItem, InvoiceItem } from "./invoice.interface";
 export type { Details, Medicine, UsageGuide } from "./medicine.interface";
 export type { Order, OrderAdmin, OrderAdminDetails, OrderAdminDetailsItem, OrderDeliver, OrderDeliverItem, OrderDetails, OrderDetailsItem, OrderItem } from "./order.interface";
