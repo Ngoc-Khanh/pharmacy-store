@@ -79,7 +79,7 @@ export const routeNames = {
 
   // ADMIN NAME ROUTES
   [baseRoutes.admin.root]: "Admin",
-  [baseRoutes.admin.dashboard]: "Bảng điều khiển",
+  [baseRoutes.admin.dashboard]: "Thống kê",
   [baseRoutes.admin.settings.root]: "Cài đặt",
   [baseRoutes.admin.users]: "Quản lý người dùng",
   [baseRoutes.admin.categories]: "Quản lý danh mục",
