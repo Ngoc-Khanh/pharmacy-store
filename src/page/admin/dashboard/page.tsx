@@ -2,6 +2,7 @@ import { routeNames, routes, siteConfig } from "@/config";
 import { DashboardAPI } from "@/services/api/dashboard.api";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
+import { DashboardCharts } from "./dashboard.chart";
 import { DashboardHeader } from "./dashboard.header";
 import { DashboardStatisticsCard } from "./dashboard.statistics";
 
@@ -9,6 +10,17 @@ export default function DashboardAdminPage() {
   const { data: dashboardStats, isLoading: isLoadingStats } = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: DashboardAPI.DashboardStats,
+    refetchOnWindowFocus: false,
+  })
+
+  const { data: chartData, isLoading: isLoadingChart } = useQuery({
+    queryKey: ["dashboard-chart"],
+    queryFn: () => DashboardAPI.DashboardChartWithSelectYear(new Date().getFullYear()),
+    refetchOnWindowFocus: false,
+  })
+  const { data: chartOrdersStatus, isLoading: isLoadingOrdersStatus } = useQuery({
+    queryKey: ["dashboard-chart-orders-status"],
+    queryFn: DashboardAPI.DashboardChartOrdersStatus,
     refetchOnWindowFocus: false,
   })
 
@@ -39,7 +51,27 @@ export default function DashboardAdminPage() {
     },
   }
 
-  const isLoading = isLoadingStats;
+  const revenueChartData = chartData || [];
+
+  const orderStatusData = (chartOrdersStatus || []).map(item => {
+    const statusMap: Record<string, { name: string; color: string }> = {
+      'PENDING': { name: 'Chờ xác nhận', color: '#f59e0b' },
+      'PROCESSING': { name: 'Đang xử lý', color: '#3b82f6' },
+      'DELIVERED': { name: 'Đã giao', color: '#10b981' },
+      'COMPLETED': { name: 'Hoàn thành', color: '#059669' },
+      'CANCELLED': { name: 'Đã hủy', color: '#ef4444' },
+    };
+    
+    const statusInfo = statusMap[item.status] || { name: item.status, color: '#6b7280' };
+    
+    return {
+      name: statusInfo.name,
+      value: item.count,
+      color: statusInfo.color,
+    };
+  });
+
+  const isLoading = isLoadingStats || isLoadingChart || isLoadingOrdersStatus;
 
   return (
     <div className="flex-col md:flex">
@@ -52,6 +84,9 @@ export default function DashboardAdminPage() {
 
         {/* Statistics Cards */}
         <DashboardStatisticsCard stats={stats} isLoading={isLoading} />
+
+        {/* Charts Section */}
+        <DashboardCharts revenueData={revenueChartData} ordersData={orderStatusData} isLoading={isLoading} />
       </div>
     </div>
   );
