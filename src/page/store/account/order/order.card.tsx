@@ -21,6 +21,7 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
   const formattedDate = format(new Date(order.createdAt), "dd/MM/yyyy", { locale: vi });
   const formattedTime = format(new Date(order.createdAt), "HH:mm", { locale: vi });
   const queryClient = useQueryClient();
+  
   // Mutation để xác nhận đơn hàng hoàn thành
   const confirmOrderMutation = useMutation({
     mutationFn: (orderId: string) => {
@@ -37,10 +38,14 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
       toast.error('Có lỗi xảy ra khi xác nhận đơn hàng');
     }
   });
-
   const handleConfirmOrder = () => {
     confirmOrderMutation.mutate(order.id);
   };
+
+  // Null safety check for order and items
+  if (!order || !order.items || order.items.length === 0) {
+    return null;
+  }
 
   return (
     <motion.div
@@ -82,14 +87,13 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
               <div className="text-sm text-gray-500 dark:text-gray-400 mb-3 flex items-center">
                 <ShoppingBag className="h-3.5 w-3.5 mr-1.5 opacity-70" />
                 {order.items.length} {order.items.length === 1 ? 'sản phẩm' : 'sản phẩm'}
-              </div>
-              <div className="space-y-3 border-l-2 border-green-100 dark:border-green-800 pl-3">
-                {order.items.slice(0, 2).map((item) => (
+              </div>              <div className="space-y-3 border-l-2 border-green-100 dark:border-green-800 pl-3">
+                {order.items.filter(item => item.medicine).slice(0, 2).map((item) => (
                   <div key={item.medicineId} className="text-sm flex justify-between items-center">
                     <div className="flex items-center">
                       <div className="w-2 h-2 rounded-full bg-gradient-to-r from-green-500 to-green-400 dark:from-green-400 dark:to-green-500 mr-2.5 shadow-sm dark:shadow-green-900/30"></div>
                       <span className="text-gray-700 dark:text-gray-200 font-medium">
-                        {item.medicine.name}
+                        {item.medicine?.name || 'Sản phẩm không xác định'}
                       </span>
                       <span className="text-gray-500 dark:text-gray-400 ml-2">
                         × {item.quantity}

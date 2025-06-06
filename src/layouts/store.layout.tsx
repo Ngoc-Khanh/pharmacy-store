@@ -1,7 +1,16 @@
+import { isActiveUserAtom, userAtom } from "@/atoms/auth.atom";
 import { StoreFooter, StoreHeader } from "@/components/layouts/store";
-import { Outlet } from "react-router-dom";
+import { routes } from "@/config";
+import { useAtomValue } from "jotai";
+import { Navigate, Outlet } from "react-router-dom";
 
 export default function StoreLayout() {
+  const user = useAtomValue(userAtom)
+  const isAccountActive = useAtomValue(isActiveUserAtom);
+  const isLoggedIn = !!user;
+
+  if (isLoggedIn && !isAccountActive) return <Navigate to={routes.errors.notActive} replace />;
+
   return (
     <div vaul-drawer-wrapper="">
       <div className="relative flex min-h-svh flex-col bg-background">

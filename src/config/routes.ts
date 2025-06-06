@@ -53,10 +53,14 @@ const baseRoutes = {
   },
 
   // ERROR ROUTES
-  generalError: "/500",
-  notfoundError: "/404",
-  maintenanceError: "/503",
-  unauthorizedError: "/401",
+  errors: {
+    root: "/errors",
+    general: "/500",
+    notfound: "/404",
+    maintenance: "/503",
+    unauthorized: "/401",
+    notActive: "/errors/401/not-active",
+  },
 };
 
 export const routeNames = {
@@ -96,6 +100,14 @@ export const routeNames = {
   [baseRoutes.store.account.invoices]: "Hóa đơn của tôi",
   [baseRoutes.store.account.invoiceDetails(":id")]: "Chi tiết hóa đơn",
 
+  // ERROR NAME ROUTES
+  [baseRoutes.errors.root]: "Lỗi",
+  [baseRoutes.errors.general]: "Lỗi hệ thống",
+  [baseRoutes.errors.notfound]: "Không tìm thấy",
+  [baseRoutes.errors.maintenance]: "Bảo trì hệ thống",
+  [baseRoutes.errors.unauthorized]: "Không có quyền truy cập",
+  [baseRoutes.errors.notActive]: "Tài khoản chưa được kích hoạt",
+  
   // DELIVER NAME ROUTES
   [baseRoutes.deliver.root]: "Giao hàng",
 };
