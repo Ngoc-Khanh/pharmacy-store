@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { routes } from "@/config";
+import { AccountRole } from "@/data/enum";
 import { User as IUser } from "@/data/interfaces";
 
 import { motion } from "framer-motion";
@@ -71,11 +72,11 @@ export default function StoreNavUser({ user }: { user: IUser }) {
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium">Hi, {user.lastname}</p>
-                    {(user.role === "admin" || user.role === "pharmacist") && (
+                    {(user.role === AccountRole.ADMIN || user.role === AccountRole.PHARMACIST) && (
                       <Badge
                         variant="outline"
                         className={
-                          user.role === "admin"
+                          user.role === AccountRole.ADMIN
                             ? "border-red-200 dark:border-red-800 bg-red-100 dark:bg-red-900/60 text-red-800 dark:text-red-300 text-xs font-medium px-1.5 py-0.5"
                             : "border-blue-200 dark:border-blue-800 bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-300 text-xs font-medium px-1.5 py-0.5"
                         }
@@ -90,7 +91,7 @@ export default function StoreNavUser({ user }: { user: IUser }) {
             </DropdownMenuLabel>
 
             <div className="p-1">
-              {user.role !== "customer" && (
+              {user.role !== AccountRole.CUSTOMER && (
                 <>
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer rounded-md">
