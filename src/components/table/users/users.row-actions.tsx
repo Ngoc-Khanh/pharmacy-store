@@ -2,6 +2,7 @@ import { useUsersDialog } from "@/atoms/dialog.atom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AccountStatus } from "@/data/enum";
 import { User } from "@/data/interfaces";
 import { cn } from "@/lib/utils";
 import { Row } from "@tanstack/react-table";
@@ -14,7 +15,7 @@ interface UserRowActionsProps {
 
 export function UserRowActions({ row }: UserRowActionsProps) {
   const { setOpen, setCurrentUser } = useUsersDialog();
-  const isActive = row.original.status === "active";
+  const isActive = row.original.status === AccountStatus.ACTIVE;
   
   return (
     <div className="flex justify-end items-center gap-2 pr-2">
