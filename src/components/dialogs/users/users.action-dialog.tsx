@@ -27,7 +27,7 @@ interface Props {
 
 export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
   const queryClient = useQueryClient();
-  const isEdit = !!currentUser;
+  const isEdit = !!currentUser; 
   const form = useForm<UserSchema>({
     resolver: zodResolver(usersSchema),
     defaultValues: isEdit ? {
