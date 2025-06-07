@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AddUserDto } from "@/data/dto";
+import { AccountRole, AccountStatus } from "@/data/enum";
 import { User } from "@/data/interfaces";
 import { cn } from "@/lib/utils";
 import { UsersAPI } from "@/services/api/users.api";
@@ -31,7 +32,7 @@ export const UsersChangeStatusDialog = memo(function UsersChangeStatusDialog({ c
   const changeStatusMutation = useMutation({
     mutationFn: () => UsersAPI.UserUpdate(
       currentUser?.id || "", 
-      { status: isActivating ? "active" : "suspended" } as AddUserDto
+      { status: isActivating ? AccountStatus.ACTIVE : AccountStatus.SUSPENDED } as AddUserDto
     ),
     onSuccess: () => {
       toast.success(
@@ -113,15 +114,15 @@ export const UsersChangeStatusDialog = memo(function UsersChangeStatusDialog({ c
                   <Badge
                     variant="outline"
                     className={cn(
-                      getRoleBadgeStyles(currentUser?.role || "customer"),
+                      getRoleBadgeStyles(currentUser?.role || AccountRole.CUSTOMER),
                       "flex items-center gap-1"
                     )}
                   >
                     <Shield className="h-3 w-3" />
-                    {currentUser?.role === "admin" 
-                      ? "Quản trị viên" 
-                      : currentUser?.role === "pharmacist" 
-                        ? "Dược sĩ" 
+                    {currentUser?.role === AccountRole.ADMIN
+                      ? "Quản trị viên"
+                      : currentUser?.role === AccountRole.PHARMACIST
+                        ? "Dược sĩ"
                         : "Khách hàng"}
                   </Badge>
                   <Badge

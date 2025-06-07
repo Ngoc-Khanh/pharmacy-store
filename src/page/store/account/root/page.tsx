@@ -18,6 +18,7 @@ import { RootAccountAddress } from "./root.address";
 import { RootAccountTitle } from "./root.title";
 import { UpdateProfileDto } from "@/data/dto";
 import { PhoneInput } from "@/components/custom/phone-input";
+import { AccountRole } from "@/data/enum";
 
 export default function RootAccountPage() {
   const user = useAtomValue(userAtom);
@@ -380,7 +381,7 @@ export default function RootAccountPage() {
               </>
             ) : (
               <>
-                {user?.role !== 'admin' && (
+                {user?.role !== AccountRole.ADMIN && (
                   <Button
                     variant="destructive"
                     onClick={handleDeleteAccount}

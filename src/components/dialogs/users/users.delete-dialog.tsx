@@ -94,7 +94,7 @@ export const UsersDeleteDialog = memo(function UsersDeleteDialog({ currentUser, 
                   <Badge 
                     variant="outline" 
                     className={cn(
-                      getRoleBadgeStyles(currentUser.role || "customer"),
+                      getRoleBadgeStyles(currentUser.role || AccountRole.CUSTOMER),
                       "flex items-center gap-1"
                     )}
                   >

@@ -2,6 +2,7 @@ import { UsersDialogs } from "@/components/dialogs/users";
 import { usersColumns, UsersDataTable } from "@/components/table/users";
 import { Skeleton } from "@/components/ui/skeleton";
 import { routeNames, routes, siteConfig } from "@/config";
+import { AccountRole } from "@/data/enum";
 import { UsersAPI } from "@/services/api/users.api";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -21,9 +22,9 @@ export default function UsersAdminPage() {
   const usersData = userList?.data || [];
   
   // Filter users by role (in a real app, you might have different criteria)
-  const adminCount = usersData.filter(user => user.role === "admin").length;
-  const customerCount = usersData.filter(user => user.role === "customer").length;
-  const pharmacistCount = usersData.filter(user => user.role === "pharmacist").length;
+  const adminCount = usersData.filter(user => user.role === AccountRole.ADMIN).length;
+  const customerCount = usersData.filter(user => user.role === AccountRole.CUSTOMER).length;
+  const pharmacistCount = usersData.filter(user => user.role === AccountRole.PHARMACIST).length;
 
   return (
     <div className="flex-col md:flex">
