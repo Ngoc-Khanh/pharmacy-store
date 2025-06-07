@@ -1,3 +1,5 @@
+import { AccountRole, AccountStatus } from "../enum";
+
 export type AddUserDto = {
   username: string;
   email: string;
@@ -5,10 +7,10 @@ export type AddUserDto = {
   firstname: string;
   lastname: string;
   phone: string;
-  role: "admin" | "pharmacist" | "customer";
-  status: "active" | "suspended" | "pending";
+  role: AccountRole;
+  status: AccountStatus;
 }
 
 export type ChangeStatusUserDto = {
-  status: "suspended" | "active";
+  status: AccountStatus;
 }

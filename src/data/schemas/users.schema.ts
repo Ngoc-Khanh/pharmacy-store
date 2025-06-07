@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AccountRole, AccountStatus } from "../enum";
 
 export const usersSchema = z.object({
   username: z.string().min(1, { message: "Tên người dùng là bắt buộc" }),
@@ -6,10 +7,10 @@ export const usersSchema = z.object({
   phone: z.string().min(1, { message: "Số điện thoại là bắt buộc" }),
   firstname: z.string().min(1, { message: "Tên là bắt buộc" }),
   lastname: z.string().min(1, { message: "Họ là bắt buộc" }),
-  status: z.enum(["active", "suspended", "pending"], {
+  status: z.nativeEnum(AccountStatus, {
     message: "Trạng thái không hợp lệ",
   }),
-  role: z.enum(["admin", "pharmacist", "customer"], {
+  role: z.nativeEnum(AccountRole, {
     message: "Vai trò không hợp lệ",
   }),
   password: z.string().optional(),

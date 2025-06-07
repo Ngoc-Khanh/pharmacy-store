@@ -5,15 +5,15 @@ export enum StockStatus {
 }
 
 export enum AccountRole {
-  ADMIN = "admin",
-  PHARMACIST = "pharmacist",
-  CUSTOMER = "customer",
+  ADMIN = "ADMIN",
+  PHARMACIST = "PHARMACIST",
+  CUSTOMER = "CUSTOMER",
 }
 
 export enum AccountStatus {
-  ACTIVE = "active",
-  SUSPENDED = "suspended",
-  PENDING = "pending",
+  ACTIVE = "ACTIVE",
+  SUSPENDED = "SUSPENDED",
+  PENDING = "PENDING",
 }
 
 export enum PaymentMethod {

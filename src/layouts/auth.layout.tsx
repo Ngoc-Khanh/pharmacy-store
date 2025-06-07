@@ -1,10 +1,12 @@
+import { isActiveUserAtom, isAuthenticatedAtom } from "@/atoms/auth.atom";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 import { routes, siteConfig } from "@/config";
 import { cn } from "@/lib/utils";
 
+import { useAtomValue } from "jotai";
 import { BriefcaseMedical } from "lucide-react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -13,6 +15,11 @@ interface AuthLayoutProps {
 }
 
 export default function AuthLayout({ children, title, useModernLayout = false }: AuthLayoutProps) {
+  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
+  const isActiveAccount = useAtomValue(isActiveUserAtom);
+
+  if (isAuthenticated && isActiveAccount) return <Navigate to={routes.store.root} replace />;
+
   // Modern split-screen layout (for sign-up)
   if (useModernLayout) {
     return (

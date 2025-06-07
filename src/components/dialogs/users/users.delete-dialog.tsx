@@ -9,8 +9,9 @@ import { cn } from "@/lib/utils";
 import { UsersAPI } from "@/services/api/users.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Clock, Shield, Trash2, TriangleAlert } from "lucide-react";
+import { AccountRole } from "@/data/enum";
 import { motion } from "framer-motion";
+import { Clock, Shield, Trash2, TriangleAlert } from "lucide-react";
 import { memo, useState } from "react";
 import { toast } from "sonner";
 
@@ -93,16 +94,16 @@ export const UsersDeleteDialog = memo(function UsersDeleteDialog({ currentUser, 
                   <Badge 
                     variant="outline" 
                     className={cn(
-                      getRoleBadgeStyles(currentUser.role || "customer"),
+                      getRoleBadgeStyles(currentUser.role || AccountRole.CUSTOMER),
                       "flex items-center gap-1"
                     )}
                   >
                     <Shield className="h-3 w-3" />
-                    {currentUser.role === "admin" 
-                      ? "Quản trị viên" 
-                      : currentUser.role === "pharmacist" 
-                        ? "Dược sĩ" 
-                        : "Khách hàng"}
+                    {currentUser.role === AccountRole.ADMIN
+                      ? "Quản trị viên"
+                      : currentUser.role === AccountRole.PHARMACIST
+                      ? "Dược sĩ"
+                      : "Khách hàng"}
                   </Badge>
                   <Badge
                     variant="outline"
