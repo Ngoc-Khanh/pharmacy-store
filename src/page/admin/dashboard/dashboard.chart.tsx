@@ -27,6 +27,9 @@ export function DashboardCharts({ revenueData, ordersData, isLoading }: Dashboar
     },
   };
 
+  // Filter out zero values from orders data
+  const filteredOrdersData = ordersData.filter(item => item.value > 0);
+
   if (isLoading) {
     return (
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
@@ -78,8 +81,8 @@ export function DashboardCharts({ revenueData, ordersData, isLoading }: Dashboar
             <CardDescription>
               Biểu đồ thể hiện xu hướng doanh thu của nhà thuốc
             </CardDescription>
-          </CardHeader>          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[200px] w-full">
+          </CardHeader>          <CardContent className="flex-1 pb-0">
+            <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[300px] w-full">
               <AreaChart data={revenueData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
@@ -124,40 +127,25 @@ export function DashboardCharts({ revenueData, ordersData, isLoading }: Dashboar
             <CardDescription>
               Phân bố trạng thái các đơn hàng hiện tại
             </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[200px] w-full">
+          </CardHeader>          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={chartConfig}
+              className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[300px] pb-0"
+            >
               <RechartsPieChart>
-                <ChartTooltip
-                  content={<ChartTooltipContent />}
-                  formatter={(value: number, name: string) => [`${value} đơn`, name]}
-                />                <Pie
-                  data={ordersData}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={60}
-                  dataKey="value"
+                <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                <Pie 
+                  data={filteredOrdersData} 
+                  dataKey="value" 
                   nameKey="name"
+                  label
                 >
-                  {ordersData.map((entry, index) => (
+                  {filteredOrdersData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
               </RechartsPieChart>
-            </ChartContainer>            <div className="mt-4 space-y-2">
-              {ordersData.map((item, index) => (
-                <div key={index} className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    <span>{item.name}</span>
-                  </div>
-                  <span className="font-medium">{item.value}</span>
-                </div>
-              ))}
-            </div>
+            </ChartContainer>
           </CardContent>
         </Card>
       </motion.div>

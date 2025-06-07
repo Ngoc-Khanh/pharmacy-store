@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { DashboardCharts } from "./dashboard.chart";
 import { DashboardHeader } from "./dashboard.header";
 import { DashboardStatisticsCard } from "./dashboard.statistics";
+import { OrderStatus } from "@/data/enum";
 
 export default function DashboardAdminPage() {
   const { data: dashboardStats, isLoading: isLoadingStats } = useQuery({
@@ -55,11 +56,12 @@ export default function DashboardAdminPage() {
 
   const orderStatusData = (chartOrdersStatus || []).map(item => {
     const statusMap: Record<string, { name: string; color: string }> = {
-      'PENDING': { name: 'Chờ xác nhận', color: '#f59e0b' },
-      'PROCESSING': { name: 'Đang xử lý', color: '#3b82f6' },
-      'DELIVERED': { name: 'Đã giao', color: '#10b981' },
-      'COMPLETED': { name: 'Hoàn thành', color: '#059669' },
-      'CANCELLED': { name: 'Đã hủy', color: '#ef4444' },
+      [OrderStatus.PENDING]: { name: 'Chờ xác nhận', color: '#f59e0b' },
+      [OrderStatus.PROCESSING]: { name: 'Đang xử lý', color: '#3b82f6' },
+      [OrderStatus.SHIPPED]: { name: 'Đang giao', color: '#f97316' },
+      [OrderStatus.DELIVERED]: { name: 'Đã giao', color: '#10b981' },
+      [OrderStatus.COMPLETED]: { name: 'Hoàn thành', color: '#059669' },
+      [OrderStatus.CANCELLED]: { name: 'Đã hủy', color: '#ef4444' },
     };
     
     const statusInfo = statusMap[item.status] || { name: item.status, color: '#6b7280' };

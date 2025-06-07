@@ -2,6 +2,7 @@ import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { DashboardAdminPage, InvoicesAdminPage, MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, SuppliersAdminPage, UsersAdminPage } from "@/page/admin";
 import CategoriesAdminPage from "@/page/admin/categories";
+import TestPage from "@/page/admin/dashboard/test";
 import { InvoiceDetailsPage } from "@/page/admin/invoice";
 import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, VerifyAccountPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
@@ -157,7 +158,7 @@ export const reactRouter: RouteObject[] = [
       },
       {
         path: "/admin/test",
-        element: <div>Test</div>,
+        element: <TestPage />,
       },
       {
         path: routes.admin.settings.root,
