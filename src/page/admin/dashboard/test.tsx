@@ -1,50 +1,52 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { routeNames, routes, siteConfig } from "@/config";
-import { UsersAPI } from "@/services/api/users.api";
+import { AccountRole, InvoiceStatus, OrderStatus, StockStatus } from "@/data/enum";
+import { CategoriesAPI } from "@/services/api/categories.api";
+import { InvoiceAPI } from "@/services/api/invoice.api";
 import { MedicineAPI } from "@/services/api/medicine.api";
 import { OrderAPI } from "@/services/api/order.api";
-import { InvoiceAPI } from "@/services/api/invoice.api";
-import { CategoriesAPI } from "@/services/api/categories.api";
 import { SupplierAPI } from "@/services/api/supplier.api";
+import { UsersAPI } from "@/services/api/users.api";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { 
-  Users, 
-  Pill, 
-  ShoppingCart, 
-  Receipt, 
-  FolderTree,
-  Building2,
-  TrendingUp,
+import {
   Activity,
-  DollarSign,
-  Package,
   AlertTriangle,
-  CheckCircle2,
-  Clock,
-  Plus,
   ArrowRight,
   BarChart3,
-  PieChart
+  Building2,
+  CheckCircle2,
+  Clock,
+  Crown,
+  DollarSign,
+  FolderTree,
+  Package,
+  PieChart,
+  Pill,
+  Plus,
+  Receipt,
+  ShoppingCart,
+  TrendingUp,
+  Users
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Cell,
   PieChart as RechartsPieChart,
-  Cell
+  XAxis,
+  YAxis
 } from "recharts";
-import { InvoiceStatus, OrderStatus, StockStatus } from "@/data/enum";
 
-export default function DashboardAdminPage() {
+export default function TestPage() {
   // Fetch data from various APIs
   const { data: usersData, isLoading: isLoadingUsers } = useQuery({
     queryKey: ["dashboard-users"],
@@ -82,13 +84,96 @@ export default function DashboardAdminPage() {
     refetchOnWindowFocus: false,
   });
 
+  // Mock top customers data - replace with actual API call
+  const topCustomersData = {
+    top_customers: [
+      {
+        rank: 1,
+        customer_id: "68431c3cc1f7e38b780d0dc6",
+        customer_info: {
+          username: "test1",
+          email: "testver1@customer.com",
+          firstname: "Test",
+          lastname: "ver1",
+          phone: "+8483945873",
+          profile_image: {
+            public_id: null,
+            url: "./avatars/2.jpg",
+            alt: "test1-alt"
+          }
+        },
+        total_orders: 1,
+        total_spent: 91000,
+        average_order_value: 91000,
+        first_order_date: "2025-06-06T16:52:11.533000Z",
+        last_order_date: "2025-06-06T16:52:11.533000Z",
+        completed_orders: 1,
+        cancelled_orders: 0
+      },
+      {
+        rank: 2,
+        customer_id: "68431c3cc1f7e38b780d0dc7",
+        customer_info: {
+          username: "customer2",
+          email: "customer2@example.com",
+          firstname: "Nguyễn",
+          lastname: "Văn A",
+          phone: "+8483945874",
+          profile_image: {
+            public_id: null,
+            url: "./avatars/3.jpg",
+            alt: "customer2-alt"
+          }
+        },
+        total_orders: 3,
+        total_spent: 275000,
+        average_order_value: 91667,
+        first_order_date: "2025-05-15T10:30:00.000000Z",
+        last_order_date: "2025-06-05T14:20:00.000000Z",
+        completed_orders: 3,
+        cancelled_orders: 0
+      },
+      {
+        rank: 3,
+        customer_id: "68431c3cc1f7e38b780d0dc8",
+        customer_info: {
+          username: "customer3",
+          email: "customer3@example.com",
+          firstname: "Trần",
+          lastname: "Thị B",
+          phone: "+8483945875",
+          profile_image: {
+            public_id: null,
+            url: "./avatars/4.jpg",
+            alt: "customer3-alt"
+          }
+        },
+        total_orders: 2,
+        total_spent: 180000,
+        average_order_value: 90000,
+        first_order_date: "2025-05-20T09:15:00.000000Z",
+        last_order_date: "2025-06-01T16:45:00.000000Z",
+        completed_orders: 2,
+        cancelled_orders: 0
+      }
+    ],
+    summary: {
+      period: "all",
+      total_customers_analyzed: 3,
+      top_customers_total_spent: 546000,
+      percentage_of_total_revenue: 85.2
+    }
+  };
+
   // Calculate statistics
   const stats = {
     users: {
       total: usersData?.data?.length || 0,
-      customers: usersData?.data?.filter(user => user.role === "customer")?.length || 0,
-      pharmacists: usersData?.data?.filter(user => user.role === "pharmacist")?.length || 0,
-      admins: usersData?.data?.filter(user => user.role === "admin")?.length || 0,    },    medicines: {
+      customers: usersData?.data?.filter(user => user.role === AccountRole.CUSTOMER)?.length || 0,
+      pharmacists: usersData?.data?.filter(user => user.role === AccountRole.PHARMACIST)?.length || 0,
+      admins: usersData?.data?.filter(user => user.role === AccountRole.ADMIN)?.length || 0,
+    },
+    medicines: {
       total: medicinesData?.data?.length || 0,
       inStock: medicinesData?.data?.filter(med => med.variants?.stockStatus === StockStatus.IN_STOCK)?.length || 0,
       outOfStock: medicinesData?.data?.filter(med => med.variants?.stockStatus === StockStatus.OUT_OF_STOCK)?.length || 0,
@@ -395,6 +480,115 @@ export default function DashboardAdminPage() {
           </motion.div>
         </div>
 
+        {/* Top Customers Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
+        >
+          <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Crown className="h-5 w-5 text-yellow-600" />
+                Khách hàng thân thiết
+              </CardTitle>
+              <CardDescription>
+                Top khách hàng có tổng chi tiêu cao nhất ({topCustomersData.summary.percentage_of_total_revenue}% tổng doanh thu)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {topCustomersData.top_customers.map((customer) => (
+                  <div 
+                    key={customer.customer_id} 
+                    className="flex items-center justify-between p-4 rounded-lg border bg-gradient-to-r from-amber-50/50 to-yellow-50/50 dark:from-amber-950/20 dark:to-yellow-950/20 hover:shadow-sm transition-shadow"
+                  >
+                    <div className="flex items-center gap-4">
+                      {/* Rank Badge */}
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-white font-bold text-sm shadow-md">
+                        {customer.rank}
+                      </div>
+                      
+                      {/* Customer Avatar & Info */}
+                      <Avatar className="h-12 w-12 ring-2 ring-yellow-200 dark:ring-yellow-800">
+                        <AvatarImage 
+                          src={customer.customer_info.profile_image.url} 
+                          alt={customer.customer_info.profile_image.alt}
+                        />
+                        <AvatarFallback className="bg-gradient-to-br from-yellow-100 to-amber-100 text-yellow-800">
+                          {customer.customer_info.firstname?.[0]}{customer.customer_info.lastname?.[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="space-y-1">
+                        <div className="font-semibold text-sm">
+                          {customer.customer_info.firstname} {customer.customer_info.lastname}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          @{customer.customer_info.username} • {customer.customer_info.phone}
+                        </div>
+                        <div className="flex items-center gap-4 text-xs">
+                          <span className="text-green-600 dark:text-green-400">
+                            {customer.completed_orders} đơn hoàn thành
+                          </span>
+                          {customer.cancelled_orders > 0 && (
+                            <span className="text-red-600 dark:text-red-400">
+                              {customer.cancelled_orders} đơn hủy
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Customer Stats */}
+                    <div className="text-right space-y-1">
+                      <div className="font-bold text-lg text-amber-700 dark:text-amber-400">
+                        {(customer.total_spent / 1000).toFixed(0)}K
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {customer.total_orders} đơn hàng
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        TB: {(customer.average_order_value / 1000).toFixed(0)}K/đơn
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Summary */}
+              <div className="mt-6 p-4 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-950/30 dark:to-cyan-950/30 rounded-lg border border-teal-100 dark:border-teal-800/20">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-bold text-teal-700 dark:text-teal-300">
+                      {topCustomersData.summary.total_customers_analyzed}
+                    </div>
+                    <div className="text-xs text-teal-600 dark:text-teal-400">
+                      Khách hàng phân tích
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-teal-700 dark:text-teal-300">
+                      {(topCustomersData.summary.top_customers_total_spent / 1000).toFixed(0)}K
+                    </div>
+                    <div className="text-xs text-teal-600 dark:text-teal-400">
+                      Tổng chi tiêu
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-teal-700 dark:text-teal-300">
+                      {topCustomersData.summary.percentage_of_total_revenue}%
+                    </div>
+                    <div className="text-xs text-teal-600 dark:text-teal-400">
+                      % Tổng doanh thu
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         {/* Additional Statistics */}
         <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
           {/* Categories */}
@@ -524,6 +718,56 @@ export default function DashboardAdminPage() {
                   </Link>
                 </Button>
               </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Top Customers */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.6 }}
+        >
+          <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Crown className="h-5 w-5 text-yellow-600" />
+                Khách hàng hàng đầu
+              </CardTitle>
+              <CardDescription>
+                Danh sách khách hàng mua sắm nhiều nhất
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <Skeleton className="h-10 w-full rounded-md" />
+              ) : (
+                <div className="space-y-4">
+                  {/* {usersData?.data
+                    ?.filter(user => user.role === AccountRole.CUSTOMER)
+                    ?.sort((a, b) => b.totalSpent - a.totalSpent)
+                    ?.slice(0, 5)
+                    ?.map((user) => (
+                      <div key={user.id} className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-3">
+                          <Avatar>
+                            <AvatarImage src={user.avatar} alt={user.name} />
+                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium text-gray-800 dark:text-gray-200">{user.name}</span>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-gray-500 dark:text-gray-400 text-xs">
+                            Tổng chi tiêu
+                          </div>
+                          <div className="font-semibold text-gray-800 dark:text-gray-200">
+                            {(user.totalSpent || 0).toLocaleString()} VNĐ
+                          </div>
+                        </div>
+                      </div>
+                    ))} */}
+                </div>
+              )}
             </CardContent>
           </Card>
         </motion.div>
