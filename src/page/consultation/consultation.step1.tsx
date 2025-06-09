@@ -249,7 +249,7 @@ export const Step1InputSymptom = () => {
                           <h5 className="font-semibold text-sm text-green-700 dark:text-green-300">Lý do chẩn đoán:</h5>
                           <ul className="space-y-1">
                             {data.primaryDiagnosis.reasons.map((reason: string, index: number) => (
-                              <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                              <li key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                                 {reason}
                               </li>
@@ -308,7 +308,7 @@ export const Step1InputSymptom = () => {
                                   </h6>
                                   <ul className="space-y-1">
                                     {diagnosis.reasons.map((reason, reasonIndex) => (
-                                      <li key={reasonIndex} className="flex items-start gap-2 text-sm text-muted-foreground">
+                                      <li key={reasonIndex} className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
                                         <span className="leading-relaxed">{reason}</span>
                                       </li>
@@ -340,7 +340,7 @@ export const Step1InputSymptom = () => {
 
                         <div className="grid gap-3">
                           {data.generalAdvice.map((advice, index) => (
-                            <div key={index} className="flex items-start gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-blue-200 dark:border-blue-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                            <div key={index} className="flex items-center gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-blue-200 dark:border-blue-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
                               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
                                 <span className="text-white text-xs font-bold">{index + 1}</span>
                               </div>
@@ -372,7 +372,7 @@ export const Step1InputSymptom = () => {
 
                         <div className="grid gap-3">
                           {data.recommendedActions.map((action, index) => (
-                            <div key={index} className="flex items-start gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-purple-200 dark:border-purple-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                            <div key={index} className="flex items-center gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-purple-200 dark:border-purple-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
                               <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
                                 <CheckCircle2 className="w-4 h-4 text-white" />
                               </div>
