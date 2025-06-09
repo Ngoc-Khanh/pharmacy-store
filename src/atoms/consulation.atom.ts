@@ -44,7 +44,7 @@ export const prevStepAtom = atom(
 // Các atom cho việc reset form
 export const resetFormAtom = atom(
   null,
-  (get, set) => {
+  (_get, set) => {
     set(currentStepAtom, 1);
     set(symptomsAtom, '');
     set(patientAgeAtom, 0);
