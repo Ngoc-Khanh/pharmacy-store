@@ -1,4 +1,5 @@
 export { AccountAPI } from "./account.api";
+export { AiAPI } from "./ai.api";
 export { AuthAPI } from "./auth.api";
 export { DashboardAPI } from "./dashboard.api";
 export { MedicineAPI } from "./medicine.api";

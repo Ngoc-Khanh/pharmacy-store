@@ -29,6 +29,8 @@ export const siteConfig = {
     // BASE API URL
     base_api_url:
       import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000",
+    llm_ai_url:
+      import.meta.env.VITE_LLM_API_URL || "http://localhost:5000",
     // BASE HEADERS
     base_headers: {
       "Content-Type": "application/json",

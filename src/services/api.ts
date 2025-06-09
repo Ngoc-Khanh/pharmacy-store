@@ -11,6 +11,11 @@ const api = axios.create({
   headers: siteConfig.backend.base_headers,
 });
 
+const aiApi = axios.create({
+  baseURL: siteConfig.backend.llm_ai_url,
+  headers: siteConfig.backend.base_headers,
+});
+
 // Add a request interceptor to include the JWT token in the headers
 api.interceptors.request.use(
   async (config) => {
@@ -30,33 +35,44 @@ api.interceptors.response.use(
   (error) => {
     if (error?.response?.status === 401) {
       // Handle 401 Unauthorized errors
-      if (!error.config.url?.includes("auth"))
-        window.location.href = routes.auth.login;
+      if (!error.config.url?.includes("auth")) window.location.href = routes.auth.login;
     }
     return Promise.reject(error);
   }
 );
 
 // Interceptor để convert response từ snake_case -> camelCase
-api.interceptors.response.use((response) => {
-  if (response.data) {
-    response.data = toCamelCase(response.data);
-  }
-  return response;
+// Interceptor để convert response từ snake_case -> camelCase cho cả api và aiApi
+[api, aiApi].forEach((instance) => {
+  instance.interceptors.response.use((response) => {
+    if (response.data) response.data = toCamelCase(response.data);
+    return response;
+  });
 });
 
 // Interceptor để convert request từ camelCase -> snake_case
-api.interceptors.request.use((config) => {
-  if (config.data) {
-    config.data = toSnakeCase(config.data);
-  }
-  return config;
+[api, aiApi].forEach((instance) => {
+  instance.interceptors.request.use((config) => {
+    if (config.data) config.data = toSnakeCase(config.data);
+    return config;
+  });
 });
 
 export const apiGet = async <ResponseData = unknown>(
   url: string,
   config?: AxiosRequestConfig
 ) => api.get<ResponseData>(url, config);
+
+export const aiApiGet = async <ResponseData = unknown>(
+  url: string,
+  config?: AxiosRequestConfig
+) => aiApi.get<ResponseData>(url, config);
+
+export const aiApiPost = async <PostData = unknown, ResponseData = unknown>(
+  url: string,
+  data: PostData,
+  config?: AxiosRequestConfig
+) => aiApi.post<ResponseData, AxiosResponse<ResponseData>>(url, data, config);
 
 export const apiPost = async <PostData = unknown, ResponseData = unknown>(
   url: string,

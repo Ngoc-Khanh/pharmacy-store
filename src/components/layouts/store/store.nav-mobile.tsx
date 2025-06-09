@@ -2,6 +2,8 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { useMetaColor } from "@/hooks/use-meta-color";
 import { Button } from "@/components/ui/button";
 import { useCallback, useState } from "react";
+import { Link } from "react-router-dom";
+import { HomeIcon, ShoppingBagIcon, HeartIcon, UserIcon, Bot as ChatBubbleLeftRightIcon } from "lucide-react";
 
 export default function StoreNavMobile() {
   const [open, setOpen] = useState(false);
@@ -14,6 +16,16 @@ export default function StoreNavMobile() {
     },
     [setMetaColor, metaColor]
   );
+
+  const closeDrawer = () => setOpen(false);
+
+  const navigationItems = [
+    { href: "/store", label: "Trang chủ", icon: HomeIcon },
+    { href: "/store/products", label: "Sản phẩm", icon: ShoppingBagIcon },
+    { href: "/store/consultation", label: "Tư vấn thuốc AI", icon: ChatBubbleLeftRightIcon },
+    { href: "/store/favorites", label: "Yêu thích", icon: HeartIcon },
+    { href: "/store/profile", label: "Tài khoản", icon: UserIcon },
+  ];
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
@@ -40,8 +52,24 @@ export default function StoreNavMobile() {
         </Button>
       </DrawerTrigger>
       <DrawerContent className="max-h-[60svh] p-0 border-t border-green-200 dark:border-green-800/50">
-        {/* NOTE: CHƯA LÀM ĐỂ SAU */}
-        <div className="text-center py-6 text-green-600 dark:text-green-400 font-medium">=====COMING SOON=====</div>
+        <div className="px-4 py-6">
+          <nav className="space-y-2">
+            {navigationItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={closeDrawer}
+                  className="flex items-center gap-3 px-3 py-3 text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/50 rounded-lg transition-colors"
+                >
+                  <IconComponent className="w-5 h-5" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </DrawerContent>
     </Drawer>
   );
