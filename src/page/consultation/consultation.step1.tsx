@@ -27,6 +27,7 @@ import {
   Info,
   Lightbulb,
   Loader2,
+  RotateCcw,
   Shield,
   Sparkles,
   Star,
@@ -90,384 +91,390 @@ export const Step1InputSymptom = () => {
         </p>
       </div>
 
-      {/* Patient Information */}
-      <Card className="border-blue-200 dark:border-blue-800/50 bg-gradient-to-br from-white to-blue-50/30 dark:from-gray-900 dark:to-blue-950/20 shadow-xl backdrop-blur-sm">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-xl flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
-              <User className="w-5 h-5 text-white" />
-            </div>
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Thông tin bệnh nhân
-            </span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-blue-500" />
-                Tuổi
-              </label>
-              <Input
-                type="number"
-                placeholder="Nhập tuổi của bạn"
-                value={patientAge || ''}
-                onChange={(e) => setPatientAge(parseInt(e.target.value) || 0)}
-                min="1"
-                max="120"
-                className="border-2 border-blue-200 dark:border-blue-800/50 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 transition-all duration-300 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                <User className="w-4 h-4 text-purple-500" />
-                Giới tính
-              </label>
-              <Select value={patientGender} onValueChange={(value: PatientGender) => setPatientGender(value)}>
-                <SelectTrigger className="border-2 border-blue-200 dark:border-blue-800/50 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 transition-all duration-300 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-                  <SelectValue placeholder="Chọn giới tính" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={PatientGender.MALE}>Nam</SelectItem>
-                  <SelectItem value={PatientGender.FEMALE}>Nữ</SelectItem>
-                  <SelectItem value={PatientGender.OTHER}>Khác</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {(!data && !isPending) && (
+        <>
+          {/* Patient Information */}
+          <Card className="border-blue-200 dark:border-blue-800/50 bg-gradient-to-br from-white to-blue-50/30 dark:from-gray-900 dark:to-blue-950/20 shadow-xl backdrop-blur-sm">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                  <User className="w-5 h-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Thông tin bệnh nhân
+                </span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-blue-500" />
+                    Tuổi
+                  </label>
+                  <Input
+                    type="number"
+                    placeholder="Nhập tuổi của bạn"
+                    value={patientAge || ''}
+                    onChange={(e) => setPatientAge(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="120"
+                    className="border-2 border-blue-200 dark:border-blue-800/50 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 transition-all duration-300 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                    <User className="w-4 h-4 text-purple-500" />
+                    Giới tính
+                  </label>
+                  <Select value={patientGender} onValueChange={(value: PatientGender) => setPatientGender(value)}>
+                    <SelectTrigger className="border-2 border-blue-200 dark:border-blue-800/50 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 transition-all duration-300 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+                      <SelectValue placeholder="Chọn giới tính" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={PatientGender.MALE}>Nam</SelectItem>
+                      <SelectItem value={PatientGender.FEMALE}>Nữ</SelectItem>
+                      <SelectItem value={PatientGender.OTHER}>Khác</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-      {/* Enhanced Input Area */}
-      <Card className="border-green-200 dark:border-green-800/50 bg-gradient-to-br from-white to-green-50/30 dark:from-gray-900 dark:to-green-950/20 shadow-xl backdrop-blur-sm">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-xl flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-              <FileText className="w-5 h-5 text-white" />
-            </div>
-            <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              Mô tả triệu chứng
-            </span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="relative">
-            <Textarea
-              placeholder="Ví dụ: Tôi bị đau đầu từ sáng nay, cảm thấy chóng mặt và hơi buồn nôn. Đau tập trung ở vùng thái dương và tăng lên khi di chuyển. Mức độ đau khoảng 7/10..."
-              value={symptoms}
-              onChange={(e) => setSymptoms(e.target.value)}
-              className="min-h-40 text-base resize-none border-2 border-green-200 dark:border-green-800/50 focus:border-green-500 dark:focus:border-green-400 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 transition-all duration-300 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
-              maxLength={1000}
-            />
-
-            {/* Character count and status */}
-            <div className="absolute bottom-4 right-4 flex items-center gap-2">
-              <Badge variant="outline" className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-green-200 dark:border-green-800">
-                {symptoms.length}/1000
-              </Badge>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Button
-        onClick={onSubmit}
-        disabled={!isValid}
-        className="w-full h-14 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
-      >
-        <div className="flex items-center justify-center gap-3">
-          <Brain className="w-6 h-6 group-hover:animate-pulse" />
-          <span>Bắt đầu chẩn đoán AI</span>
-          <Bot className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-        </div>
-      </Button>
-
-      {(isPending || data) && (
-        <Card className="border-green-200 dark:border-green-800/50 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 shadow-xl backdrop-blur-sm overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-400/10 to-emerald-400/10 animate-pulse" />
-          <CardHeader className="relative">
-            <CardTitle className="flex items-center gap-3 text-green-700 dark:text-green-300">
+          {/* Enhanced Input Area */}
+          <Card className="border-green-200 dark:border-green-800/50 bg-gradient-to-br from-white to-green-50/30 dark:from-gray-900 dark:to-green-950/20 shadow-xl backdrop-blur-sm">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                  Mô tả triệu chứng
+                </span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  {isPending ? (
-                    <Loader2 className="w-6 h-6 text-white animate-spin" />
-                  ) : (
-                    <Brain className="w-6 h-6 text-white" />
-                  )}
-                </div>
-                {!isPending && data && (
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-ping" />
-                )}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold flex items-center gap-2">
-                    <Activity className="w-5 h-5" />
-                    AI Pharmacity - Chẩn đoán
-                  </span>
+                <Textarea
+                  placeholder="Ví dụ: Tôi bị đau đầu từ sáng nay, cảm thấy chóng mặt và hơi buồn nôn. Đau tập trung ở vùng thái dương và tăng lên khi di chuyển. Mức độ đau khoảng 7/10..."
+                  value={symptoms}
+                  onChange={(e) => setSymptoms(e.target.value)}
+                  className="min-h-40 text-base resize-none border-2 border-green-200 dark:border-green-800/50 focus:border-green-500 dark:focus:border-green-400 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 transition-all duration-300 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                  maxLength={1000}
+                />
+
+                {/* Character count and status */}
+                <div className="absolute bottom-4 right-4 flex items-center gap-2">
+                  <Badge variant="outline" className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-green-200 dark:border-green-800">
+                    {symptoms.length}/1000
+                  </Badge>
                 </div>
               </div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6 relative">
-            {isPending ? (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-bounce" />
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-bounce animation-delay-100" />
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-bounce animation-delay-200" />
-                  <span className="ml-2">Đang phân tích triệu chứng và chẩn đoán...</span>
-                </div>
-                <div className="space-y-3">
-                  <Skeleton className="w-full h-52 rounded-sm" />
-                </div>
-              </div>
-            ) : data && data.primaryDiagnosis ? (
-              <div className="space-y-6">
-                {/* Primary Diagnosis */}
-                <div className="relative p-6 bg-white/70 dark:bg-gray-900/70 rounded-2xl border-2 border-green-200 dark:border-green-800/50 backdrop-blur-sm">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20 rounded-2xl"></div>
-                  <div className="relative">
-                    <h4 className="font-bold text-lg text-foreground mb-3 flex items-center gap-2">
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
-                      <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                        Chẩn đoán chính: {data.primaryDiagnosis.diagnosisName}
-                      </span>
-                    </h4>
-                    <p className="text-foreground leading-relaxed text-base mb-4">
-                      {data.primaryDiagnosis.description}
-                    </p>
-                    {data.primaryDiagnosis.reasons && data.primaryDiagnosis.reasons.length > 0 && (
-                      <div className="space-y-2">
-                        <h5 className="font-semibold text-sm text-green-700 dark:text-green-300">Lý do chẩn đoán:</h5>
-                        <ul className="space-y-1">
-                          {data.primaryDiagnosis.reasons.map((reason: string, index: number) => (
-                            <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                              {reason}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+            </CardContent>
+          </Card>
 
-                    {/* Confidence Percentage */}
-                    <div className="mt-4 flex items-center gap-2">
-                      <Badge variant="outline" className="bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 border-green-300 dark:border-green-700">
-                        Độ tin cậy: {data.primaryDiagnosis.confidencePercentage}%
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Alternative Diagnoses */}
-                {data.alternativeDiagnoses && data.alternativeDiagnoses.length > 0 && (
-                  <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                      <Info className="w-5 h-5 text-orange-600" />
-                      <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                        Chẩn đoán thay thế có thể
-                      </span>
-                    </h4>
-                    <div className="grid gap-4">
-                      {data.alternativeDiagnoses.map((diagnosis, index) => (
-                        <div key={index} className="relative p-5 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20 rounded-2xl border-2 border-orange-200 dark:border-orange-800/50 shadow-lg backdrop-blur-sm overflow-hidden">
-                          {/* Animated background */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-orange-200/20 to-red-200/20 dark:from-orange-800/10 dark:to-red-800/10 animate-pulse"></div>
-
-                          <div className="relative">
-                            <div className="flex items-center justify-between mb-3">
-                              <h5 className="font-bold text-lg text-orange-700 dark:text-orange-300 flex items-center gap-2">
-                                <Target className="w-5 h-5" />
-                                {diagnosis.diagnosisName}
-                              </h5>
-                              <div className="flex items-center gap-2">
-                                <Badge variant="outline" className="bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 border-orange-300 dark:border-orange-700 font-semibold">
-                                  <TrendingUp className="w-3 h-3 mr-1" />
-                                  {diagnosis.confidencePercentage}%
-                                </Badge>
-                              </div>
-                            </div>
-
-                            <p className="text-sm text-muted-foreground mb-4 leading-relaxed bg-white/50 dark:bg-gray-900/30 p-3 rounded-lg border border-orange-200/50 dark:border-orange-800/30">
-                              {diagnosis.description}
-                            </p>
-
-                            {diagnosis.reasons && diagnosis.reasons.length > 0 && (
-                              <div className="space-y-2">
-                                <h6 className="font-semibold text-sm text-orange-700 dark:text-orange-300 flex items-center gap-1">
-                                  <Stethoscope className="w-4 h-4" />
-                                  Lý do:
-                                </h6>
-                                <ul className="space-y-1">
-                                  {diagnosis.reasons.map((reason, reasonIndex) => (
-                                    <li key={reasonIndex} className="flex items-start gap-2 text-sm text-muted-foreground">
-                                      <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                                      <span className="leading-relaxed">{reason}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* General Advice */}
-                {data.generalAdvice && data.generalAdvice.length > 0 && (
-                  <div className="relative p-6 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-2xl border-2 border-blue-200 dark:border-blue-800/50 shadow-lg backdrop-blur-sm overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 dark:from-blue-800/10 dark:to-cyan-800/10 animate-pulse"></div>
-
-                    <div className="relative">
-                      <h4 className="text-xl font-bold text-foreground mb-6 flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
-                          <Lightbulb className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                          Lời khuyên chung
-                        </span>
-                      </h4>
-
-                      <div className="grid gap-3">
-                        {data.generalAdvice.map((advice, index) => (
-                          <div key={index} className="flex items-start gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-blue-200 dark:border-blue-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
-                              <span className="text-white text-xs font-bold">{index + 1}</span>
-                            </div>
-                            <div className="flex-1">
-                              <span className="text-foreground leading-relaxed font-medium">{advice}</span>
-                            </div>
-                            <Heart className="w-4 h-4 text-blue-500 flex-shrink-0 mt-1" />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Recommended Actions */}
-                {data.recommendedActions && data.recommendedActions.length > 0 && (
-                  <div className="relative p-6 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-2xl border-2 border-purple-200 dark:border-purple-800/50 shadow-lg backdrop-blur-sm overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-200/20 to-pink-200/20 dark:from-purple-800/10 dark:to-pink-800/10 animate-pulse"></div>
-
-                    <div className="relative">
-                      <h4 className="text-xl font-bold text-foreground mb-6 flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
-                          <Shield className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                          Hành động được khuyến nghị
-                        </span>
-                      </h4>
-
-                      <div className="grid gap-3">
-                        {data.recommendedActions.map((action, index) => (
-                          <div key={index} className="flex items-start gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-purple-200 dark:border-purple-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
-                            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
-                              <CheckCircle2 className="w-4 h-4 text-white" />
-                            </div>
-                            <div className="flex-1">
-                              <span className="text-foreground leading-relaxed font-medium">{action}</span>
-                            </div>
-                            <div className="flex items-center gap-1 text-purple-500 text-xs font-semibold bg-purple-100 dark:bg-purple-900/30 px-2 py-1 rounded-full">
-                              <span>Bước {index + 1}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Severity Level Indicator */}
-                {data.severityLevel && (
-                  <div className="relative p-6 rounded-2xl border-2 shadow-lg backdrop-blur-sm overflow-hidden">
-                    <div className={`absolute inset-0 ${data.severityLevel === SeverityLevel.HIGH
-                      ? 'bg-gradient-to-r from-red-200/20 to-red-300/20 dark:from-red-800/10 dark:to-red-900/10'
-                      : data.severityLevel === SeverityLevel.MEDIUM
-                        ? 'bg-gradient-to-r from-yellow-200/20 to-orange-200/20 dark:from-yellow-800/10 dark:to-orange-800/10'
-                        : 'bg-gradient-to-r from-green-200/20 to-emerald-200/20 dark:from-green-800/10 dark:to-emerald-800/10'
-                      } animate-pulse`}></div>
-
-                    <div className={`relative flex items-center gap-4 ${data.severityLevel === SeverityLevel.HIGH
-                      ? 'border-red-200 dark:border-red-800/50'
-                      : data.severityLevel === SeverityLevel.MEDIUM
-                        ? 'border-yellow-200 dark:border-yellow-800/50'
-                        : 'border-green-200 dark:border-green-800/50'
-                      }`}>
-                      <div className={`w-16 h-16 rounded-3xl flex items-center justify-center shadow-xl ${data.severityLevel === SeverityLevel.HIGH
-                        ? 'bg-gradient-to-br from-red-500 to-red-600'
-                        : data.severityLevel === SeverityLevel.MEDIUM
-                          ? 'bg-gradient-to-br from-yellow-500 to-orange-500'
-                          : 'bg-gradient-to-br from-green-500 to-emerald-500'
-                        }`}>
-                        {data.severityLevel === SeverityLevel.HIGH ? (
-                          <AlertTriangle className="w-8 h-8 text-white" />
-                        ) : data.severityLevel === SeverityLevel.MEDIUM ? (
-                          <AlertCircle className="w-8 h-8 text-white" />
-                        ) : (
-                          <CheckCircle2 className="w-8 h-8 text-white" />
-                        )}
-                      </div>
-
-                      <div className="flex-1">
-                        <h4 className="text-2xl font-bold text-foreground mb-2">Mức độ nghiêm trọng</h4>
-                        <p className={`text-lg font-bold ${data.severityLevel === SeverityLevel.HIGH
-                          ? 'text-red-600 dark:text-red-400'
-                          : data.severityLevel === SeverityLevel.MEDIUM
-                            ? 'text-yellow-600 dark:text-yellow-400'
-                            : 'text-green-600 dark:text-green-400'
-                          }`}>
-                          {data.severityLevel === SeverityLevel.HIGH ? 'Nghiêm trọng' :
-                            data.severityLevel === SeverityLevel.MEDIUM ? 'Trung bình' : 'Nhẹ'}
-                        </p>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {data.severityLevel === SeverityLevel.HIGH ? 'Cần gặp bác sĩ ngay lập tức' :
-                            data.severityLevel === SeverityLevel.MEDIUM ? 'Theo dõi và có thể cần gặp bác sĩ' : 'Có thể tự điều trị tại nhà'}
-                        </p>
-                      </div>
-
-                      <div className="flex flex-col gap-2">
-                        <Badge
-                          variant="outline"
-                          className={`font-bold text-lg px-4 py-2 ${data.severityLevel === SeverityLevel.HIGH
-                            ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-700'
-                            : data.severityLevel === SeverityLevel.MEDIUM
-                              ? 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700'
-                              : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 border-green-300 dark:border-green-700'
-                            }`}
-                        >
-                          {data.severityLevel === SeverityLevel.HIGH && '🚨 '}
-                          {data.severityLevel === SeverityLevel.MEDIUM && '⚠️ '}
-                          {data.severityLevel === SeverityLevel.LOW && '✅ '}
-                          <Star className="w-4 h-4 inline ml-1" />
-                        </Badge>
-                        <div className={`flex items-center gap-1 text-xs font-medium ${data.severityLevel === SeverityLevel.HIGH ? 'text-red-600' :
-                          data.severityLevel === SeverityLevel.MEDIUM ? 'text-yellow-600' : 'text-green-600'
-                          }`}>
-                          <Zap className="w-3 h-3" />
-                          <span>Mức độ {data.severityLevel}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : data ? (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">Không thể phân tích được triệu chứng. Vui lòng thử lại.</p>
-              </div>
-            ) : null}
-          </CardContent>
-        </Card>
+          <Button
+            onClick={onSubmit}
+            disabled={!isValid || isPending}
+            className="w-full h-14 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <Brain className="w-6 h-6 group-hover:animate-pulse" />
+              <span>Bắt đầu chẩn đoán AI</span>
+              <Bot className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </div>
+          </Button>
+        </>
       )}
 
+      {
+        (isPending || data) && (
+          <Card className="border-green-200 dark:border-green-800/50 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 shadow-xl backdrop-blur-sm overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-400/10 to-emerald-400/10 animate-pulse" />
+            <CardHeader className="relative">
+              <CardTitle className="flex items-center gap-3 text-green-700 dark:text-green-300">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    {isPending ? (
+                      <Loader2 className="w-6 h-6 text-white animate-spin" />
+                    ) : (
+                      <Brain className="w-6 h-6 text-white" />
+                    )}
+                  </div>
+                  {!isPending && data && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-ping" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl font-bold flex items-center gap-2">
+                      <Activity className="w-5 h-5" />
+                      AI Pharmacity - Chẩn đoán
+                    </span>
+                  </div>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6 relative">
+              {isPending ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-bounce" />
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-bounce animation-delay-100" />
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-bounce animation-delay-200" />
+                    <span className="ml-2">Đang phân tích triệu chứng và chẩn đoán...</span>
+                  </div>
+                  <div className="space-y-3">
+                    <Skeleton className="w-full h-52 rounded-sm" />
+                  </div>
+                </div>
+              ) : data && data.primaryDiagnosis ? (
+                <div className="space-y-6">
+                  {/* Primary Diagnosis */}
+                  <div className="relative p-6 bg-white/70 dark:bg-gray-900/70 rounded-2xl border-2 border-green-200 dark:border-green-800/50 backdrop-blur-sm">
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20 rounded-2xl"></div>
+                    <div className="relative">
+                      <h4 className="font-bold text-lg text-foreground mb-3 flex items-center gap-2">
+                        <CheckCircle2 className="w-5 h-5 text-green-600" />
+                        <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                          Chẩn đoán chính: {data.primaryDiagnosis.diagnosisName}
+                        </span>
+                      </h4>
+                      <p className="text-foreground leading-relaxed text-base mb-4">
+                        {data.primaryDiagnosis.description}
+                      </p>
+                      {data.primaryDiagnosis.reasons && data.primaryDiagnosis.reasons.length > 0 && (
+                        <div className="space-y-2">
+                          <h5 className="font-semibold text-sm text-green-700 dark:text-green-300">Lý do chẩn đoán:</h5>
+                          <ul className="space-y-1">
+                            {data.primaryDiagnosis.reasons.map((reason: string, index: number) => (
+                              <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                {reason}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Confidence Percentage */}
+                      <div className="mt-4 flex items-center gap-2">
+                        <Badge variant="outline" className="bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 border-green-300 dark:border-green-700">
+                          Độ tin cậy: {data.primaryDiagnosis.confidencePercentage}%
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Alternative Diagnoses */}
+                  {data.alternativeDiagnoses && data.alternativeDiagnoses.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                        <Info className="w-5 h-5 text-orange-600" />
+                        <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                          Chẩn đoán thay thế có thể
+                        </span>
+                      </h4>
+                      <div className="grid gap-4">
+                        {data.alternativeDiagnoses.map((diagnosis, index) => (
+                          <div key={index} className="relative p-5 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20 rounded-2xl border-2 border-orange-200 dark:border-orange-800/50 shadow-lg backdrop-blur-sm overflow-hidden">
+                            {/* Animated background */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-200/20 to-red-200/20 dark:from-orange-800/10 dark:to-red-800/10 animate-pulse"></div>
+
+                            <div className="relative">
+                              <div className="flex items-center justify-between mb-3">
+                                <h5 className="font-bold text-lg text-orange-700 dark:text-orange-300 flex items-center gap-2">
+                                  <Target className="w-5 h-5" />
+                                  {diagnosis.diagnosisName}
+                                </h5>
+                                <div className="flex items-center gap-2">
+                                  <Badge variant="outline" className="bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 border-orange-300 dark:border-orange-700 font-semibold">
+                                    <TrendingUp className="w-3 h-3 mr-1" />
+                                    {diagnosis.confidencePercentage}%
+                                  </Badge>
+                                </div>
+                              </div>
+
+                              <p className="text-sm text-muted-foreground mb-4 leading-relaxed bg-white/50 dark:bg-gray-900/30 p-3 rounded-lg border border-orange-200/50 dark:border-orange-800/30">
+                                {diagnosis.description}
+                              </p>
+
+                              {diagnosis.reasons && diagnosis.reasons.length > 0 && (
+                                <div className="space-y-2">
+                                  <h6 className="font-semibold text-sm text-orange-700 dark:text-orange-300 flex items-center gap-1">
+                                    <Stethoscope className="w-4 h-4" />
+                                    Lý do:
+                                  </h6>
+                                  <ul className="space-y-1">
+                                    {diagnosis.reasons.map((reason, reasonIndex) => (
+                                      <li key={reasonIndex} className="flex items-start gap-2 text-sm text-muted-foreground">
+                                        <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
+                                        <span className="leading-relaxed">{reason}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* General Advice */}
+                  {data.generalAdvice && data.generalAdvice.length > 0 && (
+                    <div className="relative p-6 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-2xl border-2 border-blue-200 dark:border-blue-800/50 shadow-lg backdrop-blur-sm overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 dark:from-blue-800/10 dark:to-cyan-800/10 animate-pulse"></div>
+
+                      <div className="relative">
+                        <h4 className="text-xl font-bold text-foreground mb-6 flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <Lightbulb className="w-5 h-5 text-white" />
+                          </div>
+                          <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                            Lời khuyên chung
+                          </span>
+                        </h4>
+
+                        <div className="grid gap-3">
+                          {data.generalAdvice.map((advice, index) => (
+                            <div key={index} className="flex items-start gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-blue-200 dark:border-blue-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                                <span className="text-white text-xs font-bold">{index + 1}</span>
+                              </div>
+                              <div className="flex-1">
+                                <span className="text-foreground leading-relaxed font-medium">{advice}</span>
+                              </div>
+                              <Heart className="w-4 h-4 text-blue-500 flex-shrink-0 mt-1" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Recommended Actions */}
+                  {data.recommendedActions && data.recommendedActions.length > 0 && (
+                    <div className="relative p-6 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-2xl border-2 border-purple-200 dark:border-purple-800/50 shadow-lg backdrop-blur-sm overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-200/20 to-pink-200/20 dark:from-purple-800/10 dark:to-pink-800/10 animate-pulse"></div>
+
+                      <div className="relative">
+                        <h4 className="text-xl font-bold text-foreground mb-6 flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <Shield className="w-5 h-5 text-white" />
+                          </div>
+                          <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                            Hành động được khuyến nghị
+                          </span>
+                        </h4>
+
+                        <div className="grid gap-3">
+                          {data.recommendedActions.map((action, index) => (
+                            <div key={index} className="flex items-start gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-purple-200 dark:border-purple-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                                <CheckCircle2 className="w-4 h-4 text-white" />
+                              </div>
+                              <div className="flex-1">
+                                <span className="text-foreground leading-relaxed font-medium">{action}</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-purple-500 text-xs font-semibold bg-purple-100 dark:bg-purple-900/30 px-2 py-1 rounded-full">
+                                <span>Bước {index + 1}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Severity Level Indicator */}
+                  {data.severityLevel && (
+                    <div className="relative p-6 rounded-2xl border-2 shadow-lg backdrop-blur-sm overflow-hidden">
+                      <div className={`absolute inset-0 ${data.severityLevel === SeverityLevel.HIGH
+                        ? 'bg-gradient-to-r from-red-200/20 to-red-300/20 dark:from-red-800/10 dark:to-red-900/10'
+                        : data.severityLevel === SeverityLevel.MEDIUM
+                          ? 'bg-gradient-to-r from-yellow-200/20 to-orange-200/20 dark:from-yellow-800/10 dark:to-orange-800/10'
+                          : 'bg-gradient-to-r from-green-200/20 to-emerald-200/20 dark:from-green-800/10 dark:to-emerald-800/10'
+                        } animate-pulse`}></div>
+
+                      <div className={`relative flex items-center gap-4 ${data.severityLevel === SeverityLevel.HIGH
+                        ? 'border-red-200 dark:border-red-800/50'
+                        : data.severityLevel === SeverityLevel.MEDIUM
+                          ? 'border-yellow-200 dark:border-yellow-800/50'
+                          : 'border-green-200 dark:border-green-800/50'
+                        }`}>
+                        <div className={`w-16 h-16 rounded-3xl flex items-center justify-center shadow-xl ${data.severityLevel === SeverityLevel.HIGH
+                          ? 'bg-gradient-to-br from-red-500 to-red-600'
+                          : data.severityLevel === SeverityLevel.MEDIUM
+                            ? 'bg-gradient-to-br from-yellow-500 to-orange-500'
+                            : 'bg-gradient-to-br from-green-500 to-emerald-500'
+                          }`}>
+                          {data.severityLevel === SeverityLevel.HIGH ? (
+                            <AlertTriangle className="w-8 h-8 text-white" />
+                          ) : data.severityLevel === SeverityLevel.MEDIUM ? (
+                            <AlertCircle className="w-8 h-8 text-white" />
+                          ) : (
+                            <CheckCircle2 className="w-8 h-8 text-white" />
+                          )}
+                        </div>
+
+                        <div className="flex-1">
+                          <h4 className="text-2xl font-bold text-foreground">Mức độ nghiêm trọng</h4>
+                          <p className={`text-lg font-bold ${data.severityLevel === SeverityLevel.HIGH
+                            ? 'text-red-600 dark:text-red-400'
+                            : data.severityLevel === SeverityLevel.MEDIUM
+                              ? 'text-yellow-600 dark:text-yellow-400'
+                              : 'text-green-600 dark:text-green-400'
+                            }`}>
+                            {data.severityLevel === SeverityLevel.HIGH ? 'Nghiêm trọng' :
+                              data.severityLevel === SeverityLevel.MEDIUM ? 'Trung bình' : 'Nhẹ'}
+                          </p>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {data.severityLevel === SeverityLevel.HIGH ? 'Cần gặp bác sĩ ngay lập tức' :
+                              data.severityLevel === SeverityLevel.MEDIUM ? 'Theo dõi và có thể cần gặp bác sĩ' : 'Có thể tự điều trị tại nhà'}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <Badge
+                            variant="outline"
+                            className={`font-bold text-lg px-4 py-2 ${data.severityLevel === SeverityLevel.HIGH
+                              ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-700'
+                              : data.severityLevel === SeverityLevel.MEDIUM
+                                ? 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700'
+                                : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 border-green-300 dark:border-green-700'
+                              }`}
+                          >
+                            {data.severityLevel === SeverityLevel.HIGH && '🚨 '}
+                            {data.severityLevel === SeverityLevel.MEDIUM && '⚠️ '}
+                            {data.severityLevel === SeverityLevel.LOW && '✅ '}
+                            <Star className="w-4 h-4 inline ml-1" />
+                          </Badge>
+                          <div className={`flex items-center gap-1 text-xs font-medium ${data.severityLevel === SeverityLevel.HIGH ? 'text-red-600' :
+                            data.severityLevel === SeverityLevel.MEDIUM ? 'text-yellow-600' : 'text-green-600'
+                            }`}>
+                            <Zap className="w-3 h-3" />
+                            <span>Mức độ {data.severityLevel}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : data ? (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">Không thể phân tích được triệu chứng. Vui lòng thử lại.</p>
+                </div>
+              ) : null}
+            </CardContent>
+          </Card>
+        )
+      }
+
       {data && (
-        <div className="flex justify-center pt-6">
+        <div className="flex justify-center gap-2 pt-6">
           <Button
             onClick={handleNext}
             disabled={!isValid || isPending}
@@ -476,6 +483,15 @@ export const Step1InputSymptom = () => {
           >
             <Sparkles className="w-5 h-5 mr-3" />
             Xem gợi ý thuốc từ AI
+          </Button>
+          <Button
+            onClick={() => setData(null)}
+            variant="outline"
+            size="lg"
+            className="px-12 py-4 text-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-2xl"
+          >
+            <RotateCcw className="w-5 h-5 mr-3" />
+            Hỏi lại từ đầu
           </Button>
         </div>
       )}
@@ -523,6 +539,6 @@ export const Step1InputSymptom = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </div >
   )
 }

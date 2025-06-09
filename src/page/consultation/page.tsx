@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Stepper, StepperDescription, StepperItem, StepperSeparator, StepperTitle, StepperTrigger } from "@/components/ui/stepper";
 import { useStepForm } from "@/hooks/use-step-form";
-import { Bot, Check, CheckCircle2, FileText, HelpCircle, MessageCircle, MessageSquare, Phone, Pill, Truck, User } from "lucide-react";
+import { Bot, BotMessageSquare, Check, CheckCircle2, FileText, HelpCircle, MessageSquare, Phone, Pill, Truck, User } from "lucide-react";
 import { Step1InputSymptom } from "./consultation.step1";
 
 export default function ConsultationPage() {
@@ -12,7 +12,7 @@ export default function ConsultationPage() {
     {
       title: 'Mô tả triệu chứng',
       description: 'Chia sẻ triệu chứng với AI',
-      icon: MessageCircle,
+      icon: BotMessageSquare,
       color: 'text-emerald-600 dark:text-emerald-400'
     },
     {
