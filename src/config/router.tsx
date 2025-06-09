@@ -6,6 +6,7 @@ import TestPage from "@/page/admin/dashboard/test";
 import { InvoiceDetailsPage } from "@/page/admin/invoice";
 import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, VerifyAccountPage } from "@/page/auth";
 import ComingSoonPage from "@/page/coming-soon";
+import { ConsultationPage } from "@/page/consultation";
 import DeliverPage from "@/page/deliver";
 import { NotActivePage } from "@/page/error";
 import { CategoriesPage, CheckoutPage, CheckoutSuccessPage, MedicinesDetailPage, MedicinesPage, RootPage } from "@/page/store";
@@ -67,6 +68,10 @@ export const reactRouter: RouteObject[] = [
       {
         path: routes.store.medicineDetails(":id"),
         element: <MedicinesDetailPage />,
+      },
+      {
+        path: routes.store.consultation,
+        element: <ConsultationPage />,
       },
       {
         path: routes.store.checkout,

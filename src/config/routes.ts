@@ -17,6 +17,7 @@ const baseRoutes = {
     categories: "/store/categories",
     medicines: "/store/medicines",
     medicineDetails: (id: string) => `/store/medicines/${id}/details`,
+    consultation: "/store/consultation",
     checkout: "/store/checkout",
     checkoutSuccess: (id: string) => `/store/checkout/${id}/success`,
     account: {
@@ -74,6 +75,7 @@ export const routeNames = {
   [baseRoutes.store.root]: "Trang chủ",
   [baseRoutes.store.categories]: "Danh mục",
   [baseRoutes.store.medicines]: "Dược phẩm",
+  [baseRoutes.store.consultation]: "Tư vấn thuốc AI",
   [baseRoutes.store.checkout]: "Thanh toán",
   [baseRoutes.store.checkoutSuccess(":id")]: "Thanh toán thành công",
 

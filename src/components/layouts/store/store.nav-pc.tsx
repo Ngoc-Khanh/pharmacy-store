@@ -12,6 +12,7 @@ export default function StoreNavPC() {
     { name: routeNames[routes.store.root], path: routes.store.root },
     { name: routeNames[routes.store.categories], path: routes.store.categories },
     { name: routeNames[routes.store.medicines], path: routes.store.medicines },
+    { name: routeNames[routes.store.consultation], path: routes.store.consultation },
   ];
 
   const isActive = (path: string) => {

@@ -37,3 +37,16 @@ export enum InvoiceStatus {
   CANCELLED = "CANCELLED",
   REFUNDED = "REFUNDED",
 }
+
+export enum PatientGender {
+  MALE = "Nam",
+  FEMALE = "Nữ",
+  OTHER = "Khác",
+}
+
+export enum SeverityLevel {
+  LOW = "nhẹ",
+  MEDIUM = "trung bình",
+  HIGH = "nghiêm trọng",
+  VERY_HIGH = "rất nghiêm trọng",
+}
