@@ -161,7 +161,7 @@ export default function StoreCart() {
                       <div className="flex flex-1 flex-col">
                         <div className="flex justify-between">
                           <Link
-                            to={`/medicine/${item.medicine.id}`}
+                            to={routes.store.medicineDetails(item.medicine.id)}
                             className="text-sm font-medium line-clamp-2 hover:text-green-600 hover:underline"
                           >
                             {item.medicine.name}
