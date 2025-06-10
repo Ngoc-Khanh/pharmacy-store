@@ -35,7 +35,7 @@ export default function StoreNavUser({ user }: { user: IUser }) {
             <Avatar className="h-full w-full">
               <AvatarImage
                 src={user.profileImage.url}
-                alt={user.username}
+                alt={user.profileImage.alt}
                 className="object-cover"
               />
               <AvatarFallback className="bg-primary/10 text-primary font-medium">
@@ -61,7 +61,7 @@ export default function StoreNavUser({ user }: { user: IUser }) {
             <DropdownMenuLabel className="p-4 border-b border-border/50">
               <div className="flex items-start gap-3">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={user.profileImage.url} alt={user.username} className="object-cover" />
+                  <AvatarImage src={user.profileImage.url} alt={user.profileImage.alt} className="object-cover" />
                   <AvatarFallback className="bg-primary/10 text-primary font-medium">
                     {user.username
                       .split(" ")
