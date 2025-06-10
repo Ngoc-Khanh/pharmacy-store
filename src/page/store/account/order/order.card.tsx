@@ -1,46 +1,28 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { routes } from '@/config';
-import { OrderAdminChangeStatusDto } from '@/data/dto';
 import { OrderStatus } from '@/data/enum';
 import { Order } from '@/data/interfaces';
-import { formatCurrency } from '@/lib/utils';
-import { StoreAPI } from '@/services/api/store.api';
-
+import { useOrderMutations } from '@/hooks/use-order-mutations';
 import { formatPaymentMethod } from '@/lib/format-payment-method';
 import { OrderStatusIcon, StatusBadge } from '@/lib/status-badge';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { formatCurrency } from '@/lib/utils';
+
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, CheckCircle, Clock, CreditCard, Leaf, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Calendar, CheckCircle, Clock, CreditCard, Leaf, ShoppingBag, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
 
 export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; showConfirmButton?: boolean }) => {
   const formattedDate = format(new Date(order.createdAt), "dd/MM/yyyy", { locale: vi });
   const formattedTime = format(new Date(order.createdAt), "HH:mm", { locale: vi });
-  const queryClient = useQueryClient();
-  
-  // Mutation để xác nhận đơn hàng hoàn thành
-  const confirmOrderMutation = useMutation({
-    mutationFn: (orderId: string) => {
-      const statusData: OrderAdminChangeStatusDto = {
-        status: OrderStatus.COMPLETED
-      };
-      return StoreAPI.UpdateOrderStatus(orderId, statusData);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
-      toast.success('Đơn hàng đã được xác nhận hoàn thành!');
-    },
-    onError: () => {
-      toast.error('Có lỗi xảy ra khi xác nhận đơn hàng');
-    }
-  });
-  const handleConfirmOrder = () => {
-    confirmOrderMutation.mutate(order.id);
-  };
+
+  const { confirmOrder, cancelOrder, isConfirming, isCancelling } = useOrderMutations();
+
+  const handleConfirmOrder = () => confirmOrder(order.id);
+
+  const handleCancelOrder = () => cancelOrder(order.id);
 
   // Null safety check for order and items
   if (!order || !order.items || order.items.length === 0) {
@@ -87,7 +69,8 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
               <div className="text-sm text-gray-500 dark:text-gray-400 mb-3 flex items-center">
                 <ShoppingBag className="h-3.5 w-3.5 mr-1.5 opacity-70" />
                 {order.items.length} {order.items.length === 1 ? 'sản phẩm' : 'sản phẩm'}
-              </div>              <div className="space-y-3 border-l-2 border-green-100 dark:border-green-800 pl-3">
+              </div>
+              <div className="space-y-3 border-l-2 border-green-100 dark:border-green-800 pl-3">
                 {order.items.filter(item => item.medicine).slice(0, 2).map((item) => (
                   <div key={item.medicineId} className="text-sm flex justify-between items-center">
                     <div className="flex items-center">
@@ -117,14 +100,38 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: Order; 
               </div>
 
               <div className="mt-4 flex flex-col md:flex-row gap-2 w-full md:w-auto">
+                {/* Nút hủy đơn hàng khi trạng thái PENDING */}
+                {order.status === OrderStatus.PENDING && (
+                  <Button
+                    onClick={handleCancelOrder}
+                    disabled={isCancelling}
+                    variant="destructive"
+                    className="group bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 dark:from-red-500 dark:to-red-600 dark:hover:from-red-600 dark:hover:to-red-700 text-white shadow-sm dark:shadow-red-900/20 hover:shadow"
+                    size="sm"
+                  >
+                    {isCancelling ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Đang hủy...
+                      </>
+                    ) : (
+                      <>
+                        <X className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                        Hủy đơn hàng
+                      </>
+                    )}
+                  </Button>
+                )}
+
+                {/* Nút xác nhận hoàn thành khi trạng thái DELIVERED */}
                 {showConfirmButton && order.status === OrderStatus.DELIVERED && (
                   <Button
                     onClick={handleConfirmOrder}
-                    disabled={confirmOrderMutation.isPending}
+                    disabled={isConfirming}
                     className="group bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 dark:from-teal-500 dark:to-teal-600 dark:hover:from-teal-600 dark:hover:to-teal-700 text-white shadow-sm dark:shadow-teal-900/20 hover:shadow"
                     size="sm"
                   >
-                    {confirmOrderMutation.isPending ? (
+                    {isConfirming ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                         Đang xử lý...
