@@ -6,5 +6,5 @@ export type PlaceOrderDto = {
 }
 
 export type OrderAdminChangeStatusDto = {
-  status: OrderStatus.CANCELLED | OrderStatus.COMPLETED;
+  status: OrderStatus;
 }
