@@ -5,6 +5,7 @@ import { z } from "zod";
 export const credentialsSchema = z.object({
   account: z
     .string()
+    .min(1, { message: "Vui lòng nhập email hoặc tên đăng nhập!" })
     .min(3, { message: "Email hoặc tên đăng nhập phải có ít nhất 3 ký tự!" })
     .refine(
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || value.length >= 3,
@@ -14,7 +15,7 @@ export const credentialsSchema = z.object({
     ),
   password: z
     .string()
-    .min(8, { message: "Mật khẩu phải có ít nhất 8 ký tự!" }),
+    .min(1, { message: "Vui lòng nhập mật khẩu!" })
 });
 
 export type CredentialsForm = z.infer<typeof credentialsSchema>;
