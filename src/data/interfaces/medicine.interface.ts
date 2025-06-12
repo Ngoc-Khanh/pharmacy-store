@@ -15,6 +15,12 @@ export interface Medicine {
   supplier: Supplier;
   details: Details;
   usageguide: UsageGuide;
+  // Additional fields that might come from Laravel API
+  price?: number; // Direct price field from Laravel
+  stock?: number; // Stock quantity from Laravel
+  category_id?: string; // Category ID from Laravel
+  readonly created_at?: string; // Laravel snake_case
+  readonly updated_at?: string; // Laravel snake_case
   readonly createdAt?: string; 
   readonly updatedAt?: string;
 }

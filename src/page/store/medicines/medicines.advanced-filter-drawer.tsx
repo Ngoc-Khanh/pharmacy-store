@@ -3,6 +3,7 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, Dr
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
+import { StockStatus } from "@/data/enum";
 
 import { Sparkles, Star } from "lucide-react";
 
@@ -13,11 +14,11 @@ interface MedicinesAdvancedFilterDrawerProps {
   priceRange: [number, number];
   displayPriceRange: [number, number];
   minRating: number;
-  status: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK" | null;
+  status: StockStatus | null;
   onCategoryToggle: (category: string) => void;
   onPriceChange: (value: [number, number]) => void;
   onRatingChange: (rating: number) => void;
-  onStatusToggle: (status?: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK" | null) => void;
+  onStatusToggle: (status?: StockStatus | null) => void;
   onReset: () => void;
   categories: string[];
   minPrice: number;
@@ -50,17 +51,22 @@ export function MedicinesAdvancedFilterDrawer({
             Bộ lọc nâng cao
           </DrawerTitle>
           <DrawerDescription className="text-center">
-            Tùy chỉnh tìm kiếm để tìm sản phẩm phù hợp nhất
+            Tùy chỉnh tìm kiếm để tìm sản phẩm phù hợp nhất. Chọn nhiều danh mục để mở rộng tìm kiếm.
           </DrawerDescription>
         </DrawerHeader>
 
         <ScrollArea className="p-6 max-h-[70vh]">
           <div className="space-y-6">
-            {/* Categories */}
+            {/* Categories - Now supporting multiple selections */}
             <div>
               <h4 className="font-medium mb-3 flex items-center justify-between text-emerald-500">
                 <span>Danh mục</span>
-                <span className="text-xs text-muted-foreground">{selectedCategories.length} đã chọn</span>
+                <span className="text-xs text-muted-foreground">
+                  {selectedCategories.length > 0 
+                    ? `${selectedCategories.length} đã chọn` 
+                    : 'Chọn nhiều danh mục'
+                  }
+                </span>
               </h4>
               <div className="max-h-[180px] overflow-y-auto pr-2 custom-scrollbar">
                 <div className="flex flex-wrap gap-2">
@@ -79,6 +85,23 @@ export function MedicinesAdvancedFilterDrawer({
                   ))}
                 </div>
               </div>
+              {selectedCategories.length > 0 && (
+                <div className="mt-3 flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground">
+                    Tìm kiếm trong: {selectedCategories.join(', ')}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      selectedCategories.forEach(cat => onCategoryToggle(cat));
+                    }}
+                    className="text-xs text-red-500 hover:text-white hover:bg-red-500"
+                  >
+                    Xóa tất cả
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -165,9 +188,9 @@ export function MedicinesAdvancedFilterDrawer({
                 Tất cả
               </div>
               <div
-                onClick={() => onStatusToggle("IN-STOCK")}
+                onClick={() => onStatusToggle(StockStatus.IN_STOCK)}
                 className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all
-                  ${status === "IN-STOCK"
+                  ${status === StockStatus.IN_STOCK
                     ? 'bg-emerald-500 text-white border-emerald-500'
                     : 'border-muted hover:border-emerald-500/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/10'
                   }`}
@@ -175,9 +198,9 @@ export function MedicinesAdvancedFilterDrawer({
                 Còn hàng
               </div>
               <div
-                onClick={() => onStatusToggle("OUT-OF-STOCK")}
+                onClick={() => onStatusToggle(StockStatus.OUT_OF_STOCK)}
                 className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all
-                  ${status === "OUT-OF-STOCK"
+                  ${status === StockStatus.OUT_OF_STOCK
                     ? 'bg-emerald-500 text-white border-emerald-500'
                     : 'border-muted hover:border-emerald-500/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/10'
                   }`}
@@ -185,14 +208,14 @@ export function MedicinesAdvancedFilterDrawer({
                 Hết hàng
               </div>
               <div
-                onClick={() => onStatusToggle("LOW-STOCK")}
+                onClick={() => onStatusToggle(StockStatus.PRE_ORDER)}
                 className={`px-3 py-2 text-sm rounded-full border cursor-pointer transition-all
-                  ${status === "LOW-STOCK"
+                  ${status === StockStatus.PRE_ORDER
                     ? 'bg-emerald-500 text-white border-emerald-500'
                     : 'border-muted hover:border-emerald-500/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/10'
                   }`}
               >
-                Sắp hết hàng
+                Đặt trước
               </div>
             </div>
           </div>
