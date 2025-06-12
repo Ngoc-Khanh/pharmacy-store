@@ -141,7 +141,6 @@ export default function MedicinesPage() {
         setSelectedCategories(matchedCategories);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryFromUrl, categories]);
 
   // Update display price with delay to prevent flickering during sliding
