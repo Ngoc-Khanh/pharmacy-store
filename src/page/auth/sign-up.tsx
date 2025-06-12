@@ -1,13 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { CheckCircle2, Loader2, Lock, Mail, Phone, User, Users } from "lucide-react";
+import { CheckCircle2, Loader2, Lock, Mail, User, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 import { PasswordInput } from "@/components/custom/password-input";
+import { PhoneInput } from "@/components/custom/phone-input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -103,10 +104,10 @@ export default function RegisterPage() {
   const onSubmit = (data: RegistrationForm) => {
     // Check if password meets all requirements
     const allRequirementsMet = Object.values(requirements).every(req => req);
-    
+
     if (!allRequirementsMet) {
-      toast.error("Mật khẩu không đủ yêu cầu!", { 
-        description: "Vui lòng đảm bảo mật khẩu đáp ứng tất cả các yêu cầu." 
+      toast.error("Mật khẩu không đủ yêu cầu!", {
+        description: "Vui lòng đảm bảo mật khẩu đáp ứng tất cả các yêu cầu."
       });
       return;
     }
@@ -150,7 +151,7 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="lastname"
@@ -226,14 +227,13 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel className="font-medium text-gray-700 dark:text-gray-300 text-sm">Số điện thoại</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 dark:text-gray-500 z-10" />
-                      <Input
-                        {...field}
-                        placeholder="+84123456789"
-                        className="h-10 pl-9 border-gray-200 dark:border-gray-800 bg-transparent dark:bg-transparent focus:ring-2 focus:ring-green-500/20 focus:border-green-500 dark:focus:border-green-400 rounded-lg text-gray-800 dark:text-gray-200 text-sm"
-                      />
-                    </div>
+                    <PhoneInput
+                      {...field}
+                      placeholder="+84123456789"
+                      defaultCountry="VN"
+                      international
+                      className="h-10 border-gray-200 dark:border-gray-800 bg-transparent dark:bg-transparent focus:ring-2 focus:ring-green-500/20 focus:border-green-500 dark:focus:border-green-400 rounded-lg text-gray-800 dark:text-gray-200 text-sm"
+                    />
                   </FormControl>
                   <FormMessage className="text-xs font-medium" />
                 </FormItem>
@@ -276,12 +276,11 @@ export default function RegisterPage() {
                             </span>
                           </div>
                           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div 
-                              className={`h-full rounded-full transition-all duration-300 ${
-                                passwordStrength >= 100 ? 'bg-green-500' :
-                                passwordStrength >= 67 ? 'bg-blue-500' :
-                                passwordStrength >= 34 ? 'bg-yellow-500' : 'bg-red-500'
-                              }`}
+                            <div
+                              className={`h-full rounded-full transition-all duration-300 ${passwordStrength >= 100 ? 'bg-green-500' :
+                                  passwordStrength >= 67 ? 'bg-blue-500' :
+                                    passwordStrength >= 34 ? 'bg-yellow-500' : 'bg-red-500'
+                                }`}
                               style={{ width: `${passwordStrength}%` }}
                             />
                           </div>
@@ -296,11 +295,10 @@ export default function RegisterPage() {
                               ) : (
                                 <div className="h-4 w-4 rounded-full border-2 border-gray-300 dark:border-gray-600" />
                               )}
-                              <span className={`text-xs ${
-                                requirements[req.id] 
-                                  ? 'text-green-600 dark:text-green-400' 
+                              <span className={`text-xs ${requirements[req.id]
+                                  ? 'text-green-600 dark:text-green-400'
                                   : 'text-gray-500 dark:text-gray-400'
-                              }`}>
+                                }`}>
                                 {req.label}
                               </span>
                             </div>
@@ -311,7 +309,7 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="passwordConfirmation"
