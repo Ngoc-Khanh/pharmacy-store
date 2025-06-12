@@ -18,9 +18,7 @@ export default function MedicineDetailsPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("details");
 
-  if (isLoading) {
-    return <MedicineDetailsSkeleton />;
-  }
+  if (isLoading) return <MedicineDetailsSkeleton />;
 
   return (
     <div className="container py-8">

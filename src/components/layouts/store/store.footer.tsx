@@ -22,7 +22,7 @@ export default function StoreFooter() {
               </p>
               <div className="flex gap-3">
                 <a
-                  href="#"
+                  href={siteConfig.links.facebook}
                   target="_blank"
                   rel="noreferrer"
                   className="h-9 w-9 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 transition-colors"
@@ -41,8 +41,8 @@ export default function StoreFooter() {
                   <Icons.gitHub className="h-4 w-4" />
                   <span className="sr-only">GitHub</span>
                 </a>
-                <a
-                  href="#"
+                {/* <a
+                  href={siteConfig.links}
                   target="_blank"
                   rel="noreferrer"
                   className="h-9 w-9 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 transition-colors"
@@ -51,12 +51,12 @@ export default function StoreFooter() {
                     <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
                   </svg>
                   <span className="sr-only">Twitter</span>
-                </a>
+                </a> */}
               </div>
             </div>
 
             {/* Link sections */}
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <h4 className="font-medium text-gray-900 dark:text-gray-100">Sản phẩm</h4>
               <ul className="space-y-2 text-sm">
                 {["Thuốc kê đơn", "Thuốc không kê đơn", "Thực phẩm chức năng", "Chăm sóc cá nhân"].map((item) => (
@@ -67,22 +67,22 @@ export default function StoreFooter() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
 
-            <div className="space-y-4">
-              <h4 className="font-medium text-gray-900 dark:text-gray-100">Công ty</h4>
+            {/* <div className="space-y-4">
+              <h4 className="font-medium text-gray-900 dark:text-gray-100">Danh mục</h4>
               <ul className="space-y-2 text-sm">
-                {["Về chúng tôi", "Dịch vụ", "Dược sĩ tư vấn", "Tuyển dụng"].map((item) => (
+                {["Trang chủ", "Danh mục", "Dược phẩm", "Tư vấn thuốc AI"].map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                    <a href={routes.store.root} className="text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors">
                       {item}
                     </a>
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
 
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <h4 className="font-medium text-gray-900 dark:text-gray-100">Hỗ trợ</h4>
               <ul className="space-y-2 text-sm">
                 {["Liên hệ", "Trung tâm trợ giúp", "Chính sách bảo mật", "Điều khoản dịch vụ"].map((item) => (
@@ -93,7 +93,7 @@ export default function StoreFooter() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </div>
 
           {/* Copyright section */}
