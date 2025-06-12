@@ -1,9 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { routes } from "@/config";
 
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, Phone, ShoppingBag, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function Hero() {
   return (
@@ -15,19 +17,19 @@ export function Hero() {
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-200/40 dark:bg-teal-800/20 rounded-full filter blur-3xl opacity-20 animate-blob animation-delay-4000" />
 
       <div className="container px-4 md:px-6 relative z-10">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
           className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center"
         >
-          <motion.div 
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex flex-col justify-center space-y-6"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.4 }}
@@ -44,9 +46,9 @@ export function Hero() {
                 </span>
               </Badge>
             </motion.div>
-            
+
             <div className="space-y-4">
-              <motion.h1 
+              <motion.h1
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
@@ -55,8 +57,8 @@ export function Hero() {
                 Chăm sóc sức khỏe<br />
                 trực tuyến đáng tin cậy
               </motion.h1>
-              
-              <motion.p 
+
+              <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
@@ -65,33 +67,39 @@ export function Hero() {
                 Dễ dàng tìm kiếm, đặt hàng và nhận tư vấn về thuốc từ đội ngũ dược sĩ chuyên nghiệp cùng công nghệ AI hiện đại.
               </motion.p>
             </div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-col gap-3 min-[400px]:flex-row mt-4"
             >
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 font-medium rounded-xl px-6 py-6 text-base group"
+                asChild
               >
-                <ShoppingBag className="mr-2 h-5 w-5" />
-                Khám phá ngay
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                <Link to={routes.store.medicines}>
+                  <ShoppingBag className="mr-2 h-5 w-5" />
+                  Khám phá ngay
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
               </Button>
-              
-              <Button 
-                size="lg" 
-                variant="outline" 
+
+              <Button
+                size="lg"
+                variant="outline"
                 className="border-green-200 hover:border-green-300 dark:border-green-800 dark:hover:border-green-700 hover:bg-green-50 dark:hover:bg-green-950/50 transition-all duration-300 rounded-xl px-6 py-6 text-base bg-white/80 dark:bg-gray-900/40 backdrop-blur-sm shadow-sm hover:shadow-md"
+                asChild
               >
-                <Phone className="mr-2 h-5 w-5" />
-                Tư vấn miễn phí
+                <Link to={routes.store.consultation}>
+                  <Phone className="mr-2 h-5 w-5" />
+                  Tư vấn miễn phí
+                </Link>
               </Button>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
@@ -99,8 +107,8 @@ export function Hero() {
             >
               <div className="flex -space-x-3">
                 {[1, 2, 3, 4].map((i) => (
-                  <Avatar 
-                    key={i} 
+                  <Avatar
+                    key={i}
                     className="border-2 border-white dark:border-gray-900 h-10 w-10 transition-transform hover:scale-110 hover:z-10 shadow-md"
                   >
                     <AvatarImage src={`/avatar/${Math.floor(Math.random() * 8) + 1}.jpg`} alt="User avatar" />
@@ -114,8 +122,8 @@ export function Hero() {
                 <span className="font-semibold text-gray-900 dark:text-white">4,000+</span> khách hàng hài lòng
               </div>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
@@ -127,7 +135,7 @@ export function Hero() {
                 { text: "Thuốc chính hãng", delay: 0.2 },
                 { text: "Đơn hàng dễ dàng", delay: 0.3 }
               ].map((tag, i) => (
-                <motion.div 
+                <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -140,7 +148,7 @@ export function Hero() {
               ))}
             </motion.div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -149,9 +157,9 @@ export function Hero() {
           >
             <div className="relative w-[90%] aspect-square">
               <div className="absolute inset-0 rounded-3xl overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-2xl border border-green-100/50 dark:border-green-900/30">
-                <img 
-                  src="/images/hero-pharmacy.png" 
-                  alt="Pharmacy Store" 
+                <img
+                  src="/images/hero-pharmacy.png"
+                  alt="Pharmacy Store"
                   className="w-full h-full object-cover opacity-90"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
@@ -159,7 +167,7 @@ export function Hero() {
                     if (fallback) fallback.style.display = 'flex';
                   }}
                 />
-                <div 
+                <div
                   id="hero-fallback"
                   className="absolute inset-0 hidden flex-col items-center justify-center bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30"
                 >

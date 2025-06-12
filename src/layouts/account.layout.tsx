@@ -3,7 +3,7 @@ import { AccountSidebar } from "@/components/layouts/account";
 import { routes } from "@/config";
 
 import { useAtomValue } from "jotai";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, ScrollRestoration } from "react-router-dom";
 
 export default function AccountLayout() {
   const isAuthenticated = useAtomValue(isAuthenticatedAtom);
@@ -26,6 +26,7 @@ export default function AccountLayout() {
           </div>
         </div>
       </div>
+      <ScrollRestoration />
     </div>
   )
 }

@@ -8,7 +8,7 @@ import { StoreAPI } from "@/services/api/store.api";
 import { useQuery } from "@tanstack/react-query";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Heart, ShoppingCart, Sparkles, Star } from "lucide-react";
+import { ArrowRight, Heart, Sparkles, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function BestSeller() {
@@ -136,17 +136,10 @@ export function BestSeller() {
                     </CardContent>
                   </Link>
                   <CardFooter className="p-5 pt-0 mt-auto">
-                    <div className="grid grid-cols-2 gap-3 w-full">
-                      <Button
-                        variant="outline"
-                        className="rounded-lg group border-green-200 dark:border-green-800 hover:bg-green-50 dark:hover:bg-green-950/50 hover:border-green-300 dark:hover:border-green-700 hover:shadow-sm transition-all duration-200"
-                      >
-                        <ShoppingCart className="mr-1.5 h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
-                        <span>Thêm</span>
-                      </Button>
+                    <div className="flex gap-3 w-full">
                       <Button
                         variant="default"
-                        className="rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 group border-0 hover:shadow-md transition-all duration-200"
+                        className="rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 group border-0 hover:shadow-md transition-all duration-200 w-full"
                         asChild
                       >
                         <Link to={routes.store.medicineDetails(product.id)}>

@@ -2,7 +2,7 @@ import { isActiveUserAtom, userAtom } from "@/atoms/auth.atom";
 import { StoreFooter, StoreHeader } from "@/components/layouts/store";
 import { routes } from "@/config";
 import { useAtomValue } from "jotai";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, ScrollRestoration } from "react-router-dom";
 
 export default function StoreLayout() {
   const user = useAtomValue(userAtom)
@@ -22,6 +22,7 @@ export default function StoreLayout() {
           <StoreFooter />
         </div>
       </div>
+      <ScrollRestoration />
     </div>
   );
 }
