@@ -2,6 +2,7 @@ import { OrderAdminChangeStatusDto, PlaceOrderDto } from "@/data/dto";
 import { Category, Invoice, InvoiceDetails, Medicine, Order, OrderDeliver, OrderDetails } from "@/data/interfaces";
 import { Paginated, SRO } from "@/data/sro";
 import { apiGet, apiPost } from "../api";
+import { StockStatus } from "@/data/enum";
 
 export const StoreAPI = {
   async CategoryRoot() {
@@ -19,11 +20,12 @@ export const StoreAPI = {
     perPage: number = 20,
     filters?: {
       search?: string;
-      category?: string;
+      category?: string | string[]; // Support multiple categories
+      categoryId?: string | string[]; // Support multiple category IDs
       minPrice?: number;
       maxPrice?: number;
       minRating?: number;
-      status?: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK";
+      status?: StockStatus | StockStatus[]; // Support multiple statuses
       sortBy?: string;
     }
   ) {
@@ -35,24 +37,42 @@ export const StoreAPI = {
         url += `&search=${encodeURIComponent(filters.search)}`;
       }
       
-      if (filters.category) {
-        url += `&category_slug=${encodeURIComponent(filters.category)}`;
+      // Support both single and multiple category_id
+      if (filters.categoryId) {
+        if (Array.isArray(filters.categoryId)) {
+          url += `&category=${filters.categoryId.join(',')}`;
+        } else {
+          url += `&category=${encodeURIComponent(filters.categoryId)}`;
+        }
+      } 
+      // Support both single and multiple category_slug
+      else if (filters.category) {
+        if (Array.isArray(filters.category)) {
+          url += `&category_slug=${filters.category.map(c => encodeURIComponent(c)).join(',')}`;
+        } else {
+          url += `&category_slug=${encodeURIComponent(filters.category)}`;
+        }
       }
       
-      if (filters.minPrice) {
+      if (filters.minPrice !== undefined && filters.minPrice >= 0) {
         url += `&min_price=${filters.minPrice}`;
       }
       
-      if (filters.maxPrice) {
+      if (filters.maxPrice !== undefined && filters.maxPrice >= 0) {
         url += `&max_price=${filters.maxPrice}`;
       }
       
-      if (filters.minRating) {
+      if (filters.minRating !== undefined && filters.minRating > 0) {
         url += `&min_rating=${filters.minRating}`;
       }
       
+      // Support both single and multiple status
       if (filters.status) {
-        url += `&status=${filters.status}`;
+        if (Array.isArray(filters.status)) {
+          url += `&status=${filters.status.join(',')}`;
+        } else {
+          url += `&status=${filters.status}`;
+        }
       }
       
       if (filters.sortBy) {

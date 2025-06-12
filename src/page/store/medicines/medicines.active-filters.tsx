@@ -1,12 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { StockStatus } from "@/data/enum";
 
 import { X } from "lucide-react";
 
 interface MedicinesActiveFiltersProps {
   selectedCategories: string[];
   minRating: number;
-  status: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK" | null;
+  status: StockStatus | null;
   priceRange: [number, number];
   displayPriceRange: [number, number];
   onCategoryToggle: (category: string) => void;
@@ -41,11 +42,11 @@ export function MedicinesActiveFilters({
   if (!hasActiveFilters) return null;
 
   // Function to get readable status text
-  const getStatusText = (status: "IN-STOCK" | "OUT-OF-STOCK" | "LOW-STOCK" | null) => {
+  const getStatusText = (status: StockStatus | null) => {
     switch (status) {
-      case "IN-STOCK": return "Còn hàng";
-      case "OUT-OF-STOCK": return "Hết hàng";
-      case "LOW-STOCK": return "Sắp hết hàng";
+      case StockStatus.IN_STOCK: return "Còn hàng";
+      case StockStatus.OUT_OF_STOCK: return "Hết hàng";
+      case StockStatus.PRE_ORDER: return "Đặt trước";
       default: return "";
     }
   };
@@ -73,9 +74,9 @@ export function MedicinesActiveFilters({
       {status && (
         <Badge
           variant="secondary"
-          className={`flex items-center gap-1 ${status === "IN-STOCK" ? "border-emerald-200 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400" :
-            status === "OUT-OF-STOCK" ? "border-red-200 bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-              "border-amber-200 bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+          className={`flex items-center gap-1 ${status === StockStatus.IN_STOCK ? "border-emerald-200 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400" :
+            status === StockStatus.OUT_OF_STOCK ? "border-red-200 bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+              "border-blue-200 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
             }`}
         >
           Trạng thái: {getStatusText(status)}
