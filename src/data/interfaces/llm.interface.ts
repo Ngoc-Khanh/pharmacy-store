@@ -12,6 +12,7 @@ export interface AiConsultationResponse {
   alternativeDiagnoses: PrimaryDiagnosis[];
   generalAdvice: string[];
   severityLevel: SeverityLevel;
+  relatedSymptoms: string[];
   recommendedActions: string[];
 }
 

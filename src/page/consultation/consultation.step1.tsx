@@ -35,9 +35,12 @@ import {
   Target,
   TrendingUp,
   User,
-  Zap
+  Zap,
+  Search,
+  Eye,
+  Thermometer
 } from "lucide-react"
-import { useState } from "react"
+import React, { useState } from "react"
 import { toast } from "sonner"
 
 export const Step1InputSymptom = () => {
@@ -72,6 +75,58 @@ export const Step1InputSymptom = () => {
     })
   }
 
+  const getSeverityConfig = (level: SeverityLevel) => {
+    switch (level) {
+      case SeverityLevel.VERY_HIGH:
+        return {
+          color: 'from-red-600 to-red-700',
+          bgColor: 'from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30',
+          borderColor: 'border-red-300 dark:border-red-700',
+          textColor: 'text-red-700 dark:text-red-300',
+          badgeColor: 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-700',
+          icon: AlertTriangle,
+          label: 'Rất nghiêm trọng',
+          description: 'Cần cấp cứu ngay lập tức',
+          emoji: '🚨'
+        }
+      case SeverityLevel.HIGH:
+        return {
+          color: 'from-orange-500 to-red-500',
+          bgColor: 'from-orange-50 to-red-50 dark:from-orange-950/30 dark:to-red-950/30',
+          borderColor: 'border-orange-300 dark:border-orange-700',
+          textColor: 'text-orange-700 dark:text-orange-300',
+          badgeColor: 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 border-orange-300 dark:border-orange-700',
+          icon: AlertTriangle,
+          label: 'Nghiêm trọng',
+          description: 'Cần gặp bác sĩ ngay lập tức',
+          emoji: '⚠️'
+        }
+      case SeverityLevel.MEDIUM:
+        return {
+          color: 'from-yellow-500 to-orange-500',
+          bgColor: 'from-yellow-50 to-orange-50 dark:from-yellow-950/30 dark:to-orange-950/30',
+          borderColor: 'border-yellow-300 dark:border-yellow-700',
+          textColor: 'text-yellow-700 dark:text-yellow-300',
+          badgeColor: 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700',
+          icon: AlertCircle,
+          label: 'Trung bình',
+          description: 'Theo dõi và có thể cần gặp bác sĩ',
+          emoji: '⚠️'
+        }
+      default:
+        return {
+          color: 'from-green-500 to-emerald-500',
+          bgColor: 'from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30',
+          borderColor: 'border-green-300 dark:border-green-700',
+          textColor: 'text-green-700 dark:text-green-300',
+          badgeColor: 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 border-green-300 dark:border-green-700',
+          icon: CheckCircle2,
+          label: 'Nhẹ',
+          description: 'Có thể tự điều trị tại nhà',
+          emoji: '✅'
+        }
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -267,6 +322,38 @@ export const Step1InputSymptom = () => {
                     </div>
                   </div>
 
+                  {/* Related Symptoms - NEW SECTION */}
+                  {data.relatedSymptoms && data.relatedSymptoms.length > 0 && (
+                    <div className="relative p-6 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/20 dark:to-blue-950/20 rounded-2xl border-2 border-cyan-200 dark:border-cyan-800/50 shadow-lg backdrop-blur-sm overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-200/20 to-blue-200/20 dark:from-cyan-800/10 dark:to-blue-800/10 animate-pulse"></div>
+
+                      <div className="relative">
+                        <h4 className="text-xl font-bold text-foreground mb-6 flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <Search className="w-5 h-5 text-white" />
+                          </div>
+                          <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                            Triệu chứng liên quan
+                          </span>
+                        </h4>
+
+                        <div className="grid gap-3">
+                          {data.relatedSymptoms.map((symptom, index) => (
+                            <div key={index} className="flex items-center gap-4 p-4 bg-white/70 dark:bg-gray-900/50 rounded-xl border border-cyan-200 dark:border-cyan-800/50 shadow-sm backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                              <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                                <Eye className="w-4 h-4 text-white" />
+                              </div>
+                              <div className="flex-1">
+                                <span className="text-foreground leading-relaxed font-medium">{symptom}</span>
+                              </div>
+                              <Thermometer className="w-4 h-4 text-cyan-500 flex-shrink-0 mt-1" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Alternative Diagnoses */}
                   {data.alternativeDiagnoses && data.alternativeDiagnoses.length > 0 && (
                     <div className="space-y-4">
@@ -389,72 +476,38 @@ export const Step1InputSymptom = () => {
                     </div>
                   )}
 
-                  {/* Severity Level Indicator */}
+                  {/* Enhanced Severity Level Indicator */}
                   {data.severityLevel && (
-                    <div className="relative p-6 rounded-2xl border-2 shadow-lg backdrop-blur-sm overflow-hidden">
-                      <div className={`absolute inset-0 ${data.severityLevel === SeverityLevel.HIGH
-                        ? 'bg-gradient-to-r from-red-200/20 to-red-300/20 dark:from-red-800/10 dark:to-red-900/10'
-                        : data.severityLevel === SeverityLevel.MEDIUM
-                          ? 'bg-gradient-to-r from-yellow-200/20 to-orange-200/20 dark:from-yellow-800/10 dark:to-orange-800/10'
-                          : 'bg-gradient-to-r from-green-200/20 to-emerald-200/20 dark:from-green-800/10 dark:to-emerald-800/10'
-                        } animate-pulse`}></div>
+                    <div className={`relative p-6 rounded-2xl border-2 shadow-lg backdrop-blur-sm overflow-hidden ${getSeverityConfig(data.severityLevel).borderColor}`}>
+                      <div className={`absolute inset-0 bg-gradient-to-r ${getSeverityConfig(data.severityLevel).bgColor} animate-pulse`}></div>
 
-                      <div className={`relative flex items-center gap-4 ${data.severityLevel === SeverityLevel.HIGH
-                        ? 'border-red-200 dark:border-red-800/50'
-                        : data.severityLevel === SeverityLevel.MEDIUM
-                          ? 'border-yellow-200 dark:border-yellow-800/50'
-                          : 'border-green-200 dark:border-green-800/50'
-                        }`}>
-                        <div className={`w-16 h-16 rounded-3xl flex items-center justify-center shadow-xl ${data.severityLevel === SeverityLevel.HIGH
-                          ? 'bg-gradient-to-br from-red-500 to-red-600'
-                          : data.severityLevel === SeverityLevel.MEDIUM
-                            ? 'bg-gradient-to-br from-yellow-500 to-orange-500'
-                            : 'bg-gradient-to-br from-green-500 to-emerald-500'
-                          }`}>
-                          {data.severityLevel === SeverityLevel.HIGH ? (
-                            <AlertTriangle className="w-8 h-8 text-white" />
-                          ) : data.severityLevel === SeverityLevel.MEDIUM ? (
-                            <AlertCircle className="w-8 h-8 text-white" />
-                          ) : (
-                            <CheckCircle2 className="w-8 h-8 text-white" />
-                          )}
+                      <div className="relative flex items-center gap-4">
+                        <div className={`w-16 h-16 rounded-3xl flex items-center justify-center shadow-xl bg-gradient-to-br ${getSeverityConfig(data.severityLevel).color}`}>
+                          {(() => {
+                            const IconComponent = getSeverityConfig(data.severityLevel).icon;
+                            return <IconComponent className="w-8 h-8 text-white" />;
+                          })()}
                         </div>
 
                         <div className="flex-1">
                           <h4 className="text-2xl font-bold text-foreground">Mức độ nghiêm trọng</h4>
-                          <p className={`text-lg font-bold ${data.severityLevel === SeverityLevel.HIGH
-                            ? 'text-red-600 dark:text-red-400'
-                            : data.severityLevel === SeverityLevel.MEDIUM
-                              ? 'text-yellow-600 dark:text-yellow-400'
-                              : 'text-green-600 dark:text-green-400'
-                            }`}>
-                            {data.severityLevel === SeverityLevel.HIGH ? 'Nghiêm trọng' :
-                              data.severityLevel === SeverityLevel.MEDIUM ? 'Trung bình' : 'Nhẹ'}
+                          <p className={`text-lg font-bold ${getSeverityConfig(data.severityLevel).textColor}`}>
+                            {getSeverityConfig(data.severityLevel).label}
                           </p>
                           <p className="text-sm text-muted-foreground mt-1">
-                            {data.severityLevel === SeverityLevel.HIGH ? 'Cần gặp bác sĩ ngay lập tức' :
-                              data.severityLevel === SeverityLevel.MEDIUM ? 'Theo dõi và có thể cần gặp bác sĩ' : 'Có thể tự điều trị tại nhà'}
+                            {getSeverityConfig(data.severityLevel).description}
                           </p>
                         </div>
 
                         <div className="flex flex-col gap-2">
                           <Badge
                             variant="outline"
-                            className={`font-bold text-lg px-4 py-2 ${data.severityLevel === SeverityLevel.HIGH
-                              ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-700'
-                              : data.severityLevel === SeverityLevel.MEDIUM
-                                ? 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700'
-                                : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 border-green-300 dark:border-green-700'
-                              }`}
+                            className={`font-bold text-lg px-4 py-2 ${getSeverityConfig(data.severityLevel).badgeColor}`}
                           >
-                            {data.severityLevel === SeverityLevel.HIGH && '🚨 '}
-                            {data.severityLevel === SeverityLevel.MEDIUM && '⚠️ '}
-                            {data.severityLevel === SeverityLevel.LOW && '✅ '}
+                            {getSeverityConfig(data.severityLevel).emoji}
                             <Star className="w-4 h-4 inline ml-1" />
                           </Badge>
-                          <div className={`flex items-center gap-1 text-xs font-medium ${data.severityLevel === SeverityLevel.HIGH ? 'text-red-600' :
-                            data.severityLevel === SeverityLevel.MEDIUM ? 'text-yellow-600' : 'text-green-600'
-                            }`}>
+                          <div className={`flex items-center gap-1 text-xs font-medium ${getSeverityConfig(data.severityLevel).textColor}`}>
                             <Zap className="w-3 h-3" />
                             <span>Mức độ {data.severityLevel}</span>
                           </div>
