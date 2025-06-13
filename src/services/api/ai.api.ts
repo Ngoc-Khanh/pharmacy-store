@@ -5,7 +5,7 @@ import { aiApiPost } from "../api"
 
 export const AiAPI = {
   async AiConsultation(dto: AiConsultationDto) {
-    const res = await aiApiPost<AiConsultationDto, SRO<AiConsultationResponse>>("v1/groq/diagnose", dto)
+    const res = await aiApiPost<AiConsultationDto, SRO<AiConsultationResponse>>("v1/consultation/diagnose", dto)
     return res.data.data;
   }
 }
