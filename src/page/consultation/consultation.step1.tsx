@@ -22,25 +22,25 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
+  Eye,
   FileText,
   Heart,
   Info,
   Lightbulb,
   Loader2,
   RotateCcw,
+  Search,
   Shield,
   Sparkles,
   Star,
   Stethoscope,
   Target,
+  Thermometer,
   TrendingUp,
   User,
-  Zap,
-  Search,
-  Eye,
-  Thermometer
+  Zap
 } from "lucide-react"
-import React, { useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 
 export const Step1InputSymptom = () => {
