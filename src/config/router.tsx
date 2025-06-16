@@ -1,4 +1,3 @@
-import StepForm from "@/components/consultation/StepForm";
 import { routes } from "@/config/routes";
 import { AccountLayout, AdminLayout, StoreLayout } from "@/layouts";
 import { DashboardAdminPage, InvoicesAdminPage, MedicinesAdminDetailPage, MedicinesAdminPage, OrdersAdminPage, SuppliersAdminPage, UsersAdminPage } from "@/page/admin";
@@ -54,10 +53,6 @@ export const reactRouter: RouteObject[] = [
   {
     element: <StoreLayout />,
     children: [
-      {
-        path: "/test",
-        element: <StepForm />,
-      },
       {
         path: routes.store.root,
         element: <RootPage />,

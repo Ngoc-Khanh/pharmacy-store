@@ -13,7 +13,7 @@ import { UsersAPI } from "@/services/api/users.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { KeyRound, LockKeyhole, Mail, Phone, RefreshCw, ShieldCheck, Sparkles, ToggleLeft, UserCircle, User as UserIcon } from "lucide-react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -165,7 +165,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
             <div className="grid gird-cols-1 gap-6">
               <motion.div
                 custom={1}
-                variants={formSectionVariants}
+                variants={formSectionVariants as Variants}
                 initial="hidden"
                 animate="visible"
                 className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-emerald-200/50 dark:hover:border-emerald-800/30 transition-all duration-300"
@@ -255,7 +255,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
 
               <motion.div
                 custom={2}
-                variants={formSectionVariants}
+                variants={formSectionVariants as Variants}
                 initial="hidden"
                 animate="visible"
                 className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-emerald-200/50 dark:hover:border-emerald-800/30 transition-all duration-300"
@@ -320,7 +320,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
 
               <motion.div
                 custom={3}
-                variants={formSectionVariants}
+                variants={formSectionVariants as Variants}
                 initial="hidden"
                 animate="visible"
                 className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-emerald-200/50 dark:hover:border-emerald-800/30 transition-all duration-300"
@@ -433,7 +433,7 @@ export function UsersActionDialog({ currentUser, open, onOpenChange }: Props) {
 
               <motion.div
                 custom={4}
-                variants={formSectionVariants}
+                variants={formSectionVariants as Variants}
                 initial="hidden"
                 animate="visible"
                 className="rounded-xl border border-border/50 bg-card/40 p-5 backdrop-blur-sm hover:border-emerald-200/50 dark:hover:border-emerald-800/30 transition-all duration-300"

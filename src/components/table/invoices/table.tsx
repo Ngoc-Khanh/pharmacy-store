@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Invoice } from "@/data/interfaces";
 import { cn } from "@/lib/utils";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, RowData, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useState } from "react";
 import { DataTablePagination } from "../data-table-pagination";
 import { InvoicesTableToolbar } from "./invoices.table-toolbar";
@@ -117,7 +117,7 @@ export default function InvoicesDataTable({ columns, data }: DataTableProps) {
                       custom={i}
                       initial="hidden"
                       animate="visible"
-                      variants={fadeInUpVariants}
+                      variants={fadeInUpVariants as Variants}
                       className="group border-b border-emerald-50 dark:border-emerald-800/10 hover:bg-emerald-50/70 dark:hover:bg-emerald-900/20 data-[state=selected]:bg-emerald-100 dark:data-[state=selected]:bg-emerald-800/30 transition-colors"
                       data-state={row.getIsSelected() && "selected"}
                     >

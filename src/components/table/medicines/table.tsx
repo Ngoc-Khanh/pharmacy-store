@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Medicine } from "@/data/interfaces";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, RowData, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { DataTablePagination } from "../data-table-pagination";
@@ -130,7 +130,7 @@ export default function MedicinesDataTable({ columns, data, pagination, isLoadin
                         custom={index}
                         initial="hidden"
                         animate="visible"
-                        variants={fadeInUpVariants}
+                        variants={fadeInUpVariants as Variants}
                         className={`transition-all hover:bg-teal-50/70 dark:hover:bg-teal-900/20 border-b border-teal-100/60 dark:border-teal-900/20 ${
                           index % 2 === 0 ? 'bg-white dark:bg-gray-950/80' : 'bg-teal-50/40 dark:bg-teal-950/10'
                         } ${row.getIsSelected() ? 'bg-teal-100/70 dark:bg-teal-900/30 hover:bg-teal-100/90 dark:hover:bg-teal-900/40' : ''}`}
