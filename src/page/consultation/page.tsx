@@ -2,8 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Stepper, StepperDescription, StepperItem, StepperSeparator, StepperTitle, StepperTrigger } from "@/components/ui/stepper";
 import { useStepForm } from "@/hooks/use-step-form";
-import { Bot, BotMessageSquare, Check, CheckCircle2, FileText, HelpCircle, MessageSquare, Phone, Pill, Truck, User } from "lucide-react";
+import { Bot, BotMessageSquare, Check, CheckCircle2, FileText, HelpCircle, MessageSquare, Phone, Pill, User, Star } from "lucide-react";
 import { Step1InputSymptom } from "./consultation.step1";
+import { Step2MedicineSuggestion } from "./consultation.step2";
+import { Step3OrderInformation } from "./consultation.step3";
+import { Step4Confirmation } from "./consultation.step4";
+import { Step5Invoice } from "./consultation.step5";
+import { Step6Feedback } from "./consultation.step6";
 
 export default function ConsultationPage() {
   const { currentStep, totalSteps } = useStepForm();
@@ -28,22 +33,22 @@ export default function ConsultationPage() {
       color: 'text-teal-600 dark:text-teal-400'
     },
     {
-      title: 'Phí giao hàng',
-      description: 'Chọn khu vực giao hàng',
-      icon: Truck,
+      title: 'Xác nhận đặt hàng',
+      description: 'Thuốc đã thêm vào giỏ hàng',
+      icon: CheckCircle2,
       color: 'text-cyan-600 dark:text-cyan-400'
     },
     {
-      title: 'Xem hóa đơn',
-      description: 'Kiểm tra đơn hàng',
+      title: 'Hóa đơn điện tử',
+      description: 'Chi tiết đơn hàng đã đặt',
       icon: FileText,
       color: 'text-green-600 dark:text-green-400'
     },
     {
-      title: 'Hoàn thành',
-      description: 'Xác nhận đặt hàng',
-      icon: CheckCircle2,
-      color: 'text-emerald-600 dark:text-emerald-400'
+      title: 'Góp ý & Đánh giá',
+      description: 'Đánh giá trải nghiệm',
+      icon: Star,
+      color: 'text-purple-600 dark:text-purple-400'
     }
   ];
 
@@ -51,6 +56,18 @@ export default function ConsultationPage() {
     switch (currentStep) {
       case 1:
         return <Step1InputSymptom />
+      case 2:
+        return <Step2MedicineSuggestion />
+      case 3:
+        return <Step3OrderInformation />
+      case 4:
+        return <Step4Confirmation />
+      case 5:
+        return <Step5Invoice />
+      case 6:
+        return <Step6Feedback />
+      default:
+        return null
     }
   }
 
@@ -173,7 +190,7 @@ export default function ConsultationPage() {
                             </StepperTrigger>
                             {index < stepTitles.length - 1 && (
                               <StepperSeparator className={`
-                              absolute inset-y-0 top-[calc(2.9rem+0.125rem)] left-6 -order-1 m-0 -translate-x-1/2 group-data-[orientation=horizontal]/stepper:w-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=horizontal]/stepper:flex-none group-data-[orientation=vertical]/stepper:h-[calc(100%-1.5rem-0.25rem)]
+                                absolute inset-y-0 top-[calc(2.9rem+0.125rem)] left-6 -order-1 m-0 -translate-x-1/2 group-data-[orientation=horizontal]/stepper:w-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=horizontal]/stepper:flex-none group-data-[orientation=vertical]/stepper:h-[calc(100%-1.5rem-0.25rem)]
                                 transition-colors duration-300
                                 ${stepNumber < currentStep
                                   ? 'data-[orientation=vertical]:bg-gradient-to-b data-[orientation=vertical]:from-green-500 data-[orientation=vertical]:to-emerald-500'

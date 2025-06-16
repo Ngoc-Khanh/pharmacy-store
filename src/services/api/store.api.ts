@@ -157,6 +157,10 @@ export const StoreAPI = {
   async InvoiceDetails(id: string) {
     const res = await apiGet<SRO<InvoiceDetails>>(`v1/store/invoices/${id}/details`);
     return res.data.data;
-  }
+  },
   
+  async InvoiceDetailsWithOrderId(id: string) {
+    const res = await apiGet<SRO<InvoiceDetails>>(`v1/store/invoices/${id}/details-with-orders-id`);
+    return res.data.data;
+  }
 };

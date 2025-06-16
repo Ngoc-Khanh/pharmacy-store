@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { AddAddressDto } from "@/data/dto";
 import { AddressSchema } from "@/data/schemas";
@@ -16,6 +17,162 @@ import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useMemo } from "react";
+
+// Data cho các tỉnh thành Việt Nam
+const VIETNAM_PROVINCES = [
+  { value: "an-giang", label: "An Giang" },
+  { value: "ba-ria-vung-tau", label: "Bà Rịa - Vũng Tàu" },
+  { value: "bac-giang", label: "Bắc Giang" },
+  { value: "bac-kan", label: "Bắc Kạn" },
+  { value: "bac-lieu", label: "Bạc Liêu" },
+  { value: "bac-ninh", label: "Bắc Ninh" },
+  { value: "ben-tre", label: "Bến Tre" },
+  { value: "binh-dinh", label: "Bình Định" },
+  { value: "binh-duong", label: "Bình Dương" },
+  { value: "binh-phuoc", label: "Bình Phước" },
+  { value: "binh-thuan", label: "Bình Thuận" },
+  { value: "ca-mau", label: "Cà Mau" },
+  { value: "can-tho", label: "Cần Thơ" },
+  { value: "cao-bang", label: "Cao Bằng" },
+  { value: "da-nang", label: "Đà Nẵng" },
+  { value: "dak-lak", label: "Đắk Lắk" },
+  { value: "dak-nong", label: "Đắk Nông" },
+  { value: "dien-bien", label: "Điện Biên" },
+  { value: "dong-nai", label: "Đồng Nai" },
+  { value: "dong-thap", label: "Đồng Tháp" },
+  { value: "gia-lai", label: "Gia Lai" },
+  { value: "ha-giang", label: "Hà Giang" },
+  { value: "ha-nam", label: "Hà Nam" },
+  { value: "ha-noi", label: "Hà Nội" },
+  { value: "ha-tinh", label: "Hà Tĩnh" },
+  { value: "hai-duong", label: "Hải Dương" },
+  { value: "hai-phong", label: "Hải Phòng" },
+  { value: "hau-giang", label: "Hậu Giang" },
+  { value: "hoa-binh", label: "Hòa Bình" },
+  { value: "hung-yen", label: "Hưng Yên" },
+  { value: "khanh-hoa", label: "Khánh Hòa" },
+  { value: "kien-giang", label: "Kiên Giang" },
+  { value: "kon-tum", label: "Kon Tum" },
+  { value: "lai-chau", label: "Lai Châu" },
+  { value: "lam-dong", label: "Lâm Đồng" },
+  { value: "lang-son", label: "Lạng Sơn" },
+  { value: "lao-cai", label: "Lào Cai" },
+  { value: "long-an", label: "Long An" },
+  { value: "nam-dinh", label: "Nam Định" },
+  { value: "nghe-an", label: "Nghệ An" },
+  { value: "ninh-binh", label: "Ninh Bình" },
+  { value: "ninh-thuan", label: "Ninh Thuận" },
+  { value: "phu-tho", label: "Phú Thọ" },
+  { value: "phu-yen", label: "Phú Yên" },
+  { value: "quang-binh", label: "Quảng Bình" },
+  { value: "quang-nam", label: "Quảng Nam" },
+  { value: "quang-ngai", label: "Quảng Ngãi" },
+  { value: "quang-ninh", label: "Quảng Ninh" },
+  { value: "quang-tri", label: "Quảng Trị" },
+  { value: "soc-trang", label: "Sóc Trăng" },
+  { value: "son-la", label: "Sơn La" },
+  { value: "tay-ninh", label: "Tây Ninh" },
+  { value: "thai-binh", label: "Thái Bình" },
+  { value: "thai-nguyen", label: "Thái Nguyên" },
+  { value: "thanh-hoa", label: "Thanh Hóa" },
+  { value: "thua-thien-hue", label: "Thừa Thiên Huế" },
+  { value: "tien-giang", label: "Tiền Giang" },
+  { value: "tp-ho-chi-minh", label: "TP Hồ Chí Minh" },
+  { value: "tra-vinh", label: "Trà Vinh" },
+  { value: "tuyen-quang", label: "Tuyên Quang" },
+  { value: "vinh-long", label: "Vĩnh Long" },
+  { value: "vinh-phuc", label: "Vĩnh Phúc" },
+  { value: "yen-bai", label: "Yên Bái" }
+];
+
+// Mapping của thành phố chính theo tỉnh
+const CITIES_BY_PROVINCE = {
+  "ha-noi": [
+    { value: "ba-dinh", label: "Ba Đình" },
+    { value: "hoan-kiem", label: "Hoàn Kiếm" },
+    { value: "tay-ho", label: "Tây Hồ" },
+    { value: "long-bien", label: "Long Biên" },
+    { value: "cau-giay", label: "Cầu Giấy" },
+    { value: "dong-da", label: "Đống Đa" },
+    { value: "hai-ba-trung", label: "Hai Bà Trưng" },
+    { value: "hoang-mai", label: "Hoàng Mai" },
+    { value: "thanh-xuan", label: "Thanh Xuân" },
+    { value: "ha-dong", label: "Hà Đông" },
+    { value: "son-tay", label: "Sơn Tây" },
+    { value: "ba-vi", label: "Ba Vì" },
+    { value: "chuong-my", label: "Chương Mỹ" },
+    { value: "dan-phuong", label: "Đan Phượng" },
+    { value: "dong-anh", label: "Đông Anh" },
+    { value: "gia-lam", label: "Gia Lâm" },
+    { value: "hoai-duc", label: "Hoài Đức" },
+    { value: "me-linh", label: "Mê Linh" },
+    { value: "my-duc", label: "Mỹ Đức" },
+    { value: "phu-xuan", label: "Phú Xuyên" },
+    { value: "phuc-tho", label: "Phúc Thọ" },
+    { value: "quoc-oai", label: "Quốc Oai" },
+    { value: "soc-son", label: "Sóc Sơn" },
+    { value: "thach-that", label: "Thạch Thất" },
+    { value: "thanh-oai", label: "Thanh Oai" },
+    { value: "thanh-tri", label: "Thanh Trì" },
+    { value: "thuong-tin", label: "Thường Tín" },
+    { value: "ung-hoa", label: "Ứng Hòa" }
+  ],
+  "tp-ho-chi-minh": [
+    { value: "quan-1", label: "Quận 1" },
+    { value: "quan-2", label: "Quận 2" },
+    { value: "quan-3", label: "Quận 3" },
+    { value: "quan-4", label: "Quận 4" },
+    { value: "quan-5", label: "Quận 5" },
+    { value: "quan-6", label: "Quận 6" },
+    { value: "quan-7", label: "Quận 7" },
+    { value: "quan-8", label: "Quận 8" },
+    { value: "quan-9", label: "Quận 9" },
+    { value: "quan-10", label: "Quận 10" },
+    { value: "quan-11", label: "Quận 11" },
+    { value: "quan-12", label: "Quận 12" },
+    { value: "quan-binh-thanh", label: "Quận Bình Thạnh" },
+    { value: "quan-go-vap", label: "Quận Gò Vấp" },
+    { value: "quan-phu-nhuan", label: "Quận Phú Nhuận" },
+    { value: "quan-tan-binh", label: "Quận Tân Bình" },
+    { value: "quan-tan-phu", label: "Quận Tân Phú" },
+    { value: "quan-thu-duc", label: "Quận Thủ Đức" },
+    { value: "huyen-binh-chanh", label: "Huyện Bình Chánh" },
+    { value: "huyen-can-gio", label: "Huyện Cần Giờ" },
+    { value: "huyen-cu-chi", label: "Huyện Củ Chi" },
+    { value: "huyen-hoc-mon", label: "Huyện Hóc Môn" },
+    { value: "huyen-nha-be", label: "Huyện Nhà Bè" }
+  ],
+  "da-nang": [
+    { value: "hai-chau", label: "Hải Châu" },
+    { value: "cam-le", label: "Cẩm Lệ" },
+    { value: "thanh-khe", label: "Thanh Khê" },
+    { value: "lien-chieu", label: "Liên Chiểu" },
+    { value: "ngu-hanh-son", label: "Ngũ Hành Sơn" },
+    { value: "son-tra", label: "Sơn Trà" },
+    { value: "hoa-vang", label: "Hòa Vang" },
+    { value: "hoang-sa", label: "Hoàng Sa" }
+  ]
+};
+
+const COUNTRIES = [
+  { value: "viet-nam", label: "Việt Nam" },
+  { value: "united-states", label: "Hoa Kỳ" },
+  { value: "china", label: "Trung Quốc" },
+  { value: "japan", label: "Nhật Bản" },
+  { value: "south-korea", label: "Hàn Quốc" },
+  { value: "singapore", label: "Singapore" },
+  { value: "thailand", label: "Thái Lan" },
+  { value: "malaysia", label: "Malaysia" },
+  { value: "philippines", label: "Philippines" },
+  { value: "indonesia", label: "Indonesia" },
+  { value: "australia", label: "Úc" },
+  { value: "canada", label: "Canada" },
+  { value: "united-kingdom", label: "Vương quốc Anh" },
+  { value: "france", label: "Pháp" },
+  { value: "germany", label: "Đức" },
+  { value: "other", label: "Khác" }
+];
 
 interface Props {
   currentAddress?: AddressSchema;
@@ -38,13 +195,15 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
     addressLine1: z.string().min(1, "Địa chỉ là bắt buộc"),
     addressLine2: z.string().nullable().optional(),
     city: z.string().min(1, "Thành phố là bắt buộc"),
-    state: z.string().nullable().optional(),
+    state: z.string().min(1, "Tỉnh là bắt buộc"),
     country: z.string().min(1, "Quốc gia là bắt buộc"),
     postalCode: z.string().min(1, "Mã bưu điện là bắt buộc"),
     isDefault: z.boolean(),
   });
 
-  const form = useForm<AddAddressDto>({
+  type FormData = z.infer<typeof formSchema>;
+
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
@@ -52,9 +211,9 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
         addressLine1: currentAddress.addressLine1 || "",
         addressLine2: currentAddress.addressLine2 || "",
         city: currentAddress.city || "",
-        state: currentAddress.state || "",
+        state: currentAddress.state || "ha-noi",
         postalCode: currentAddress.postalCode || "",
-        country: currentAddress.country || "",
+        country: currentAddress.country || "viet-nam",
         name: currentAddress.name || "",
         phone: currentAddress.phone || "",
       }
@@ -64,12 +223,28 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
         addressLine1: "",
         addressLine2: "",
         city: "",
-        state: "",
-        country: "",
+        state: "ha-noi",
+        country: "viet-nam",
         postalCode: "",
         isDefault: false,
       },
   });
+
+  // Watch state để cập nhật cities khi thay đổi tỉnh
+  const selectedState = form.watch("state");
+  
+  const availableCities = useMemo(() => {
+    if (selectedState && CITIES_BY_PROVINCE[selectedState as keyof typeof CITIES_BY_PROVINCE]) {
+      return CITIES_BY_PROVINCE[selectedState as keyof typeof CITIES_BY_PROVINCE];
+    }
+    return [];
+  }, [selectedState]);
+
+  // Reset city khi thay đổi state
+  const handleStateChange = (value: string) => {
+    form.setValue("state", value);
+    form.setValue("city", ""); // Reset city khi thay đổi tỉnh
+  };
 
   const addAddressMutation = useMutation({
     mutationFn: AccountAPI.addAddress,
@@ -103,11 +278,24 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
     },
   });
 
-  const onSubmit = (data: AddAddressDto) => {
+  const onSubmit = (data: FormData) => {
+    // Convert FormData to AddAddressDto
+    const addressData: AddAddressDto = {
+      name: data.name,
+      phone: data.phone,
+      addressLine1: data.addressLine1,
+      addressLine2: data.addressLine2 || null,
+      city: data.city,
+      state: data.state || null,
+      country: data.country,
+      postalCode: data.postalCode,
+      isDefault: data.isDefault,
+    };
+
     if (isEdit && currentAddress) {
-      editAddressMutation.mutate({ ...data, id: currentAddress.id });
+      editAddressMutation.mutate({ ...addressData, id: currentAddress.id });
     } else {
-      addAddressMutation.mutate(data);
+      addAddressMutation.mutate(addressData);
     }
   }
 
@@ -251,40 +439,58 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="city"
+                    name="state"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-medium">
-                          Thành phố <span className="text-destructive">*</span>
+                          Tỉnh/Thành phố <span className="text-destructive">*</span>
                         </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Hà Nội"
-                            autoComplete="off"
-                            className="focus-visible:ring-primary"
-                            {...field}
-                            value={field.value || ""}
-                          />
-                        </FormControl>
+                        <Select onValueChange={handleStateChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="focus:ring-primary">
+                              <SelectValue placeholder="Chọn tỉnh/thành phố" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {VIETNAM_PROVINCES.map((province) => (
+                              <SelectItem key={province.value} value={province.value}>
+                                {province.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={form.control}
-                    name="state"
+                    name="city"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">Tỉnh <span className="text-destructive">*</span></FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="HN"
-                            autoComplete="off"
-                            className="focus-visible:ring-primary"
-                            {...field}
-                            value={field.value || ""}
-                          />
-                        </FormControl>
+                        <FormLabel className="font-medium">
+                          Quận/Huyện <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value} disabled={!selectedState || availableCities.length === 0}>
+                          <FormControl>
+                            <SelectTrigger className="focus:ring-primary">
+                              <SelectValue placeholder={selectedState ? "Chọn quận/huyện" : "Chọn tỉnh trước"} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {availableCities.length > 0 ? (
+                              availableCities.map((city) => (
+                                <SelectItem key={city.value} value={city.value}>
+                                  {city.label}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectItem value="other" disabled>
+                                Không có dữ liệu
+                              </SelectItem>
+                            )}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -323,15 +529,20 @@ export function AddressesActionDialog({ currentAddress, open, onOpenChange }: Pr
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-medium">Quốc gia <span className="text-destructive">*</span></FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Việt Nam"
-                            autoComplete="off"
-                            className="focus-visible:ring-primary"
-                            {...field}
-                            value={field.value || ""}
-                          />
-                        </FormControl>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="focus:ring-primary">
+                              <SelectValue placeholder="Chọn quốc gia" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {COUNTRIES.map((country) => (
+                              <SelectItem key={country.value} value={country.value}>
+                                {country.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}

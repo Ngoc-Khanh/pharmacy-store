@@ -1,4 +1,5 @@
-import { PatientGender } from "@/data/enum";
+import { PatientGender, PaymentMethod } from "@/data/enum";
+import { Medicine, Order } from "@/data/interfaces";
 import { atom } from "jotai";
 import { atomWithReset } from "jotai/utils";
 
@@ -6,6 +7,22 @@ import { atomWithReset } from "jotai/utils";
 export const symptomsAtom = atomWithReset('');
 export const patientAgeAtom = atomWithReset(0);
 export const patientGenderAtom = atomWithReset<PatientGender>(PatientGender.MALE);
+
+export const consultationIdAtom = atomWithReset<string | null>(null);
+
+// Chọn thuốc atoms
+export const selectedMedicinesAtom = atomWithReset<Medicine[]>([]);
+
+// Step 3 atoms - Order information
+export const selectedAddressIdAtom = atomWithReset<string | null>(null);
+export const selectedPaymentMethodAtom = atomWithReset<PaymentMethod>(PaymentMethod.COD);
+
+// Step 5 atoms - Order result
+export const placedOrderAtom = atomWithReset<Order | null>(null);
+
+// Step 6 atoms - Feedback
+export const feedbackRatingAtom = atomWithReset<number | null>(null);
+export const feedbackCommentAtom = atomWithReset('');
 
 // Các atom cho trạng thái tiến trình
 export const currentStepAtom = atomWithReset(1);
@@ -17,6 +34,7 @@ export const formDataAtom = atom(
     symptoms: get(symptomsAtom),
     patientAge: get(patientAgeAtom),
     patientGender: get(patientGenderAtom),
+    selectedMedicines: get(selectedMedicinesAtom),
   })
 )
 
@@ -49,6 +67,13 @@ export const resetFormAtom = atom(
     set(symptomsAtom, '');
     set(patientAgeAtom, 0);
     set(patientGenderAtom, PatientGender.MALE);
+    set(selectedMedicinesAtom, []);
+    set(selectedAddressIdAtom, null);
+    set(selectedPaymentMethodAtom, PaymentMethod.COD);
+    set(placedOrderAtom, null);
+    set(feedbackRatingAtom, null);
+    set(feedbackCommentAtom, '');
+    set(consultationIdAtom, null);
   }
 )
 
@@ -66,4 +91,14 @@ export const isStep1ValidAtom = atom((get) => {
   const age = get(patientAgeAtom);
   const gender = get(patientGenderAtom);
   return symptoms.trim().length > 5 && age > 0 && gender;
+})
+
+export const isStep2ValidAtom = atom((get) => {
+  const selectedMedicines = get(selectedMedicinesAtom);
+  return selectedMedicines.length > 0;
+})
+
+export const isStep6ValidAtom = atom((get) => {
+  const rating = get(feedbackRatingAtom);
+  return rating !== null && rating > 0;
 })
