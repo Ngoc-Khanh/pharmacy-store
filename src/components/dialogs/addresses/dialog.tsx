@@ -29,6 +29,7 @@ export default function AddressesDialog() {
         open={open === "add"}
         onOpenChange={(isOpen) => handleOpenChange(isOpen, "add")}
       />
+      
       {currentAddress && (
         <>
           <AddressesActionDialog

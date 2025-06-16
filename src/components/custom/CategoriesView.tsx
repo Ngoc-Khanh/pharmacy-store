@@ -1,31 +1,31 @@
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
-import { StoreAPI } from "@/services/api/store.api";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router-dom";
-import { routes } from "@/config";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  ShoppingBag, 
-  Package, 
-  Pill, 
-  Stethoscope, 
-  Tablets, 
-  Apple, 
-  Heart, 
-  Baby, 
-  Droplets, 
-  Dumbbell, 
-  ShieldCheck, 
+import { routes } from "@/config";
+import { StoreAPI } from "@/services/api/store.api";
+import { useQuery } from "@tanstack/react-query";
+import { motion, Variants } from "framer-motion";
+import {
+  Apple,
+  Baby,
+  Droplets,
+  Dumbbell,
   Flower2,
-  Search,
+  Heart,
   LayoutGrid,
-  List
+  List,
+  Package,
+  Pill,
+  Search,
+  ShieldCheck,
+  ShoppingBag,
+  Stethoscope,
+  Tablets
 } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 // Map of category names to their respective icons
 const categoryIcons: Record<string, React.ElementType> = {
@@ -225,7 +225,7 @@ export function CategoriesView() {
                 const CategoryIcon = categoryIcons[category.title] || categoryIcons.default;
                 
               return (
-                <motion.div key={category.id} variants={itemVariants}>
+                <motion.div key={category.id} variants={itemVariants as Variants}>
                   <Link to={`${routes.store.medicines}?category=${category.slug}`} className="block h-full">
                     <Card className="bg-white dark:bg-gray-950 border-0 shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer overflow-hidden h-full">
                       <CardContent className="p-6 flex flex-col items-center text-center">
@@ -260,7 +260,7 @@ export function CategoriesView() {
               const CategoryIcon = categoryIcons[category.title] || categoryIcons.default;
               
               return (
-                <motion.div key={category.id} variants={itemVariants}>
+                <motion.div key={category.id} variants={itemVariants as Variants}>
                   <Link to={`${routes.store.medicines}?category=${category.slug}`} className="block w-full">
                     <Card className="bg-white dark:bg-gray-950 border-0 shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer overflow-hidden">
                       <CardContent className="p-6 flex flex-row items-center">

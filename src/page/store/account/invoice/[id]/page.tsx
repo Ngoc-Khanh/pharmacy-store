@@ -4,7 +4,7 @@ import { routes, siteConfig } from "@/config";
 import { InvoiceDetails } from "@/data/interfaces";
 import { StoreAPI } from "@/services/api/store.api";
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -76,12 +76,12 @@ export default function InvoiceDetailsPage() {
           className="grid grid-cols-1 lg:grid-cols-3 gap-8"
         >
           {/* Left Column - Invoice Summary */}
-          <motion.div variants={itemVariants} className="lg:col-span-1 space-y-6">
+          <motion.div variants={itemVariants as Variants} className="lg:col-span-1 space-y-6">
             <InvoiceSummary invoice={invoice} />
           </motion.div>
 
           {/* Right Column - Invoice Items & Details */}
-          <motion.div variants={itemVariants} className="lg:col-span-2">
+          <motion.div variants={itemVariants as Variants} className="lg:col-span-2">
             <InvoiceProducts invoice={invoice} />
           </motion.div>
         </motion.div>

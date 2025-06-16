@@ -4,7 +4,7 @@ import { OrderAdmin } from "@/data/interfaces";
 import { cn } from "@/lib/utils";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { useState } from "react";
 import { DataTablePagination } from "../data-table-pagination";
 import { OrdersTableToolbar } from "./orders.table-toolbar";
@@ -104,7 +104,7 @@ export default function OrdersDataTable({ columns, data }: DataTableProps) {
                       custom={index}
                       initial="hidden"
                       animate="visible"
-                      variants={fadeInUpVariants}
+                      variants={fadeInUpVariants as Variants}
                       className={cn(
                         "transition-all hover:bg-indigo-50/70 dark:hover:bg-indigo-900/20 border-b border-indigo-100/60 dark:border-indigo-900/20",
                         index % 2 === 0 ? 'bg-white dark:bg-gray-950/80' : 'bg-indigo-50/40 dark:bg-indigo-950/10',

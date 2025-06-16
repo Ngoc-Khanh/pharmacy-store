@@ -18,7 +18,7 @@ import { Step1Data, Step1EnhancedInput, Step1EnhancedTips, Step1PatientInformati
 
 export const Step1InputSymptom = () => {
   const user = useAtomValue(userAtom)
-  const { symptoms, patientAge, patientGender, nextStep, isValid } = useStep1()
+  const { symptoms, patientAge, patientGender, nextStep, isValid, setConsultationId } = useStep1()
   const [data, setData] = useState<AiConsultationResponse | null>(null)
 
   const handleNext = () => {
@@ -29,6 +29,7 @@ export const Step1InputSymptom = () => {
     mutationFn: AiAPI.AiConsultation,
     onSuccess: (responseData) => {
       setData(responseData)
+      setConsultationId(responseData.consultationId)
     },
     onError: (error) => {
       toast.error(error.message)
@@ -53,7 +54,7 @@ export const Step1InputSymptom = () => {
       {/* Enhanced Header */}
       <div className="text-center relative">
         <div className="relative inline-flex items-center justify-center w-24 h-24 mb-6">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-500 rounded-3xl opacity-20 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-500 rounded-3xl opacity-20 animate-pulse" />
           <div className="relative w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-xl">
             <BotMessageSquare className="w-10 h-10 text-white" />
           </div>

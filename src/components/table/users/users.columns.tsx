@@ -6,7 +6,7 @@ import { AccountRole, AccountStatus } from "@/data/enum";
 import { User } from "@/data/interfaces";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { ShieldCheck, Stethoscope, UserCircle2 } from "lucide-react";
 import { UserRowActions } from "./users.row-actions";
 
@@ -100,7 +100,7 @@ export const usersColumns: ColumnDef<User>[] = [
           initial="initial"
           whileHover="hover"
           whileTap="tap"
-          variants={scaleAnimation}
+          variants={scaleAnimation as Variants}
           className="flex items-center justify-center py-1"
         >
           <Avatar className="h-10 w-10 ring-2 ring-emerald-100/50 dark:ring-emerald-700/30 shadow-md">
@@ -190,7 +190,7 @@ export const usersColumns: ColumnDef<User>[] = [
         <motion.div
           initial="initial"
           whileHover="hover"
-          variants={hoverAnimation}
+          variants={hoverAnimation as Variants}
           className="py-1"
         >
           <Badge
@@ -218,7 +218,7 @@ export const usersColumns: ColumnDef<User>[] = [
         <motion.div
           initial="initial"
           whileHover="hover"
-          variants={hoverAnimation}
+          variants={hoverAnimation as Variants}
           className="py-1"
         >
           <Badge
@@ -251,7 +251,7 @@ export const usersColumns: ColumnDef<User>[] = [
         <motion.div
           initial="initial"
           whileHover="hover"
-          variants={hoverAnimation}
+          variants={hoverAnimation as Variants}
           className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 w-fit shadow-sm ${userType.color}`}
         >
           {userType.icon && (

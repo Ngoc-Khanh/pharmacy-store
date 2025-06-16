@@ -1,15 +1,24 @@
 import {
+  consultationIdAtom,
   currentStepAtom,
+  feedbackCommentAtom,
+  feedbackRatingAtom,
   formDataAtom,
   goToStepAtom,
   isFirstStepAtom,
   isLastStepAtom,
   isStep1ValidAtom,
+  isStep2ValidAtom,
+  isStep6ValidAtom,
   nextStepAtom,
   patientAgeAtom,
   patientGenderAtom,
+  placedOrderAtom,
   prevStepAtom,
   resetFormAtom,
+  selectedAddressIdAtom,
+  selectedMedicinesAtom,
+  selectedPaymentMethodAtom,
   symptomsAtom,
   totalStepsAtom,
 } from "@/atoms/consulation.atom";
@@ -62,8 +71,9 @@ export const useStep1 = () => {
   const [symptoms, setSymptoms] = useAtom(symptomsAtom);
   const [patientAge, setPatientAge] = useAtom(patientAgeAtom);
   const [patientGender, setPatientGender] = useAtom(patientGenderAtom);
+  const [consultationId, setConsultationId] = useAtom(consultationIdAtom);
   const isValid = useAtomValue(isStep1ValidAtom);
-  const nextStep = useSetAtom(nextStepAtom)
+  const nextStep = useSetAtom(nextStepAtom);
 
   return {
     symptoms,
@@ -72,7 +82,83 @@ export const useStep1 = () => {
     setPatientAge,
     patientGender,
     setPatientGender,
+    consultationId,
+    setConsultationId,
     isValid,
     nextStep,
+  };
+};
+
+export const useStep2 = () => {
+  const consultationId = useAtomValue(consultationIdAtom);
+  const [selectedMedicines, setSelectedMedicines] = useAtom(selectedMedicinesAtom);
+  const isValid = useAtomValue(isStep2ValidAtom);
+  const nextStep = useSetAtom(nextStepAtom);
+  const prevStep = useSetAtom(prevStepAtom);
+
+  return {
+    consultationId,
+    selectedMedicines,
+    setSelectedMedicines,
+    isValid,
+    nextStep,
+    prevStep,
+  };
+};
+
+export const useStep3 = () => {
+  const [selectedAddressId, setSelectedAddressId] = useAtom(selectedAddressIdAtom);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useAtom(selectedPaymentMethodAtom);
+  const selectedMedicines = useAtomValue(selectedMedicinesAtom);
+  const nextStep = useSetAtom(nextStepAtom);
+  const prevStep = useSetAtom(prevStepAtom);
+
+  return {
+    selectedAddressId,
+    setSelectedAddressId,
+    selectedPaymentMethod,
+    setSelectedPaymentMethod,
+    selectedMedicines,
+    nextStep,
+    prevStep,
+  };
+};
+
+export const useStep5 = () => {
+  const [placedOrder, setPlacedOrder] = useAtom(placedOrderAtom);
+  const selectedMedicines = useAtomValue(selectedMedicinesAtom);
+  const selectedAddressId = useAtomValue(selectedAddressIdAtom);
+  const selectedPaymentMethod = useAtomValue(selectedPaymentMethodAtom);
+  const nextStep = useSetAtom(nextStepAtom);
+  const prevStep = useSetAtom(prevStepAtom);
+
+  return {
+    placedOrder,
+    setPlacedOrder,
+    selectedMedicines,
+    selectedAddressId,
+    selectedPaymentMethod,
+    nextStep,
+    prevStep,
+  };
+};
+
+export const useStep6 = () => {
+  const [feedbackRating, setFeedbackRating] = useAtom(feedbackRatingAtom);
+  const [feedbackComment, setFeedbackComment] = useAtom(feedbackCommentAtom);
+  const isValid = useAtomValue(isStep6ValidAtom);
+  const resetForm = useSetAtom(resetFormAtom);
+  const goToStep = useSetAtom(goToStepAtom);
+  const placedOrder = useAtomValue(placedOrderAtom);
+
+  return {
+    feedbackRating,
+    setFeedbackRating,
+    feedbackComment,
+    setFeedbackComment,
+    isValid,
+    resetForm,
+    goToStep,
+    placedOrder,
   };
 };

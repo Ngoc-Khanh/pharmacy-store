@@ -1,11 +1,16 @@
 import { AiConsultationDto } from "@/data/dto"
-import { AiConsultationResponse } from "@/data/interfaces"
+import { AiConsultationResponse, AiMedicineSuggestionResponse } from "@/data/interfaces"
 import { SRO } from "@/data/sro"
-import { aiApiPost } from "../api"
+import { aiApiGet, aiApiPost } from "../api"
 
 export const AiAPI = {
   async AiConsultation(dto: AiConsultationDto) {
     const res = await aiApiPost<AiConsultationDto, SRO<AiConsultationResponse>>("v1/consultation/diagnose", dto)
+    return res.data.data;
+  },
+
+  async AiMedicineSuggestion(consultationId: string) {
+    const res = await aiApiGet<SRO<AiMedicineSuggestionResponse>>(`v1/consultation/recommend-medicines/${consultationId}`)
     return res.data.data;
   }
 }
