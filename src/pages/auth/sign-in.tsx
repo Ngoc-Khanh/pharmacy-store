@@ -1,4 +1,4 @@
-import { PasswordInput } from "@/components/custom";
+import { PasswordInput } from "@/components/custom/password-input";
 import { TextAnimate } from "@/components/magicui/text-animate";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";

@@ -1,6 +1,7 @@
 import { routes } from "@/config";
 import { StoreLayout } from "@/layouts";
 import { ForgotPasswordPage, ResetPasswordPage, SignInPage, SignUpPage, VerifyAccountPage } from "@/pages/auth";
+import { RootPage } from "@/pages/store";
 import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
@@ -17,7 +18,7 @@ export const reactRouter: RouteObject[] = [
   // STORE PAGES
   {
     element: <StoreLayout />, children: [
-      { path: routes.store.root, element: <div>Store Home Page's</div> },
+      { path: routes.store.root, element: <RootPage /> },
     ]
   },
 

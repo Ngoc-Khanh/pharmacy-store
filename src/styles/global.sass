@@ -76,32 +76,27 @@
   *
     @apply border-border
 
-  html
-    @apply scroll-smooth
-
   body
-    @apply bg-background text-foreground overscroll-none
-
-  ::-webkit-scrollbar
-    width: 5px
-
-  ::-webkit-scrollbar-track
-    background: transparent
-
-  ::-webkit-scrollbar-thumb
-    background: hsl(var(--border))
-    border-radius: 5px
-
-  *
-    scrollbar-width: thin
-    scrollbar-color: hsl(var(--border)) transparent
+    @apply bg-background text-foreground
 
 @layer utilities
-  .border-grid
-    @apply border-border/30 dark:border-border
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button
+    -webkit-appearance: none
+    margin: 0
 
-  .container-wrapper
-    @apply min-[1800px]:max-w-[1536px] min-[1800px]:border-x border-border/30 dark:border-border mx-auto w-full
+  input[type="number"]
+    -moz-appearance: textfield
 
-  .container
-    @apply px-4 xl:px-6 2xl:px-4 mx-auto max-w-[1536px]
+  ::-webkit-scrollbar
+    width: 2px
+    height: 2px
+
+  ::-webkit-scrollbar-track
+    background: hsl(var(--muted))
+
+  ::-webkit-scrollbar-thumb
+    background: hsl(var(--muted-foreground))
+
+  ::-webkit-scrollbar-thumb:hover
+    background: hsl(var(--primary))

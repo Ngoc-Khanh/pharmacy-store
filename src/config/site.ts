@@ -1,3 +1,5 @@
+import { routes } from "./routes";
+
 export const siteConfig = {
   // SETTING SITE CONFIG
   name: "Pharmacity Store",
@@ -41,3 +43,14 @@ export const META_THEME_COLORS = {
   light: "#ffffff",
   dark: "#09090b",
 };
+
+export const mainNav = [
+  {
+    title: "Trang chủ",
+    href: routes.store.root,
+  },
+  {
+    title: "Danh mục",
+    href: routes.store.categories,
+  },
+]

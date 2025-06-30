@@ -1,5 +1,5 @@
-import { PhoneInput } from "@/components/custom";
 import { PasswordInput } from "@/components/custom/password-input";
+import { PhoneInput } from "@/components/custom/phone-input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
