@@ -1,6 +1,6 @@
-import { routes } from "@/config/routes";
+import { routes } from "@/config";
 import { StoreLayout } from "@/layouts";
-import { SignInPage } from "@/pages/auth";
+import { ForgotPasswordPage, ResetPasswordPage, SignInPage, SignUpPage, VerifyAccountPage } from "@/pages/auth";
 import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
@@ -9,8 +9,10 @@ export const reactRouter: RouteObject[] = [
 
   // AUTHENTICATION PAGES
   { path: routes.auth.login, element: <SignInPage /> },
-  { path: routes.auth.register, element: <div>Register Page's</div> },
-  { path: routes.auth.forgotPassword, element: <div>Forgot Password Page's</div> },
+  { path: routes.auth.register, element: <SignUpPage /> },
+  { path: routes.auth.verifyAccount(":id"), element: <VerifyAccountPage /> },
+  { path: routes.auth.forgotPassword, element: <ForgotPasswordPage /> },
+  { path: routes.auth.resetPassword(":token"), element: <ResetPasswordPage /> },
 
   // STORE PAGES
   {
