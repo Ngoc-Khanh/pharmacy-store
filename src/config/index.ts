@@ -1,3 +1,3 @@
-export { reactRouter } from "./router";
-export { siteConfig } from "./site";
-export { routes } from "./routes";
+export * from "./site";
+export * from "./routes";
+export * from "./router";

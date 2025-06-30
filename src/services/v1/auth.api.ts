@@ -1,5 +1,5 @@
 import { CredentialsDto } from "@/data/dto";
-import { RefreshTokenResponse, UserResponse } from "@/data/interfaces";
+import { Credential, RefreshTokenResponse, UserResponse } from "@/data/interfaces";
 import { SRO } from "@/data/sro";
 import { apiGet, apiPost } from "@/services/api";
 
