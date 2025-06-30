@@ -1,8 +1,7 @@
 export const siteConfig = {
   // SETTING SITE CONFIG
-  name: "Pharmacy Store",
-  url: "https://krug.com",
-  ogImage: "https://ui.shadcn.com/og.jpg",
+  name: "Pharmacity Store",
+  url: import.meta.env.VITE_APP_URL || "http://localhost:5173",
   description:
     "Your trusted pharmacy for quality medications and health care products.",
   // OWNER INFO
@@ -13,7 +12,7 @@ export const siteConfig = {
 
   // AUTH JWT
   auth: {
-    jwt_key: "ACCESS_TOKEN",
+    jwt_key: "access_token",
   },
 
   // CONFIG LOCALES
@@ -26,7 +25,9 @@ export const siteConfig = {
   backend: {
     // BASE API URL
     base_api_url:
-      import.meta.env.VITE_BACKEND_API_BASE_URL || "http://localhost:8000",
+      import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000",
+    llm_ai_url:
+      import.meta.env.VITE_LLM_API_URL || "http://localhost:5000",
     // BASE HEADERS
     base_headers: {
       "Content-Type": "application/json",
