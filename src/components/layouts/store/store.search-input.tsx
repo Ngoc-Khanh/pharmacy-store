@@ -36,7 +36,7 @@ export function SearchInput() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-full flex-1"
+        className="relative p-4 rounded-full flex-1"
       >
         <Search
           className={cn(
