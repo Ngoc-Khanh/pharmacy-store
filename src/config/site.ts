@@ -53,4 +53,8 @@ export const mainNav = [
     title: "Danh mục",
     href: routes.store.categories,
   },
+  {
+    title: "AI Chẩn đoán",
+    href: routes.store.consultation,
+  },
 ]
