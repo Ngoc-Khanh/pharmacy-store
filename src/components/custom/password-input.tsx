@@ -15,7 +15,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     return (
       <div className="relative group">
         {showIcon && (
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400 group-focus-within:text-green-500 transition-colors duration-200 drop-shadow-sm" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 dark:text-gray-300 group-focus-within:text-green-500 transition-colors duration-200 drop-shadow-sm z-10" />
         )}
         <Input
           {...props}
@@ -30,7 +30,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors focus:outline-none focus:text-green-500 p-1 rounded-md hover:bg-green-50 dark:hover:bg-green-900/20 group"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400 transition-colors focus:outline-none focus:text-green-500 p-1 rounded-md hover:bg-green-50 dark:hover:bg-green-900/20 group z-10"
           tabIndex={-1}
         >
           {showPassword ? (
