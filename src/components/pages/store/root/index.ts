@@ -3,8 +3,10 @@ export * from './root.categories';
 export * from './root.cta';
 export * from './root.different-feature-cards';
 export * from './root.featured';
+export * from './root.featured-product';
 export * from './root.hero';
 export * from './root.less-is-more-card';
 export * from './root.pictures';
+export * from './root.product-card';
+export * from './root.product-card-skeleton';
 export * from './root.services';
-
