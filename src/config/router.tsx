@@ -1,6 +1,7 @@
 import { routes } from "@/config";
 import { AccountLayout, StoreLayout } from "@/layouts";
 import { AddressesPage, CartPage, ChangePasswordPage, InvoicesPage, OrdersPage, ProfilePage } from "@/pages/account";
+import { OrderDetails } from "@/pages/account/[id]";
 import { ForgotPasswordPage, ResetPasswordPage, SignInPage, SignUpPage, VerifyAccountPage } from "@/pages/auth";
 import { CategoryPage, RootPage } from "@/pages/store";
 import { Navigate, RouteObject } from "react-router-dom";
@@ -27,6 +28,7 @@ export const reactRouter: RouteObject[] = [
         { path: routes.store.account.changePwd, element: <ChangePasswordPage /> },
         { path: routes.store.account.cart, element: <CartPage /> },
         { path: routes.store.account.orders, element: <OrdersPage /> },
+        { path: routes.store.account.orderDetails(":id"), element: <OrderDetails /> },
         { path: routes.store.account.invoices, element: <InvoicesPage /> },
       ] },
     ]
