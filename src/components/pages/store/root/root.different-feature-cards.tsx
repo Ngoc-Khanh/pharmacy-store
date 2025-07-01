@@ -5,38 +5,22 @@ export function RootDifferentFeatureCards() {
     {
       Icon: Icons.cart,
       title: "Đặt hàng nhanh chóng",
-      description:
-        "Hệ thống đặt hàng online tiện lợi, giao hàng tận nơi trong 24h.",
-      gradient: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-50 dark:bg-blue-950/30",
-      iconBg: "bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/50 dark:to-cyan-900/50"
+      description: "Hệ thống đặt hàng online tiện lợi, giao hàng tận nơi trong 24h.",
     },
     {
       Icon: Icons.tag,
       title: "Giá cả minh bạch",
-      description:
-        "Chúng tôi cam kết về giá cả rõ ràng, không phát sinh chi phí ẩn. Mọi thông tin giá đều công khai và cạnh tranh.",
-      gradient: "from-emerald-500 to-green-500",
-      bgColor: "bg-emerald-50 dark:bg-emerald-950/30",
-      iconBg: "bg-gradient-to-br from-emerald-100 to-green-100 dark:from-emerald-900/50 dark:to-green-900/50"
+      description: "Chúng tôi cam kết về giá cả rõ ràng, không phát sinh chi phí ẩn. Mọi thông tin giá đều công khai và cạnh tranh.",
     },
     {
       Icon: Icons.package,
       title: "Nguồn gốc rõ ràng",
-      description:
-        "Chỉ hợp tác với các nhà cung cấp uy tín, thuốc chính hãng có đầy đủ giấy tờ pháp lý.",
-      gradient: "from-purple-500 to-violet-500",
-      bgColor: "bg-purple-50 dark:bg-purple-950/30",
-      iconBg: "bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-900/50 dark:to-violet-900/50"
+      description: "Chỉ hợp tác với các nhà cung cấp uy tín, thuốc chính hãng có đầy đủ giấy tờ pháp lý.",
     },
     {
       Icon: Icons.award,
       title: "Tư vấn chuyên nghiệp",
-      description:
-        "Đội ngũ dược sĩ giàu kinh nghiệm sẵn sàng tư vấn và hỗ trợ khách hàng 24/7.",
-      gradient: "from-orange-500 to-red-500",
-      bgColor: "bg-orange-50 dark:bg-orange-950/30",
-      iconBg: "bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/50 dark:to-red-900/50"
+      description: "Đội ngũ dược sĩ giàu kinh nghiệm sẵn sàng tư vấn và hỗ trợ khách hàng 24/7.",
     },
   ];
 
