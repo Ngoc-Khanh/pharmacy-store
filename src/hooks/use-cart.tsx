@@ -1,10 +1,11 @@
-import { cartApiLoadingAtom, cartAtom, cartErrorAtom, cartItemCountAtom, cartTotalPriceAtom, clearCartAtom, initCartAtom, removeFromCartAtom, updateCartItemQuantityAtom } from "@/atoms";
+import { addToCartAtom, cartApiLoadingAtom, cartAtom, cartErrorAtom, cartItemCountAtom, cartTotalPriceAtom, clearCartAtom, initCartAtom, removeFromCartAtom, updateCartItemQuantityAtom } from "@/atoms";
 import { useAtom } from "jotai";
 
 export function useCart() {
   const [cart] = useAtom(cartAtom);
   const [itemCount] = useAtom(cartItemCountAtom);
   const [totalPrice] = useAtom(cartTotalPriceAtom);
+  const [, addToCart] = useAtom(addToCartAtom);
   const [, updateItemQuantity] = useAtom(updateCartItemQuantityAtom);
   const [, removeItem] = useAtom(removeFromCartAtom);
   const [, clearCart] = useAtom(clearCartAtom);
@@ -16,6 +17,7 @@ export function useCart() {
     cart,
     itemCount,
     totalPrice,
+    addToCart,
     updateItemQuantity,
     removeItem,
     clearCart,

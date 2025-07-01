@@ -24,7 +24,7 @@ export function StoreSideMenu() {
       >
         <div className="grid py-8 gap-y-3 ml-12 md:ml-[96px] mt-[120px]">
           {mainNav.map(({ title, href }, index) => (
-            <Link key={index} to={href} className="text-xl md:text-3xl">
+            <Link key={index} to={href} className="text-xl md:text-3xl font-medium uppercase">
               {title}
             </Link>
           ))}

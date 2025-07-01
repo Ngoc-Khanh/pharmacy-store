@@ -22,6 +22,12 @@ export const reactRouter: RouteObject[] = [
     element: <StoreLayout />, children: [
       { path: routes.store.root, element: <RootPage /> },
       { path: routes.store.categories, element: <CategoryPage /> },
+      { path: routes.store.medicines, element: <div>Medicine</div> },
+      { path: routes.store.medicineDetails(":id"), element: <div>Medicine Details</div> },
+      { path: routes.store.consultation, element: <div>Consultation</div> },
+      { path: routes.store.checkout, element: <div>Checkout</div> },
+      { path: routes.store.checkoutSuccess(":id"), element: <div>Checkout Success</div> },
+
       { element: <AccountLayout />, children: [
         { path: routes.store.account.root, element: <ProfilePage /> },
         { path: routes.store.account.addresses, element: <AddressesPage /> },

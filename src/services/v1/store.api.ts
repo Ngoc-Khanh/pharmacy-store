@@ -1,6 +1,6 @@
 import { OrderChangeStatusDto, PlaceOrderDto } from "@/data/dto";
-import { CategoryResponse, InvoiceDetails, InvoiceResponse, MedicineResponse, OrderDetails, OrderResponse } from "@/data/interfaces";
-import { SRO } from "@/data/sro";
+import { CategoryResponse, InvoiceDetails, InvoiceResponse, ListParams, MedicineResponse, OrderDetails, OrderResponse, SupplierResponse } from "@/data/interfaces";
+import { Paginated, SRO } from "@/data/sro";
 import { apiGet, apiPost } from "@/services/api";
 
 export const StoreAPI = {
@@ -14,13 +14,29 @@ export const StoreAPI = {
     return res.data.data;
   },
 
-  async MedicineDetails(id: string) {
-    const res = await apiGet<SRO<MedicineResponse>>(`v1/store/medicines/${id}/details`);
+  async MedicineList(params?: ListParams) {
+    const searchParams = new URLSearchParams();
+    if (params?.s) searchParams.append('s', params.s);
+    if (params?.page) searchParams.append('page', params.page.toString());
+    if (params?.limit) searchParams.append('per_page', params.limit.toString());
+    const queryString = searchParams.toString();
+    const url = queryString ? `v1/store/medicines?${queryString}` : "v1/store/medicines";
+    const res = await apiGet<SRO<Paginated<MedicineResponse>>>(url);
     return res.data.data;
   },
 
-  async CategoriesRoot() {
-    const res = await apiGet<SRO<CategoryResponse[]>>("v1/store/categories");
+  async SupplierList(params?: ListParams) {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.append('page', params.page.toString());
+    if (params?.limit) searchParams.append('per_page', params.limit.toString());
+    const queryString = searchParams.toString();
+    const url = queryString ? `v1/store/suppliers?${queryString}` : "v1/store/suppliers";
+    const res = await apiGet<SRO<Paginated<SupplierResponse>>>(url);
+    return res.data.data;
+  },
+
+  async MedicineDetails(id: string) {
+    const res = await apiGet<SRO<MedicineResponse>>(`v1/store/medicines/${id}/details`);
     return res.data.data;
   },
 

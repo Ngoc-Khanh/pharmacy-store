@@ -58,6 +58,14 @@ export const mainNav = [
     title: "AI Chẩn đoán",
     href: routes.store.consultation,
   },
+  {
+    title: "Tài khoản",
+    href: routes.store.account.root,
+  },
+  {
+    title: "Giỏ hàng",
+    href: routes.store.account.cart,
+  }
 ]
 
 export const accountMenus = [
