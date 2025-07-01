@@ -6,11 +6,10 @@ export function RootLessIsMoreCard() {
   return (
     <section className="max-w-[1920px] mx-auto h-[620px] md:h-[580px] bg-gradient-to-br from-emerald-100 via-green-50 to-teal-100 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-950 grid grid-cols-12 my-16 relative overflow-hidden">
       {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-72 h-72 bg-green-200/30 dark:bg-green-900/30 rounded-full blur-3xl transform translate-x-32 -translate-y-16 animate-pulse"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 bg-green-200/30 dark:bg-green-900/30 rounded-full blur-3xl transform translate-x-32 -translate-y-16"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-200/20 dark:bg-emerald-900/20 rounded-full blur-3xl transform -translate-x-48 translate-y-24"></div>
       
       <div className="relative w-full h-[340px] md:h-[580px] col-span-12 md:col-span-8 overflow-hidden group">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out z-10"></div>
         <img
           src="https://res.cloudinary.com/dr9fzhpcj/image/upload/v1751347964/allopathic-medicine_pl4qcg.jpg"
           alt="Thuốc chất lượng cao"
@@ -22,10 +21,10 @@ export function RootLessIsMoreCard() {
       <div className="col-span-12 md:col-span-4 pb-6 md:py-20 px-6 md:px-16 relative z-10 flex flex-col justify-center">
         <div className="space-y-6 transform hover:translate-y-[-4px] transition-transform duration-300">
           <div className="inline-block">
-            <div className="w-12 h-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mb-4 animate-pulse"></div>
+            <div className="w-12 h-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mb-4"></div>
           </div>
           
-          <h2 className="text-xl md:text-3xl font-bold mb-3 text-green-800 dark:text-green-300 leading-tight bg-gradient-to-r from-green-700 to-emerald-600 dark:from-green-300 dark:to-emerald-400 bg-clip-text text-transparent animate-in slide-in-from-left duration-700">
+          <h2 className="text-xl md:text-3xl font-bold mb-3 text-green-800 dark:text-green-300 leading-tight bg-gradient-to-r from-green-700 to-emerald-600 dark:from-green-300 dark:to-emerald-400 bg-clip-text text-transparent">
             Sức khỏe là ưu tiên hàng đầu
           </h2>
           
@@ -37,7 +36,6 @@ export function RootLessIsMoreCard() {
           </p>
           
           <div className="relative inline-block group/button">
-            <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur-lg opacity-75 group-hover/button:opacity-100 transition-opacity duration-300 animate-pulse"></div>
             <Link
               to="/shop"
               className={cn(
