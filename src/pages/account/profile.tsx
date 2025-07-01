@@ -1,6 +1,6 @@
 import { Loader } from "@/components/custom/loader";
 import { PhoneInput } from "@/components/custom/phone-input";
-import { ProfileSkeleton, ProfileTitle } from "@/components/pages/account";
+import { ProfileAddress, ProfileSkeleton, ProfileTitle } from "@/components/pages/account";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -307,7 +307,7 @@ export default function ProfilePage() {
         <Separator className="bg-gray-100 dark:bg-gray-800" />
 
         {/* Address Section */}
-        {/* <RootAccountAddress /> */}
+        <ProfileAddress />
 
         <Separator className="bg-gray-100 dark:bg-gray-800" />
 

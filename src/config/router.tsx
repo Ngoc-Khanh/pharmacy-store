@@ -1,6 +1,6 @@
 import { routes } from "@/config";
 import { AccountLayout, StoreLayout } from "@/layouts";
-import { ProfilePage } from "@/pages/account";
+import { AddressesPage, CartPage, ChangePasswordPage, InvoicesPage, OrdersPage, ProfilePage } from "@/pages/account";
 import { ForgotPasswordPage, ResetPasswordPage, SignInPage, SignUpPage, VerifyAccountPage } from "@/pages/auth";
 import { CategoryPage, RootPage } from "@/pages/store";
 import { Navigate, RouteObject } from "react-router-dom";
@@ -23,11 +23,11 @@ export const reactRouter: RouteObject[] = [
       { path: routes.store.categories, element: <CategoryPage /> },
       { element: <AccountLayout />, children: [
         { path: routes.store.account.root, element: <ProfilePage /> },
-        { path: routes.store.account.addresses, element: <div>Addresses</div> },
-        { path: routes.store.account.changePwd, element: <div>Password</div> },
-        { path: routes.store.account.cart, element: <div>Cart</div> },
-        { path: routes.store.account.orders, element: <div>Orders</div> },
-        { path: routes.store.account.invoices, element: <div>Invoices</div> },
+        { path: routes.store.account.addresses, element: <AddressesPage /> },
+        { path: routes.store.account.changePwd, element: <ChangePasswordPage /> },
+        { path: routes.store.account.cart, element: <CartPage /> },
+        { path: routes.store.account.orders, element: <OrdersPage /> },
+        { path: routes.store.account.invoices, element: <InvoicesPage /> },
       ] },
     ]
   },

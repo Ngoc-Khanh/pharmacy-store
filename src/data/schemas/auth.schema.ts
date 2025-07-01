@@ -132,3 +132,22 @@ export const resetPasswordSchema = z
   });
 
 export type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
+
+
+export const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(6, "Mật khẩu hiện tại phải có ít nhất 6 ký tự"),
+    newPassword: z.string()
+      .min(8, "Mật khẩu mới phải có ít nhất 8 ký tự")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa, 1 chữ cái viết thường, 1 chữ số và 1 ký tự đặc biệt"
+      ),
+    newPasswordConfirmation: z.string(),
+  })
+  .refine((data) => data.newPassword === data.newPasswordConfirmation, {
+    message: "Mật khẩu không khớp",
+    path: ["newPasswordConfirmation"],
+  });
+
+export type PasswordFormValues = z.infer<typeof passwordSchema>;
