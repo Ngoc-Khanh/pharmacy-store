@@ -88,7 +88,9 @@ export function StoreNavUser({ user }: StoreNavUserProps) {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">{user.email}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                    {user.email.length > 20 ? `${user.email.substring(0, 20)}...` : user.email}
+                  </p>
                 </div>
               </div>
             </DropdownMenuLabel>

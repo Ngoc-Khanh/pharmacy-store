@@ -1,7 +1,8 @@
 import { routes } from "@/config";
-import { StoreLayout } from "@/layouts";
+import { AccountLayout, StoreLayout } from "@/layouts";
+import { ProfilePage } from "@/pages/account";
 import { ForgotPasswordPage, ResetPasswordPage, SignInPage, SignUpPage, VerifyAccountPage } from "@/pages/auth";
-import { RootPage } from "@/pages/store";
+import { CategoryPage, RootPage } from "@/pages/store";
 import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
@@ -19,6 +20,15 @@ export const reactRouter: RouteObject[] = [
   {
     element: <StoreLayout />, children: [
       { path: routes.store.root, element: <RootPage /> },
+      { path: routes.store.categories, element: <CategoryPage /> },
+      { element: <AccountLayout />, children: [
+        { path: routes.store.account.root, element: <ProfilePage /> },
+        { path: routes.store.account.addresses, element: <div>Addresses</div> },
+        { path: routes.store.account.changePwd, element: <div>Password</div> },
+        { path: routes.store.account.cart, element: <div>Cart</div> },
+        { path: routes.store.account.orders, element: <div>Orders</div> },
+        { path: routes.store.account.invoices, element: <div>Invoices</div> },
+      ] },
     ]
   },
 
