@@ -1,5 +1,5 @@
 import { Stepper, StepperDescription, StepperItem, StepperSeparator, StepperTitle, StepperTrigger } from "@/components/custom/stepper";
-import { ConsultationStepOne, ConsultationStepThree, ConsultationStepTwo } from "@/components/pages/store/consultation";
+import { ConsultationStepFour, ConsultationStepOne, ConsultationStepThree, ConsultationStepTwo } from "@/components/pages/store/consultation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { stepTitles, useStepConsultation } from "@/hooks/use-step-consultation";
@@ -16,8 +16,8 @@ export default function ConsultationPage() {
         return <ConsultationStepTwo />
       case 3:
         return <ConsultationStepThree />
-      // case 4:
-      //   return <Step4Confirmation />
+      case 4:
+        return <ConsultationStepFour />
       // case 5:
       //   return <Step5Invoice />
       // case 6:
