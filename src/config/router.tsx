@@ -1,9 +1,10 @@
 import { routes } from "@/config";
 import { AccountLayout, StoreLayout } from "@/layouts";
 import { AddressesPage, CartPage, ChangePasswordPage, InvoicesPage, OrdersPage, ProfilePage } from "@/pages/account";
-import { OrderDetails } from "@/pages/account/[id]";
+import { InvoiceDetailPage, OrderDetailPage } from "@/pages/account/[id]";
 import { ForgotPasswordPage, ResetPasswordPage, SignInPage, SignUpPage, VerifyAccountPage } from "@/pages/auth";
 import { CategoryPage, RootPage } from "@/pages/store";
+import { MedicineDetailPage } from "@/pages/store/[id]";
 import { Navigate, RouteObject } from "react-router-dom";
 
 export const reactRouter: RouteObject[] = [
@@ -22,14 +23,21 @@ export const reactRouter: RouteObject[] = [
     element: <StoreLayout />, children: [
       { path: routes.store.root, element: <RootPage /> },
       { path: routes.store.categories, element: <CategoryPage /> },
+      { path: routes.store.medicines, element: <div>Medicine</div> },
+      { path: routes.store.medicineDetails(":id"), element: <MedicineDetailPage /> },
+      { path: routes.store.consultation, element: <div>Consultation</div> },
+      { path: routes.store.checkout, element: <div>Checkout</div> },
+      { path: routes.store.checkoutSuccess(":id"), element: <div>Checkout Success</div> },
+
       { element: <AccountLayout />, children: [
         { path: routes.store.account.root, element: <ProfilePage /> },
         { path: routes.store.account.addresses, element: <AddressesPage /> },
         { path: routes.store.account.changePwd, element: <ChangePasswordPage /> },
         { path: routes.store.account.cart, element: <CartPage /> },
         { path: routes.store.account.orders, element: <OrdersPage /> },
-        { path: routes.store.account.orderDetails(":id"), element: <OrderDetails /> },
+        { path: routes.store.account.orderDetails(":id"), element: <OrderDetailPage /> },
         { path: routes.store.account.invoices, element: <InvoicesPage /> },
+        { path: routes.store.account.invoiceDetails(":id"), element: <InvoiceDetailPage /> },
       ] },
     ]
   },

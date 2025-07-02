@@ -4,6 +4,7 @@ export interface CategoryResponse {
   slug: string;
   description: string;
   isActive?: boolean;
+  totalMedicines?: number;
   readonly updatedAt: string;
   readonly createdAt: string;
 }
