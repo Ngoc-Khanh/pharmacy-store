@@ -3,7 +3,7 @@ import { AiConsultationResponse, AiMedicineSuggestionResponse } from "@/data/int
 import { SRO } from "@/data/sro";
 import { aiApiGet, aiApiPost } from "@/services/api";
 
-export const AIApi = {
+export const AiAPI = {
   async AiConsultation(dto: AiConsultationDto) {
     const res = await aiApiPost<AiConsultationDto, SRO<AiConsultationResponse>>("v1/consultation/diagnose", dto)
     return res.data.data;

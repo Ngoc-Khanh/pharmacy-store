@@ -1,9 +1,9 @@
-import { StepOneInputArea, StepOnePatientInformation } from "@/components/pages/store/consultation";
+import { StepOneData, StepOneEnhancedTips, StepOneInputArea, StepOnePatientInformation } from "@/components/pages/store/consultation";
 import { Button } from "@/components/ui/button";
 import { AiConsultationResponse } from "@/data/interfaces";
 import { useAuth } from "@/hooks/use-auth";
 import { useStep1 } from "@/hooks/use-step-consultation";
-import { AIApi } from "@/services/v1";
+import { AiAPI } from "@/services/v1";
 import { useMutation } from "@tanstack/react-query";
 import { Bot, BotMessageSquare, Brain, RotateCcw, Sparkles } from "lucide-react";
 import { useState } from "react";
@@ -19,7 +19,7 @@ export function ConsultationStepOne() {
   }
 
   const { mutate: consultationMutation, isPending } = useMutation({
-    mutationFn: AIApi.AiConsultation,
+    mutationFn: AiAPI.AiConsultation,
     onSuccess: (responseData) => {
       setData(responseData)
       setConsultationId(responseData.consultationId)
@@ -82,7 +82,7 @@ export function ConsultationStepOne() {
         </>
       )}
 
-
+      {(isPending || data) && (<StepOneData data={data} isPending={isPending} />)}
 
       {data && (
         <div className="flex justify-center gap-4">
@@ -108,6 +108,9 @@ export function ConsultationStepOne() {
           </Button>
         </div>
       )}
+
+      {/* Enhanced Tips */}
+      <StepOneEnhancedTips />
     </div>
   );
 }
