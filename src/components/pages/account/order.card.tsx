@@ -68,8 +68,8 @@ export const OrderCard = ({ order, showConfirmButton = false }: { order: OrderRe
                 {order.items.length} {order.items.length === 1 ? 'sản phẩm' : 'sản phẩm'}
               </div>
               <div className="space-y-3 border-l-2 border-green-100 dark:border-green-800 pl-3">
-                {order.items.filter(item => item.medicine).slice(0, 2).map((item) => (
-                  <div key={item.medicineId} className="text-sm flex justify-between items-center">
+                {order.items.filter(item => item.medicine).slice(0, 2).map((item, index) => (
+                  <div key={`${item.medicineId}-${index}`} className="text-sm flex justify-between items-center">
                     <div className="flex items-center">
                       <div className="w-2 h-2 rounded-full bg-gradient-to-r from-green-500 to-green-400 dark:from-green-400 dark:to-green-500 mr-2.5 shadow-sm dark:shadow-green-900/30"></div>
                       <span className="text-gray-700 dark:text-gray-200 font-medium">
