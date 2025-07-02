@@ -286,7 +286,7 @@ export const clearCartAtom = atom(
 // `clearCartAfterPaymentAtom` xóa giỏ hàng sau khi thanh toán thành công
 export const clearCartAfterPaymentAtom = atom(
   null,
-  async (get, set) => {
+  async (_, set) => {
     console.log("🛒 clearCartAfterPayment triggered");
     
     // Xóa giỏ hàng trong state ngay lập tức

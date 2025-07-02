@@ -19,9 +19,10 @@ import {
   selectedPaymentMethodAtom,
   symptomsAtom,
   totalStepsAtom,
-} from "@/atoms";
+  resetConsultationAtom,
+} from "@/atoms/consultation.atom";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { BotMessageSquare, CheckCircle2, FileText, Pill, Star, User } from "lucide-react";
+import { BotMessageSquare, CheckCircle2, FileText, Pill, User } from "lucide-react";
 
 /**
  * Custom hook sử dụng Jotai atoms thay thế cho useStepForm
@@ -130,6 +131,7 @@ export const useStep5 = () => {
   const selectedPaymentMethod = useAtomValue(selectedPaymentMethodAtom);
   const nextStep = useSetAtom(nextStepAtom);
   const prevStep = useSetAtom(prevStepAtom);
+  const resetConsultation = useSetAtom(resetConsultationAtom);
 
   return {
     placedOrder,
@@ -139,6 +141,7 @@ export const useStep5 = () => {
     selectedPaymentMethod,
     nextStep,
     prevStep,
+    resetConsultation,
   };
 };
 
@@ -191,10 +194,10 @@ export const stepTitles = [
     icon: FileText,
     color: 'text-green-600 dark:text-green-400'
   },
-  {
-    title: 'Góp ý & Đánh giá',
-    description: 'Đánh giá trải nghiệm',
-    icon: Star,
-    color: 'text-purple-600 dark:text-purple-400'
-  }
+  // {
+  //   title: 'Góp ý & Đánh giá',
+  //   description: 'Đánh giá trải nghiệm',
+  //   icon: Star,
+  //   color: 'text-purple-600 dark:text-purple-400'
+  // }
 ];

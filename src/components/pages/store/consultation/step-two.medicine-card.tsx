@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { StockStatus } from "@/data/enums";
 import { MedicineResponse } from "@/data/interfaces";
-import { CheckCircle, DollarSign, Pill, Star } from "lucide-react";
+import { CheckCircle, Coins, Pill, Star } from "lucide-react";
 
 interface StepTwoMedicineCardProps {
   medicine: MedicineResponse;
@@ -53,9 +53,9 @@ export const StepTwoMedicineCard = ({ medicine, isSelected, onToggle }: StepTwoM
 
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-1">
-          <DollarSign className="w-4 h-4 text-emerald-600" />
+          <Coins className="w-4 h-4 text-emerald-600" />
           <span className="text-lg font-bold text-emerald-600">
-            {medicine.variants.price.toLocaleString('vi-VN')}đ
+            {medicine.variants.price.toLocaleString('vi-VN')} ₫
           </span>
         </div>
         <Badge className={medicine.variants.stockStatus === StockStatus.IN_STOCK

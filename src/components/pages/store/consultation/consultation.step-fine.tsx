@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export const ConsultationStepFine = () => {
   const navigate = useNavigate();
-  const { placedOrder, selectedPaymentMethod, nextStep } = useStep5();
+  const { placedOrder, selectedPaymentMethod, nextStep, resetConsultation } = useStep5();
 
   // Fetch invoice details using the placed order ID
   const { data: invoice, isLoading: isLoadingInvoice, error: invoiceError } = useQuery<InvoiceDetails>({
@@ -25,6 +25,10 @@ export const ConsultationStepFine = () => {
   const handleDownloadInvoice = () => {
     console.log("[ConsultationStepFine] Download invoice for order:", placedOrder?.id);
     // TODO: Implement invoice download functionality
+  };
+  const handleAskAgain = () => {
+    resetConsultation();
+    // Có thể thêm toast thông báo nếu cần
   };
 
   // Loading state
@@ -62,6 +66,7 @@ export const ConsultationStepFine = () => {
         onContinueShopping={handleContinueShopping}
         onGoHome={handleGoHome}
         onNextStep={nextStep}
+        onAskAgain={handleAskAgain}
       />
 
       {/* Feedback Section */}

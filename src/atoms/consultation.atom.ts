@@ -1,7 +1,7 @@
 import { PatientGender, PaymentMethod } from "@/data/enums";
 import { MedicineResponse, OrderResponse } from "@/data/interfaces";
 import { atom } from "jotai";
-import { atomWithReset } from "jotai/utils";
+import { atomWithReset, RESET } from "jotai/utils";
 
 // Các atom cho từng trường hợp dữ liệu form
 export const symptomsAtom = atomWithReset('');
@@ -26,7 +26,7 @@ export const feedbackCommentAtom = atomWithReset('');
 
 // Các atom cho trạng thái step
 export const currentStepAtom = atomWithReset(1);
-export const totalStepsAtom = atom(6);
+export const totalStepsAtom = atom(5);
 
 // Các bước tiến trình atoms
 export const isFirstStepAtom = atom((get) => get(currentStepAtom) === 1);
@@ -54,6 +54,35 @@ export const goToStepAtom = atom(
   (get, set, step: number) => {
     const total = get(totalStepsAtom);
     if (step >= 1 && step <= total) set(currentStepAtom, step);
+  }
+)
+
+// Reset toàn bộ consultation state và quay về step 1
+export const resetConsultationAtom = atom(
+  null,
+  (get, set) => {
+    // Reset tất cả form data
+    set(symptomsAtom, RESET);
+    set(patientAgeAtom, RESET);
+    set(patientGenderAtom, RESET);
+    set(consultationIdAtom, RESET);
+    
+    // Reset selected medicines
+    set(selectedMedicinesAtom, RESET);
+    
+    // Reset order info
+    set(selectedAddressIdAtom, RESET);
+    set(selectedPaymentMethodAtom, RESET);
+    
+    // Reset order result
+    set(placedOrderAtom, RESET);
+    
+    // Reset feedback
+    set(feedbackRatingAtom, RESET);
+    set(feedbackCommentAtom, RESET);
+    
+    // Reset về step 1
+    set(currentStepAtom, RESET);
   }
 )
 

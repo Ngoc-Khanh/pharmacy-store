@@ -12,8 +12,8 @@ export function StoreLayout() {
           </main>
           <StoreFooter />
         </div>
+        <ScrollRestoration />
       </div>
-      <ScrollRestoration />
     </div>
   );
 }
