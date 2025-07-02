@@ -68,14 +68,16 @@ export const addToCartAtom = atom(
     // Kiểm tra người dùng đã đăng nhập hay chưa
     const isAuthenticated = get(isAuthenticatedAtom);
     if (!isAuthenticated) {
-      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
-      return;
+      const error = new Error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      toast.error(error.message);
+      throw error;
     }
 
     if (!medicine?.id) {
       console.error("Đối tượng sản phẩm không hợp lệ", medicine);
-      toast.error("Không thể thêm vào giỏ hàng do dữ liệu không hợp lệ");
-      return;
+      const error = new Error("Không thể thêm vào giỏ hàng do dữ liệu không hợp lệ");
+      toast.error(error.message);
+      throw error;
     }
     
     // Lưu lại trạng thái hiện tại để có thể hoàn tác nếu API lỗi
