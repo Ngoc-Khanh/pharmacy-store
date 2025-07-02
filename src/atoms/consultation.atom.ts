@@ -25,7 +25,7 @@ export const feedbackRatingAtom = atomWithReset<number | null>(null);
 export const feedbackCommentAtom = atomWithReset('');
 
 // Các atom cho trạng thái step
-export const currentStepAtom = atomWithReset(3);
+export const currentStepAtom = atomWithReset(4);
 export const totalStepsAtom = atom(6);
 
 // Các bước tiến trình atoms

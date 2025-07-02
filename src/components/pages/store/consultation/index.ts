@@ -1,6 +1,12 @@
+export * from "./consultation.step-four";
 export * from "./consultation.step-one";
 export * from "./consultation.step-three";
 export * from "./consultation.step-two";
+export * from "./step-four.action-buttons";
+export * from "./step-four.feedback-section";
+export * from "./step-four.next-steps";
+export * from "./step-four.order-summary";
+export * from "./step-four.success-header";
 export * from "./step-one.data";
 export * from "./step-one.enhanced-tips";
 export * from "./step-one.input-area";
@@ -16,3 +22,4 @@ export * from "./step-two.important-notice";
 export * from "./step-two.loading-skeleton";
 export * from "./step-two.medicine-card";
 export * from "./step-two.selection-summary";
+
