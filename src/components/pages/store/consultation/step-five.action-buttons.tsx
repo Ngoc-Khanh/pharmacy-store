@@ -1,37 +1,59 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { FileText, Home, ShoppingBag, Star } from "lucide-react";
+import { FileText, Home, MessageCircleQuestion, ShoppingBag, Star } from "lucide-react";
 
 interface StepFiveActionButtonsProps {
   onViewOrders: () => void;
   onContinueShopping: () => void;
   onGoHome: () => void;
   onNextStep: () => void;
+  onAskAgain?: () => void;
 }
 
 export const StepFiveActionButtons = ({ 
   onViewOrders, 
   onContinueShopping, 
   onGoHome, 
-  onNextStep 
+  onNextStep,
+  onAskAgain
 }: StepFiveActionButtonsProps) => (
   <>
-    {/* Feedback Navigation */}
+    {/* Ask Again & Feedback Section */}
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 1.3 }}
-      className="text-center"
+      transition={{ delay: 1.2 }}
+      className="grid grid-cols-1 md:grid-cols-2 gap-4"
     >
+      {/* Ask Again Button */}
+      {onAskAgain && (
+        <Button
+          onClick={onAskAgain}
+          className="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white h-14 text-lg font-medium px-8 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all"
+        >
+          <MessageCircleQuestion className="w-6 h-6" />
+          Hỏi lại
+        </Button>
+      )}
+
+      {/* Feedback Button */}
       <Button
         onClick={onNextStep}
-        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white h-14 text-lg font-medium px-10 flex items-center justify-center gap-3 mx-auto shadow-lg hover:shadow-xl transition-all"
+        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white h-14 text-lg font-medium px-8 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all"
       >
         <Star className="w-6 h-6" />
         Đánh giá trải nghiệm
       </Button>
-      <p className="text-sm text-muted-foreground mt-3">
-        Giúp chúng tôi cải thiện dịch vụ bằng đánh giá của bạn 🌟
+    </motion.div>
+
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1.25 }}
+      className="text-center"
+    >
+      <p className="text-sm text-muted-foreground">
+        {onAskAgain ? 'Có thể đặt câu hỏi mới hoặc ' : ''}Giúp chúng tôi cải thiện dịch vụ bằng đánh giá của bạn 🌟
       </p>
     </motion.div>
 

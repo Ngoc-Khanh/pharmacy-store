@@ -64,11 +64,10 @@ export const ConsultationStepThree = () => {
   const addToCartMutation = useMutation({
     mutationFn: AccountAPI.AddToCart,
     onSuccess: () => {
-      toast.success("Đã thêm thuốc vào giỏ hàng thành công!")
       queryClient.invalidateQueries({ queryKey: ['cart'] })
     },
     onError: (error) => {
-      toast.error(error.message || "Không thể thêm vào giỏ hàng")
+      console.error("Cart add error:", error)
     },
   })
 
@@ -126,22 +125,28 @@ export const ConsultationStepThree = () => {
     setIsAddingToCart(true)
 
     try {
-      for (const medicine of selectedMedicines) {
+      const addPromises = selectedMedicines.map(medicine => {
         const cartItem: CartItemDto = {
           medicineId: medicine.id,
           quantity: 1,
         }
-        await addToCartMutation.mutateAsync(cartItem)
-      }
+        return addToCartMutation.mutateAsync(cartItem)
+      })
 
-      toast.success(`Đã thêm ${selectedMedicines.length} loại thuốc vào giỏ hàng!`)
+      await Promise.allSettled(addPromises)
+
+      toast.success(`Đã thêm ${selectedMedicines.length} loại thuốc vào giỏ hàng thành công!`, {
+        description: `Tổng giá trị: ${selectedMedicines.reduce((sum, medicine) => sum + medicine.variants.price, 0).toLocaleString('vi-VN')} ₫`,
+        duration: 3000,
+      })
 
       setTimeout(() => {
         nextStep()
-      }, 1000)
+      }, 1500)
 
-    } catch {
-      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng")
+    } catch (error) {
+      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng. Vui lòng thử lại!")
+      console.error("Batch add to cart error:", error)
     } finally {
       setIsAddingToCart(false)
     }

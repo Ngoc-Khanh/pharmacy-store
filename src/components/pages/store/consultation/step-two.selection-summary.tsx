@@ -20,7 +20,7 @@ export const StepTwoSelectionSummary = ({ medicines }: { medicines: MedicineResp
                 Đã chọn {medicines.length} thuốc
               </h4>
               <p className="text-sm text-teal-600 dark:text-teal-400">
-                Tổng: {totalPrice.toLocaleString('vi-VN')}đ
+                Tổng: {totalPrice.toLocaleString('vi-VN')} ₫
               </p>
             </div>
           </div>
