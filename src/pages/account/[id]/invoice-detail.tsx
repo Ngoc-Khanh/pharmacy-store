@@ -61,7 +61,7 @@ export default function InvoiceDetailPage() {
         <title>{`Hóa đơn #${invoice.invoiceNumber} | ${siteConfig.name}`}</title>
       </Helmet>
 
-      <div className="py-8 px-4 max-w-7xl mx-auto min-h-screen bg-gradient-to-b from-white to-gray-50/50">
+      <div className="py-8 px-4 max-w-7xl mx-auto min-h-screen bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
         <InvoiceDetailHeader invoiceNumber={invoice.invoiceNumber} onBack={goBack} />
 
         <motion.div

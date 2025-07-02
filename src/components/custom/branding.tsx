@@ -13,7 +13,7 @@ export function Branding({ className }: Props) {
         className
       )}
     >
-      <span className="text-emerald-600 hover:text-emerald-700 transition-colors">
+      <span className="text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300 transition-colors">
         {siteConfig.name.slice(0, 10).toUpperCase()}
       </span>
       <span className="text-slate-900 dark:text-slate-100">

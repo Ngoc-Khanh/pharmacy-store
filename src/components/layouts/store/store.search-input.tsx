@@ -56,7 +56,7 @@ export function SearchInput() {
                   placeholder="Tìm kiếm sản phẩm"
                   className={cn(
                     isFocused ? "pl-6" : "pl-10",
-                    "rounded-full transition-all duration-500",
+                    "rounded-full transition-all duration-500 border-gray-200 dark:border-gray-700 focus:border-teal-500 dark:focus:border-teal-400 focus:ring-teal-500/20 dark:focus:ring-teal-400/20",
                   )}
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
@@ -66,7 +66,7 @@ export function SearchInput() {
             </FormItem>
           )}
         />
-        <Button className="absolute right-4 top-4" type="submit" variant="link">
+        <Button className="absolute right-4 top-4 hover:text-teal-600 dark:hover:text-teal-400" type="submit" variant="link">
           <Search
             className={cn(
               "h-4 w-4 text-muted-foreground transition-all duration-200",
