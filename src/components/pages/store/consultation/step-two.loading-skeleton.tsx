@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const LoadingSkeleton = () => (
+export const StepTwoLoadingSkeleton = () => (
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
     {[1, 2, 3, 4].map((i) => (
       <Card key={i} className="border-teal-200 dark:border-teal-800 shadow-lg">

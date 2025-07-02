@@ -1,5 +1,5 @@
 import { TextShimmer } from "@/components/custom/text-shimmer";
-import { DiagnosisSummary, ImportantNotice, LoadingSkeleton, MedicineCard, SelectionSummary } from "@/components/pages/store/consultation";
+import { StepTwoDiagnosisSummary, StepTwoImportantNotice, StepTwoLoadingSkeleton, StepTwoMedicineCard, StepTwoSelectionSummary } from "@/components/pages/store/consultation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AiMedicineSuggestionResponse } from "@/data/interfaces";
@@ -8,7 +8,6 @@ import { AiAPI } from "@/services/v1";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Info, Package, Pill } from "lucide-react";
 
-// Main Component
 export const ConsultationStepTwo = () => {
   const { consultationId, selectedMedicines, setSelectedMedicines, nextStep, prevStep, isValid } = useStep2();
 
@@ -48,7 +47,7 @@ export const ConsultationStepTwo = () => {
       </div>
 
       {/* Diagnosis Summary */}
-      {MedicineSuggestion && <DiagnosisSummary data={MedicineSuggestion} />}
+      {MedicineSuggestion && <StepTwoDiagnosisSummary data={MedicineSuggestion} />}
 
       {/* Medicine List Header */}
       <div className="flex items-center justify-between">
@@ -71,7 +70,7 @@ export const ConsultationStepTwo = () => {
 
       {/* Medicine List */}
       {isLoading ? (
-        <LoadingSkeleton />
+        <StepTwoLoadingSkeleton />
       ) : !MedicineSuggestion?.recommendedMedicines.length ? (
         <Card className="border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950/20">
           <CardContent className="p-8 text-center">
@@ -89,7 +88,7 @@ export const ConsultationStepTwo = () => {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {MedicineSuggestion.recommendedMedicines.map((medicine) => (
-            <MedicineCard
+            <StepTwoMedicineCard
               key={medicine.id}
               medicine={medicine}
               isSelected={isMedicineSelected(medicine.id)}
@@ -100,10 +99,10 @@ export const ConsultationStepTwo = () => {
       )}
 
       {/* Selection Summary */}
-      <SelectionSummary medicines={selectedMedicines} />
+      <StepTwoSelectionSummary medicines={selectedMedicines} />
 
       {/* Important Notice */}
-      <ImportantNotice />
+      <StepTwoImportantNotice />
 
       {/* Navigation */}
       <div className="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">

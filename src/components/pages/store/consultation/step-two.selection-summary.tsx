@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MedicineResponse } from "@/data/interfaces";
 import { CheckCircle, Star } from "lucide-react";
 
-export const SelectionSummary = ({ medicines }: { medicines: MedicineResponse[] }) => {
+export const StepTwoSelectionSummary = ({ medicines }: { medicines: MedicineResponse[] }) => {
   if (medicines.length === 0) return null;
   const totalPrice = medicines.reduce((total, med) => total + med.variants.price, 0);
 

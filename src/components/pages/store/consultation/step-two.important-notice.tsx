@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertTriangle, Clock, Info, Shield } from "lucide-react";
 
-export const ImportantNotice = () => (
+export const StepTwoImportantNotice = () => (
   <Card className="border-red-200 dark:border-red-800 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 shadow-lg">
     <CardContent className="p-4">
       <div className="flex items-center gap-3 mb-3">

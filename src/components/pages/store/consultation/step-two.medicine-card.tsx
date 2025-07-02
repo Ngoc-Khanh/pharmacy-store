@@ -5,13 +5,13 @@ import { StockStatus } from "@/data/enums";
 import { MedicineResponse } from "@/data/interfaces";
 import { CheckCircle, DollarSign, Pill, Star } from "lucide-react";
 
-interface MedicineCardProps {
+interface StepTwoMedicineCardProps {
   medicine: MedicineResponse;
   isSelected: boolean;
   onToggle: () => void;
 }
 
-export const MedicineCard = ({ medicine, isSelected, onToggle }: MedicineCardProps) => (
+export const StepTwoMedicineCard = ({ medicine, isSelected, onToggle }: StepTwoMedicineCardProps) => (
   <Card
     className={`cursor-pointer transition-all duration-300 hover:shadow-lg border-teal-200 dark:border-teal-800 overflow-hidden ${isSelected
       ? 'ring-2 ring-teal-400 bg-gradient-to-br from-teal-50/80 to-emerald-50/80 dark:from-teal-950/30 dark:to-emerald-950/30'

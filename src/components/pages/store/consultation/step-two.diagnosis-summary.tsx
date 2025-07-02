@@ -5,7 +5,7 @@ import { SeverityLevel } from "@/data/enums";
 import { AiMedicineSuggestionResponse } from "@/data/interfaces";
 import { AlertTriangle, CheckCircle, Stethoscope, TrendingUp } from "lucide-react";
 
-export const DiagnosisSummary = ({ data }: { data: AiMedicineSuggestionResponse }) => {
+export const StepTwoDiagnosisSummary = ({ data }: { data: AiMedicineSuggestionResponse }) => {
   const getSeverityConfig = (level: SeverityLevel) => {
     switch (level) {
       case SeverityLevel.HIGH:
