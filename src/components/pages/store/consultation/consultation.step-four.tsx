@@ -1,15 +1,9 @@
+import { StepFourActionButtons, StepFourFeedbackSection, StepFourNextSteps, StepFourOrderSummary, StepFourSuccessHeader } from "@/components/pages/store/consultation";
 import { PlaceOrderDto } from "@/data/dto";
 import { useStep2, useStep3, useStep5 } from "@/hooks/use-step-consultation";
 import { StoreAPI } from "@/services/v1";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import {
-  StepFourActionButtons,
-  StepFourFeedbackSection,
-  StepFourNextSteps,
-  StepFourOrderSummary,
-  StepFourSuccessHeader
-} from ".";
 
 export const ConsultationStepFour = () => {
   const navigate = useNavigate();
