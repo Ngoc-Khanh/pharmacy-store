@@ -73,36 +73,64 @@ export default function CheckoutSuccessfulPage() {
 
   // Bảo vệ trang khỏi truy cập trực tiếp và kiểm tra order tồn tại
   useEffect(() => {
+    console.log("🔍 Checkout Success Effect Running:", {
+      checkingOrder,
+      orderNotFound,
+      orderId,
+      orderExists: !!orderData
+    });
+    
     // Nếu đang check order thì chờ
-    if (checkingOrder) return;
+    if (checkingOrder) {
+      console.log("⏳ Still checking order, waiting...");
+      return;
+    }
+    
     // Nếu order không tồn tại trong DB
     if (orderNotFound) {
-      console.log("Order not found in database, redirecting to orders page");
+      console.log("❌ Order not found in database, redirecting to orders page");
       toast.error("Không tìm thấy đơn hàng này");
       navigate(routes.store.account.orders);
       return;
     }
+    
     // Kiểm tra session confirmation (chỉ khi order tồn tại)
     const orderConfirmation = sessionStorage.getItem("order-confirmation");
     const storedOrderId = sessionStorage.getItem("order-id");
-    // Log để debug - chỉ ở môi trường dev
-    if (import.meta.env.DEV) {
-      console.log("Checkout successful page loaded:", { 
-        orderConfirmation, 
-        storedOrderId, 
-        urlOrderId: orderId,
-        orderExists: !!orderData
-      });
-    }   
-    // Nếu không có xác nhận đơn hàng và order đã tồn tại từ trước (không phải vừa đặt)
-    if (!orderConfirmation && orderData) {
-      toast.info("Vui lòng kiểm tra đơn hàng của bạn tại trang đơn hàng");
-      navigate(routes.store.account.orders);
-      return;
-    }
     
-    // Đánh dấu đã xem trang thành công
-    sessionStorage.setItem("order-viewed", "true");
+    console.log("🔍 Session check:", { 
+      orderConfirmation, 
+      storedOrderId, 
+      urlOrderId: orderId,
+      orderExists: !!orderData
+    });
+    
+    // IMPORTANT: Nếu có orderData từ API nghĩa là order tồn tại
+    if (orderData) {
+      console.log("✅ Order exists in database:", orderData.id);
+      
+      // Nếu không có confirmation nhưng order tồn tại, có thể là refresh trang
+      if (!orderConfirmation) {
+        console.log("⚠️ No order confirmation but order exists - might be page refresh");
+        // CHỈ redirect nếu order đã cũ (hơn 5 phút)
+        const orderCreatedAt = new Date(orderData.createdAt);
+        const now = new Date();
+        const diffMinutes = (now.getTime() - orderCreatedAt.getTime()) / (1000 * 60);
+        
+        if (diffMinutes > 5) {
+          console.log("⏰ Order is older than 5 minutes, redirecting to orders");
+          toast.info("Vui lòng kiểm tra đơn hàng của bạn tại trang đơn hàng");
+          navigate(routes.store.account.orders);
+          return;
+        } else {
+          console.log("🕐 Order is recent, allowing access");
+        }
+      }
+      
+      // Đánh dấu đã xem trang thành công
+      sessionStorage.setItem("order-viewed", "true");
+      console.log("✅ Checkout success page loaded successfully");
+    }
   }, [navigate, orderId, orderData, orderNotFound, checkingOrder]);
 
   // Cleanup effect

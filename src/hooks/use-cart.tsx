@@ -1,4 +1,17 @@
-import { addToCartAtom, cartApiLoadingAtom, cartAtom, cartErrorAtom, cartItemCountAtom, cartTotalPriceAtom, clearCartAtom, initCartAtom, removeFromCartAtom, updateCartItemQuantityAtom } from "@/atoms";
+import { 
+  addToCartAtom, 
+  cartApiLoadingAtom, 
+  cartAtom, 
+  cartErrorAtom, 
+  cartItemCountAtom, 
+  cartTotalPriceAtom, 
+  clearCartAtom, 
+  clearCartAfterPaymentAtom,
+  forceRefreshCartAtom,
+  initCartAtom, 
+  removeFromCartAtom, 
+  updateCartItemQuantityAtom 
+} from "@/atoms";
 import { useAtom } from "jotai";
 
 export function useCart() {
@@ -9,6 +22,8 @@ export function useCart() {
   const [, updateItemQuantity] = useAtom(updateCartItemQuantityAtom);
   const [, removeItem] = useAtom(removeFromCartAtom);
   const [, clearCart] = useAtom(clearCartAtom);
+  const [, clearCartAfterPayment] = useAtom(clearCartAfterPaymentAtom);
+  const [, forceRefreshCart] = useAtom(forceRefreshCartAtom);
   const [, initCart] = useAtom(initCartAtom);
   const [isInitializing] = useAtom(cartApiLoadingAtom);
   const [error] = useAtom(cartErrorAtom);
@@ -21,6 +36,8 @@ export function useCart() {
     updateItemQuantity,
     removeItem,
     clearCart,
+    clearCartAfterPayment,
+    forceRefreshCart,
     initCart,
     isInitializing,
     error,

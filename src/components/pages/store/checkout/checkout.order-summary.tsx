@@ -5,7 +5,7 @@ import { routes } from "@/config";
 import { PlaceOrderDto } from "@/data/dto";
 import { PaymentMethod } from "@/data/enums";
 import { CartItem } from "@/data/interfaces";
-// import { useCart } from "@/hooks/use-cart"; // Không cần vì API tự xử lý
+import { useCart } from "@/hooks/use-cart";
 import { formatCurrency } from "@/lib/utils";
 import { StoreAPI } from "@/services/v1";
 import { useMutation } from "@tanstack/react-query";
@@ -23,7 +23,7 @@ interface CheckoutOrderSummaryProps {
 
 export function CheckoutOrderSummary({ cart, totalPrice, selectedAddress, showNewAddressForm, paymentMethod }: CheckoutOrderSummaryProps) {
   const navigate = useNavigate();
-  // const { clearCart } = useCart(); // Không cần vì API tự xử lý
+  const { clearCartAfterPayment } = useCart();
   const shippingCost = totalPrice > 500000 ? 0 : 30000;
   const taxAmount = Math.round(totalPrice * 0.1);
   const grandTotal = totalPrice + shippingCost + taxAmount;
@@ -31,26 +31,66 @@ export function CheckoutOrderSummary({ cart, totalPrice, selectedAddress, showNe
   const { mutate: placeOrder, isPending: isProcessing } = useMutation({
     mutationFn: (orderData: PlaceOrderDto) => StoreAPI.PlaceOrder(orderData),
     onSuccess: (data) => {
-      const orderId = data?.id || "unknown";
+      console.log("🎉 Order API Response:", data);
       
-      // Lưu xác nhận đơn hàng vào sessionStorage TRƯỚC khi navigate
+      // Kiểm tra data hợp lệ
+      if (!data || !data.id) {
+        console.error("❌ Invalid order response:", data);
+        toast.error("Đặt hàng thành công nhưng không thể lấy mã đơn hàng. Vui lòng kiểm tra tại 'Đơn hàng của tôi'");
+        navigate(routes.store.account.orders);
+        return;
+      }
+      
+      const orderId = data.id;
+      console.log("✅ Order placed successfully with ID:", orderId);
+      
+      // Lưu xác nhận đơn hàng vào sessionStorage TRƯỚC khi làm bất cứ gì khác
       sessionStorage.setItem("order-confirmation", "true");
       sessionStorage.setItem("order-id", orderId);
       
-      // Log để debug
-      console.log("Order placed successfully:", { orderId, hasConfirmation: sessionStorage.getItem("order-confirmation") });
+      // Verify sessionStorage đã được set
+      const confirmationCheck = sessionStorage.getItem("order-confirmation");
+      const orderIdCheck = sessionStorage.getItem("order-id");
+      console.log("🔍 SessionStorage verification:", { 
+        confirmation: confirmationCheck, 
+        storedOrderId: orderIdCheck 
+      });
       
-      // Không cần xóa giỏ hàng vì API sẽ tự xử lý
-      // clearCart();
+      // Xóa giỏ hàng TRƯỚC khi navigate để tránh re-render conflicts
+      clearCartAfterPayment();
       
-      toast.success(`Đặt hàng thành công, mã đơn hàng: ${orderId}`);
+      // Toast thông báo thành công
+      toast.success(`Đặt hàng thành công! Mã đơn hàng: ${orderId}`);
       
-      // Sử dụng setTimeout để đảm bảo sessionStorage được set hoàn toàn
+      // Navigate với timeout dài hơn để đảm bảo mọi thứ đã complete
+      console.log("🚀 Navigating to success page...");
+      const targetUrl = routes.store.checkoutSuccess(orderId);
+      console.log("🎯 Target URL:", targetUrl);
+      
+      // Sử dụng setTimeout với timeout dài hơn
       setTimeout(() => {
-        navigate(routes.store.checkoutSuccess(orderId));
-      }, 100);
+        try {
+          navigate(targetUrl, { replace: true });
+          console.log("✅ Navigation completed to:", targetUrl);
+        } catch (error) {
+          console.error("❌ Navigation failed:", error);
+          toast.error("Không thể chuyển trang. Vui lòng kiểm tra đơn hàng tại 'Đơn hàng của tôi'");
+          navigate(routes.store.account.orders, { replace: true });
+        }
+      }, 200); // Tăng thời gian timeout từ 100ms lên 200ms
+      
+      // Fallback: Nếu navigation không work sau 1 giây, dùng window.location
+      setTimeout(() => {
+        // Kiểm tra nếu vẫn ở trang checkout
+        if (window.location.pathname.includes('/checkout') && !window.location.pathname.includes('/success')) {
+          console.log("🚨 React Router navigation failed, using window.location as fallback");
+          toast.info("Đang chuyển hướng...");
+          window.location.href = window.location.origin + targetUrl;
+        }
+      }, 1000);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("❌ Place order failed:", error);
       toast.error("Đặt hàng thất bại, vui lòng thử lại sau");
     },
   })

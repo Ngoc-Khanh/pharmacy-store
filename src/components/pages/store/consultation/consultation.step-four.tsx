@@ -1,5 +1,6 @@
 import { StepFourActionButtons, StepFourFeedbackSection, StepFourNextSteps, StepFourOrderSummary, StepFourSuccessHeader } from "@/components/pages/store/consultation";
 import { PlaceOrderDto } from "@/data/dto";
+import { useCart } from "@/hooks/use-cart";
 import { useStep2, useStep3, useStep5 } from "@/hooks/use-step-consultation";
 import { StoreAPI } from "@/services/v1";
 import { useMutation } from "@tanstack/react-query";
@@ -7,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export const ConsultationStepFour = () => {
   const navigate = useNavigate();
+  const { clearCartAfterPayment } = useCart();
   const { selectedMedicines, prevStep } = useStep2();
   const { selectedAddressId, selectedPaymentMethod } = useStep3();
   const { setPlacedOrder, nextStep } = useStep5();
@@ -18,6 +20,8 @@ export const ConsultationStepFour = () => {
   const placeOrderMutation = useMutation({
     mutationFn: StoreAPI.PlaceOrder,
     onSuccess: (order) => {
+      // Xóa giỏ hàng sau khi đặt hàng thành công từ consultation
+      clearCartAfterPayment();
       setPlacedOrder(order);
       nextStep(); // Go to step 5 to show invoice
     },
