@@ -17,7 +17,7 @@ export function InvoiceDetailHeader({ invoiceNumber, onBack }: InvoiceHeaderProp
     >
       <Button
         variant="ghost"
-        className="mr-4 rounded-full p-2 h-10 w-10 hover:bg-teal-50 text-teal-600 transition-colors border border-teal-100 shadow-sm"
+        className="mr-4 rounded-full p-2 h-10 w-10 hover:bg-teal-50 dark:hover:bg-teal-900/30 text-teal-600 dark:text-teal-400 transition-colors border border-teal-100 dark:border-teal-800 shadow-sm"
         onClick={onBack}
       >
         <ArrowLeft className="h-5 w-5" />
@@ -27,11 +27,11 @@ export function InvoiceDetailHeader({ invoiceNumber, onBack }: InvoiceHeaderProp
           <Receipt className="h-6 w-6" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Chi Tiết Hóa Đơn</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">Chi Tiết Hóa Đơn</h1>
           <div className="flex items-center mt-1">
-            <span className="text-sm font-medium text-teal-600 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-100">#{invoiceNumber}</span>
+            <span className="text-sm font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 px-2 py-0.5 rounded-md border border-teal-100 dark:border-teal-800">#{invoiceNumber}</span>
             <span className="inline-block mx-2 w-1.5 h-1.5 rounded-full bg-teal-500"></span>
-            <span className="text-xs text-gray-500">Mã hóa đơn</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">Mã hóa đơn</span>
           </div>
         </div>
       </div>

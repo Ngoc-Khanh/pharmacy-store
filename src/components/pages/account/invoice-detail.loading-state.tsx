@@ -16,7 +16,7 @@ export default function InvoiceDetailLoadingState() {
         {/* Left Column Skeleton */}
         <div className="lg:col-span-1 space-y-6">
           {/* Invoice Summary Skeleton */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 space-y-5">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 space-y-5">
             <div className="flex items-center justify-between">
               <Skeleton className="h-6 w-32" />
               <Skeleton className="h-6 w-24 rounded-full" />
@@ -35,7 +35,7 @@ export default function InvoiceDetailLoadingState() {
           </div>
 
           {/* Support Card Skeleton */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
             <div className="flex items-start">
               <Skeleton className="h-10 w-10 rounded-full mr-3 flex-shrink-0" />
               <div className="flex-1 space-y-2">
@@ -49,8 +49,8 @@ export default function InvoiceDetailLoadingState() {
 
         {/* Right Column Skeleton */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="p-5 border-b">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="p-5 border-b dark:border-gray-700">
               <div className="flex justify-between items-center">
                 <Skeleton className="h-6 w-40" />
                 <Skeleton className="h-6 w-20 rounded-full" />
@@ -58,7 +58,7 @@ export default function InvoiceDetailLoadingState() {
             </div>
             <div className="pb-4">
               {[...Array(4)].map((_, index) => (
-                <div key={index} className="flex justify-between items-center p-4 border-b">
+                <div key={index} className="flex justify-between items-center p-4 border-b dark:border-gray-700">
                   <div className="flex items-center flex-1">
                     <Skeleton className="h-12 w-12 rounded-md mr-3 flex-shrink-0" />
                     <div className="flex-1">
@@ -72,7 +72,7 @@ export default function InvoiceDetailLoadingState() {
                 </div>
               ))}
             </div>
-            <div className="p-5 bg-gray-50 border-t">
+            <div className="p-5 bg-gray-50 dark:bg-gray-700/50 border-t dark:border-gray-700">
               <div className="space-y-3 max-w-md ml-auto">
                 <div className="flex justify-between items-center">
                   <Skeleton className="h-4 w-20" />
@@ -86,7 +86,7 @@ export default function InvoiceDetailLoadingState() {
                   <Skeleton className="h-4 w-20" />
                   <Skeleton className="h-4 w-16" />
                 </div>
-                <div className="h-px w-full bg-gray-200 my-3" />
+                <div className="h-px w-full bg-gray-200 dark:bg-gray-600 my-3" />
                 <div className="flex justify-between items-center">
                   <Skeleton className="h-6 w-28" />
                   <Skeleton className="h-6 w-32" />

@@ -65,6 +65,14 @@ export const mainNav = [
   {
     title: "Giỏ hàng",
     href: routes.store.account.cart,
+  },
+  {
+    title: "Đơn hàng",
+    href: routes.store.account.orders,
+  },
+  {
+    title: "Hóa đơn",
+    href: routes.store.account.invoices,
   }
 ]
 

@@ -13,25 +13,25 @@ export function InvoiceDetailErrorState({ error, onBack }: ErrorStateProps) {
       <div className="mb-6 flex items-center">
         <Button
           variant="ghost"
-          className="mr-4 rounded-full p-2 h-9 w-9 hover:bg-rose-50 text-rose-600"
+          className="mr-4 rounded-full p-2 h-9 w-9 hover:bg-rose-50 dark:hover:bg-rose-900/30 text-rose-600 dark:text-rose-400"
           onClick={onBack}
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <h1 className="text-2xl font-bold">Chi Tiết Hóa Đơn</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Chi Tiết Hóa Đơn</h1>
       </div>
       
-      <Card className="shadow-md border-0 rounded-xl bg-white">
+      <Card className="shadow-md border-0 rounded-xl bg-white dark:bg-gray-800">
         <CardContent className="p-8 text-center">
-          <div className="rounded-full bg-rose-100 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
-            <Info className="h-8 w-8 text-rose-500" />
+          <div className="rounded-full bg-rose-100 dark:bg-rose-900/30 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
+            <Info className="h-8 w-8 text-rose-500 dark:text-rose-400" />
           </div>
           
-          <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
             Đã xảy ra lỗi
           </h2>
           
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">
             {error instanceof Error ? error.message : "Không thể tải thông tin hóa đơn"}
           </p>
           
