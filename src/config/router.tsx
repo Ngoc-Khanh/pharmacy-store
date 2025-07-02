@@ -3,7 +3,7 @@ import { AccountLayout, StoreLayout } from "@/layouts";
 import { AddressesPage, CartPage, ChangePasswordPage, InvoicesPage, OrdersPage, ProfilePage } from "@/pages/account";
 import { InvoiceDetailPage, OrderDetailPage } from "@/pages/account/[id]";
 import { ForgotPasswordPage, ResetPasswordPage, SignInPage, SignUpPage, VerifyAccountPage } from "@/pages/auth";
-import { CategoryPage, CheckoutPage, RootPage } from "@/pages/store";
+import { CategoryPage, CheckoutPage, ConsultationPage, RootPage } from "@/pages/store";
 import { CheckoutSuccessfulPage, MedicineDetailPage } from "@/pages/store/[id]";
 import { Navigate, RouteObject } from "react-router-dom";
 
@@ -25,7 +25,7 @@ export const reactRouter: RouteObject[] = [
       { path: routes.store.categories, element: <CategoryPage /> },
       { path: routes.store.medicines, element: <div>Medicine</div> },
       { path: routes.store.medicineDetails(":id"), element: <MedicineDetailPage /> },
-      { path: routes.store.consultation, element: <div>Consultation</div> },
+      { path: routes.store.consultation, element: <ConsultationPage /> },
       { path: routes.store.checkout, element: <CheckoutPage /> },
       { path: routes.store.checkoutSuccess(":id"), element: <CheckoutSuccessfulPage /> },
 
