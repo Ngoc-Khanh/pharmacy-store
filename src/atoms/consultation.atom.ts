@@ -60,7 +60,7 @@ export const goToStepAtom = atom(
 // Reset toàn bộ consultation state và quay về step 1
 export const resetConsultationAtom = atom(
   null,
-  (get, set) => {
+  (_, set) => {
     // Reset tất cả form data
     set(symptomsAtom, RESET);
     set(patientAgeAtom, RESET);
