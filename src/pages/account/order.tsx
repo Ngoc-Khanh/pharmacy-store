@@ -65,13 +65,13 @@ export default function OrderPage() {
               </div>
               <h1 className="text-2xl font-bold md:text-3xl">Đơn hàng của bạn</h1>
             </div>
-            <p className="text-muted-foreground ml-13 pl-0.5">
+            <div className="text-muted-foreground ml-13 pl-0.5">
               {isLoading ?
                 <Skeleton className="h-4 w-40" /> :
                 (orders && orders.length > 0 ?
                   `Bạn có ${orders.length} đơn hàng` :
                   'Bạn chưa có đơn hàng nào')}
-            </p>
+            </div>
           </div>
 
           {/* Search and filter section */}

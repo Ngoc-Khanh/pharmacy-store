@@ -1,11 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { routeNames, routes, siteConfig } from "@/config";
+import { StoreAPI } from "@/services/v1";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle2, ClipboardCheck, MapPin, Package, Truck, Phone, Mail, Clock } from "lucide-react";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const orderSteps = [
   {
@@ -60,24 +63,70 @@ export default function CheckoutSuccessfulPage() {
   const orderNumber = orderId || "PH" + Math.floor(100000 + Math.random() * 900000);
   const navigate = useNavigate();
 
-  // Bảo vệ trang khỏi truy cập trực tiếp
+  // Query để kiểm tra order có tồn tại không
+  const { data: orderData, isError: orderNotFound, isLoading: checkingOrder } = useQuery({
+    queryKey: ["order-detail", orderId],
+    queryFn: () => StoreAPI.OrderDetails(orderId!),
+    enabled: !!orderId,
+    retry: false, // Không retry nếu order không tồn tại
+  });
+
+  // Bảo vệ trang khỏi truy cập trực tiếp và kiểm tra order tồn tại
   useEffect(() => {
-    const orderConfirmation = sessionStorage.getItem("order-confirmation");
-    // Nếu không có xác nhận đơn hàng, chuyển hướng về trang đơn hàng
-    if (!orderConfirmation) {
+    // Nếu đang check order thì chờ
+    if (checkingOrder) return;
+    // Nếu order không tồn tại trong DB
+    if (orderNotFound) {
+      console.log("Order not found in database, redirecting to orders page");
+      toast.error("Không tìm thấy đơn hàng này");
       navigate(routes.store.account.orders);
       return;
     }
+    // Kiểm tra session confirmation (chỉ khi order tồn tại)
+    const orderConfirmation = sessionStorage.getItem("order-confirmation");
+    const storedOrderId = sessionStorage.getItem("order-id");
+    // Log để debug - chỉ ở môi trường dev
+    if (import.meta.env.DEV) {
+      console.log("Checkout successful page loaded:", { 
+        orderConfirmation, 
+        storedOrderId, 
+        urlOrderId: orderId,
+        orderExists: !!orderData
+      });
+    }   
+    // Nếu không có xác nhận đơn hàng và order đã tồn tại từ trước (không phải vừa đặt)
+    if (!orderConfirmation && orderData) {
+      toast.info("Vui lòng kiểm tra đơn hàng của bạn tại trang đơn hàng");
+      navigate(routes.store.account.orders);
+      return;
+    }
+    
     // Đánh dấu đã xem trang thành công
     sessionStorage.setItem("order-viewed", "true");
-    // Cleanup: Xóa dữ liệu session khi rời khỏi component
+  }, [navigate, orderId, orderData, orderNotFound, checkingOrder]);
+
+  // Cleanup effect
+  useEffect(() => {
     return () => {
       if (sessionStorage.getItem("order-viewed")) {
         sessionStorage.removeItem("order-confirmation");
         sessionStorage.removeItem("order-viewed");
+        sessionStorage.removeItem("order-id");
       }
     };
-  }, [navigate]);
+  }, []);
+
+  // Hiển thị loading nếu đang kiểm tra order
+  if (checkingOrder) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-950 dark:via-gray-900 dark:to-green-950/20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Đang kiểm tra đơn hàng...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-950 dark:via-gray-900 dark:to-green-950/20">

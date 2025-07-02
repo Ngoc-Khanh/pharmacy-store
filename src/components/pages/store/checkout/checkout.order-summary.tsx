@@ -5,7 +5,7 @@ import { routes } from "@/config";
 import { PlaceOrderDto } from "@/data/dto";
 import { PaymentMethod } from "@/data/enums";
 import { CartItem } from "@/data/interfaces";
-import { useCart } from "@/hooks/use-cart";
+// import { useCart } from "@/hooks/use-cart"; // Không cần vì API tự xử lý
 import { formatCurrency } from "@/lib/utils";
 import { StoreAPI } from "@/services/v1";
 import { useMutation } from "@tanstack/react-query";
@@ -23,7 +23,7 @@ interface CheckoutOrderSummaryProps {
 
 export function CheckoutOrderSummary({ cart, totalPrice, selectedAddress, showNewAddressForm, paymentMethod }: CheckoutOrderSummaryProps) {
   const navigate = useNavigate();
-  const { clearCart } = useCart();
+  // const { clearCart } = useCart(); // Không cần vì API tự xử lý
   const shippingCost = totalPrice > 500000 ? 0 : 30000;
   const taxAmount = Math.round(totalPrice * 0.1);
   const grandTotal = totalPrice + shippingCost + taxAmount;
@@ -31,13 +31,24 @@ export function CheckoutOrderSummary({ cart, totalPrice, selectedAddress, showNe
   const { mutate: placeOrder, isPending: isProcessing } = useMutation({
     mutationFn: (orderData: PlaceOrderDto) => StoreAPI.PlaceOrder(orderData),
     onSuccess: (data) => {
-      // Lưu xác nhận đơn hàng vào sessionStorage để kiểm tra ở trang thành công
-      sessionStorage.setItem("order-confirmation", "true");
-      // Xóa giỏ hàng sau khi đặt hàng thành công
-      clearCart();
       const orderId = data?.id || "unknown";
+      
+      // Lưu xác nhận đơn hàng vào sessionStorage TRƯỚC khi navigate
+      sessionStorage.setItem("order-confirmation", "true");
+      sessionStorage.setItem("order-id", orderId);
+      
+      // Log để debug
+      console.log("Order placed successfully:", { orderId, hasConfirmation: sessionStorage.getItem("order-confirmation") });
+      
+      // Không cần xóa giỏ hàng vì API sẽ tự xử lý
+      // clearCart();
+      
       toast.success(`Đặt hàng thành công, mã đơn hàng: ${orderId}`);
-      navigate(routes.store.checkoutSuccess(orderId));
+      
+      // Sử dụng setTimeout để đảm bảo sessionStorage được set hoàn toàn
+      setTimeout(() => {
+        navigate(routes.store.checkoutSuccess(orderId));
+      }, 100);
     },
     onError: () => {
       toast.error("Đặt hàng thất bại, vui lòng thử lại sau");
