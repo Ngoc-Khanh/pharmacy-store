@@ -27,12 +27,12 @@ export function MedicineDetailBreadcrumb({ id, name }: MedicineDetailBreadcrumbP
             </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator className="text-slate-400" />
-          <BreadcrumbItem>
+          {/* <BreadcrumbItem>
             <Link to={routes.store.medicines} className="text-slate-600 hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 transition-colors">
               {routeNames[routes.store.medicines]}
             </Link>
           </BreadcrumbItem>
-          <BreadcrumbSeparator className="text-slate-400" />
+          <BreadcrumbSeparator className="text-slate-400" /> */}
           <BreadcrumbItem>
             <Link to={routes.store.medicineDetails(id)} className="font-medium text-slate-800 dark:text-white">
               {name || "Chi tiết sản phẩm"}
