@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { accountMenus } from "@/config";
 import { useAuth } from "@/hooks/use-auth";
+import { formatAvatarUrl } from "@/lib/format-avatar-url";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Link, useLocation } from "react-router-dom";
@@ -28,16 +29,7 @@ export function AccountSidebar() {
     }
   }
 
-  // Xử lý đường dẫn avatar
-  const getAvatarUrl = (url: string | undefined) => {
-    if (!url) return "";
-    // Nếu là URL đầy đủ (http/https) thì giữ nguyên
-    if (url.startsWith("http://") || url.startsWith("https://")) return url;
-    // Nếu bắt đầu bằng "./" hoặc "/" thì đây là đường dẫn tương đối từ public
-    if (url.startsWith("./") || url.startsWith("/")) return url.startsWith("./") ? url.substring(2) : url;
-    // Trường hợp khác, coi như đường dẫn tương đối
-    return url;
-  }
+
 
   return (
     <div className="w-72 space-y-6">
@@ -53,7 +45,7 @@ export function AccountSidebar() {
               <Avatar className="w-24 h-24 border-4 border-white/30 shadow-lg mx-auto">
                 {user?.profileImage?.url ? (
                   <AvatarImage 
-                    src={getAvatarUrl(user.profileImage.url)} 
+                    src={formatAvatarUrl(user.profileImage.url) || ""} 
                     alt={user.profileImage.alt || `${user.firstname} ${user.lastname}`} 
                   />
                 ) : null}
