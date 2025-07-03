@@ -67,14 +67,13 @@ export function CategoryToolbar({
 
   // Tạo sort value từ sortBy và sortOrder
   const getSortValue = () => {
-    if (sortBy === 'created_at' && sortOrder === 'desc') return 'default';
     if (sortBy === 'price_asc') return 'price-asc';
     if (sortBy === 'price_desc') return 'price-desc';
     if (sortBy === 'rating_desc') return 'rating-desc';
-    if (sortBy === 'created_at' && sortOrder === 'desc') return 'newest';
     if (sortBy === 'popular') return 'popular';
     if (sortBy === 'name' && sortOrder === 'asc') return 'name-asc';
     if (sortBy === 'name' && sortOrder === 'desc') return 'name-desc';
+    if (sortBy === 'created_at' && sortOrder === 'desc') return 'newest';
     return 'default';
   };
 
@@ -84,6 +83,7 @@ export function CategoryToolbar({
 
     switch (value) {
       case 'default':
+      case 'newest':
         onSortChange('created_at', 'desc');
         break;
       case 'price-asc':
@@ -94,9 +94,6 @@ export function CategoryToolbar({
         break;
       case 'rating-desc':
         onSortChange('rating_desc');
-        break;
-      case 'newest':
-        onSortChange('created_at', 'desc');
         break;
       case 'popular':
         onSortChange('popular');

@@ -67,18 +67,23 @@ export default function CategoryPage() {
   }, [searchParams, setSearchParams]);
 
   // Tạo params cho API từ current state
-  const getApiParams = useCallback((): MedicineFilterParams => ({
-    s: searchQuery || undefined,
-    page: 1,
-    limit: 12,
-    category_id: selectedCategory !== 'all' ? selectedCategory : undefined,
-    supplier_id: selectedSupplier !== 'all' ? selectedSupplier : undefined,
-    min_price: minPrice > 0 ? minPrice : undefined,
-    max_price: maxPrice < 1000000 ? maxPrice : undefined,
-    min_rating: selectedRating.length > 0 ? Math.min(...selectedRating) : undefined,
-    sort_by: sortBy,
-    sort_order: sortOrder,
-  }), [searchQuery, selectedCategory, selectedSupplier, minPrice, maxPrice, selectedRating, sortBy, sortOrder]);
+  const getApiParams = useCallback((): MedicineFilterParams => {
+    // Chỉ gửi sort_order nếu sort_by cần sort_order (name, created_at, updated_at)
+    const needsSortOrder = sortBy === 'name' || sortBy === 'created_at' || sortBy === 'updated_at';
+    
+    return {
+      s: searchQuery || undefined,
+      page: 1,
+      limit: 12,
+      category_id: selectedCategory !== 'all' ? selectedCategory : undefined,
+      supplier_id: selectedSupplier !== 'all' ? selectedSupplier : undefined,
+      min_price: minPrice > 0 ? minPrice : undefined,
+      max_price: maxPrice < 1000000 ? maxPrice : undefined,
+      min_rating: selectedRating.length > 0 ? Math.min(...selectedRating) : undefined,
+      sort_by: sortBy,
+      sort_order: needsSortOrder ? sortOrder : undefined,
+    };
+  }, [searchQuery, selectedCategory, selectedSupplier, minPrice, maxPrice, selectedRating, sortBy, sortOrder]);
 
   const {
     data: medicines,
@@ -88,10 +93,14 @@ export default function CategoryPage() {
     fetchNextPage: fetchNextPageMedicines
   } = useInfiniteQuery({
     queryKey: ["medicines", getApiParams()],
-    queryFn: ({ pageParam = 1 }) => StoreAPI.MedicineList({
-      ...getApiParams(),
-      page: pageParam,
-    }),
+    queryFn: ({ pageParam = 1 }) => {
+      const params = {
+        ...getApiParams(),
+        page: pageParam,
+      };
+      console.log('API Params được gửi:', params);
+      return StoreAPI.MedicineList(params);
+    },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       return lastPage.nextPageUrl ? lastPage.currentPage + 1 : undefined;
@@ -187,6 +196,21 @@ export default function CategoryPage() {
     updateUrlParams({ view: mode });
   };
 
+  const handleSortChange = (sortField: MedicineFilterParams['sort_by'], order?: 'asc' | 'desc') => {
+    setSortBy(sortField);
+    if (order) {
+      setSortOrder(order);
+    }
+    
+    // Chỉ update sort_order nếu sort_by không phải là price_asc, price_desc, rating_desc (vì chúng đã bao gồm direction)
+    const needsSortOrder = sortField === 'name' || sortField === 'created_at' || sortField === 'updated_at';
+    
+    updateUrlParams({ 
+      sort_by: sortField, 
+      sort_order: needsSortOrder ? (order || sortOrder) : undefined
+    });
+  };
+
   // Clear filters function
   const clearFilters = () => {
     setSelectedCategory('all');
@@ -197,6 +221,7 @@ export default function CategoryPage() {
     setSortBy('created_at');
     setSortOrder('desc');
     setSearchQuery('');
+    setViewMode('grid');
     
     // Clear URL params
     setSearchParams(new URLSearchParams());
@@ -267,6 +292,9 @@ export default function CategoryPage() {
               setViewMode={handleViewModeChange}
               totalProducts={totalProducts}
               hasActiveFilters={hasActiveFilters}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSortChange={handleSortChange}
             />
 
             <CategoryProductsGrid
