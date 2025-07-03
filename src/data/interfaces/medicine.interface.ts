@@ -18,7 +18,7 @@ export interface MedicineResponse {
   readonly updatedAt?: string;
 }
 
-interface Thumbnail {
+export interface Thumbnail {
   publicId?: string;
   url: string;
   alt: string;
@@ -30,7 +30,7 @@ interface Ratings {
   reviewCount?: number;
 }
 
-interface Variant {
+export interface Variant {
   price: number;
   quantity?: number;
   limitQuantity?: number;

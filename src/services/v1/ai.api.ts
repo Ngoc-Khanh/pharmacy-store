@@ -1,5 +1,5 @@
 import { AiConsultationDto } from "@/data/dto";
-import { AiConsultationResponse, AiMedicineSuggestionResponse } from "@/data/interfaces";
+import { AiConsultationResponse, AiMedicineSimilarityResponse, AiMedicineSuggestionResponse } from "@/data/interfaces";
 import { SRO } from "@/data/sro";
 import { aiApiGet, aiApiPost } from "@/services/api";
 
@@ -13,4 +13,9 @@ export const AiAPI = {
     const res = await aiApiGet<SRO<AiMedicineSuggestionResponse>>(`v1/consultation/recommend-medicines/${consultationId}`)
     return res.data.data;
   },
+
+  async AiMedicineSimilarity(medicineId: string) {
+    const res = await aiApiGet<SRO<AiMedicineSimilarityResponse>>(`v1/medicine/${medicineId}/simmilar-medicines`)
+    return res.data.data;
+  }
 }

@@ -1,5 +1,5 @@
 import { PatientGender, SeverityLevel } from "@/data/enums";
-import { MedicineResponse } from "@/data/interfaces";
+import { MedicineResponse, Thumbnail, Variant } from "@/data/interfaces";
 
 export interface Step1FormData {
   symptoms: string;
@@ -41,4 +41,26 @@ export interface AiMedicineSuggestionResponse {
   recommendedMedicines: MedicineResponse[];
   totalFound: number;
   searchQuery: string;
+}
+
+export interface AiMedicineSimilarityResponse {
+  originalMedicine: OriginalMedicine;
+  similarMedicines: SimilarMedicine[];
+  totalFound: number;
+  searchStrategy: string;
+  queryUsed: string;
+}
+
+export interface OriginalMedicine {
+  id: string;
+  categoryId: string;
+  name: string;
+  description: string;
+  thumbnail: Thumbnail;
+  variants: Variant;
+}
+
+export interface SimilarMedicine extends MedicineResponse {
+  similarityScore: number;
+  similarityRanking: number;
 }
