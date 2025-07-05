@@ -280,6 +280,7 @@ export const ConsultationStepThree = () => {
                   method={method}
                   isSelected={selectedPaymentMethod === method.id}
                   onSelect={() => setSelectedPaymentMethod(method.id)}
+                  disabled={method.id !== PaymentMethod.COD}
                 />
               ))}
             </div>

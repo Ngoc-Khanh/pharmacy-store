@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config";
+import { routes, siteConfig } from "@/config";
 import { Award, Clock, Heart, Mail, MapPin, Phone, Shield, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -45,11 +45,11 @@ export function StoreFooter() {
           <div>
             <h4 className="text-lg font-semibold mb-6 text-white">Liên kết nhanh</h4>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-emerald-200 hover:text-white transition-colors flex items-center gap-2">Trang chủ</Link></li>
-              <li><Link to="/categories" className="text-emerald-200 hover:text-white transition-colors">Danh mục thuốc</Link></li>
-              <li><Link to="/ai-consultation" className="text-emerald-200 hover:text-white transition-colors">Tư vấn AI</Link></li>
-              <li><Link to="/about" className="text-emerald-200 hover:text-white transition-colors">Về chúng tôi</Link></li>
-              <li><Link to="/contact" className="text-emerald-200 hover:text-white transition-colors">Liên hệ</Link></li>
+              <li><Link to={routes.store.root} className="text-emerald-200 hover:text-white transition-colors flex items-center gap-2">Trang chủ</Link></li>
+              <li><Link to={routes.store.categories} className="text-emerald-200 hover:text-white transition-colors">Danh mục thuốc</Link></li>
+              <li><Link to={routes.store.consultation} className="text-emerald-200 hover:text-white transition-colors">Tư vấn AI</Link></li>
+              <li><Link to={routes.store.account.root} className="text-emerald-200 hover:text-white transition-colors">Tài khoản</Link></li>
+              <li><Link to={routes.store.account.root} className="text-emerald-200 hover:text-white transition-colors">Giỏ hàng</Link></li>
             </ul>
           </div>
 

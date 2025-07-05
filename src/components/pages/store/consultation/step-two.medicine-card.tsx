@@ -35,7 +35,7 @@ export const StepTwoMedicineCard = ({ medicine, isSelected, onToggle }: StepTwoM
 
       <div className="flex gap-3 mb-3">
         <img
-          src={medicine.thumbnail.url}
+                            src={medicine.thumbnail?.url || ""}
           alt={medicine.name}
           className="w-16 h-16 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
           onError={(e) => { e.currentTarget.src = '/placeholder-medicine.png'; }}

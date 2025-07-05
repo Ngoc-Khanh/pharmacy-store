@@ -26,10 +26,10 @@ export default function MedicineDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         {/* Product Image Section */}
         <MedicineDetailImage
-          imageUrl={medicine?.thumbnail.url || ""}
-          imageAlt={medicine?.thumbnail.alt || ""}
-          stockStatus={medicine?.variants.stockStatus}
-          discountPercent={medicine?.variants.discountPercent}
+          imageUrl={medicine?.thumbnail?.url || ""}
+          imageAlt={medicine?.thumbnail?.alt || medicine?.name || "Thuốc"}
+          stockStatus={medicine?.variants?.stockStatus}
+          discountPercent={medicine?.variants?.discountPercent}
         />
 
         {/* Product Info Section */}

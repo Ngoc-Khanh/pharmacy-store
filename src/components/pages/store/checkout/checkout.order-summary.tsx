@@ -119,8 +119,8 @@ export function CheckoutOrderSummary({ cart, totalPrice, selectedAddress, showNe
               <div key={item.medicine.id} className="flex gap-4">
                 <div className="w-16 h-16 rounded border border-gray-200 dark:border-gray-800 overflow-hidden flex-shrink-0">
                   <img
-                    src={item.medicine.thumbnail.url}
-                    alt={item.medicine.thumbnail.alt}
+                                            src={item.medicine?.thumbnail?.url || ""}
+                        alt={item.medicine?.thumbnail?.alt || item.medicine?.name || "Thuốc"}
                     className="w-full h-full object-cover"
                   />
                 </div>

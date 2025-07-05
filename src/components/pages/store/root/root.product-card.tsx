@@ -71,9 +71,19 @@ export function RootProductCard({ className, medicine, index = 0, ...props }: Ro
           <CardContent className="relative p-0 overflow-hidden">
             <div className="aspect-square bg-gradient-to-br from-gray-50/50 to-gray-100/50 dark:from-gray-800/50 dark:to-gray-900/50 flex items-center justify-center overflow-hidden">
               <img
-                src={medicine.thumbnail.url}
-                alt={medicine.thumbnail.alt}
+                src={medicine.thumbnail?.url || ""}
+                alt={medicine.thumbnail?.alt || medicine.name || "Thuốc"}
                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 ease-out"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.parentElement!.innerHTML = `
+                    <div class="w-full h-full bg-gradient-to-br from-teal-50 to-emerald-50 dark:from-teal-900/30 dark:to-emerald-900/20 flex items-center justify-center">
+                      <svg class="h-16 w-16 text-teal-500 dark:text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"/>
+                      </svg>
+                    </div>
+                  `;
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
