@@ -11,6 +11,7 @@ export const siteConfig = {
   links: {
     facebook: "https://www.facebook.com/ngockhanh2k3",
     github: "https://github.com/Ngoc-Khanh",
+    instagram: "https://www.instagram.com/k_rug.0907",
   },
 
   // AUTH JWT

@@ -38,8 +38,8 @@ export const StepFourOrderSummary = ({ selectedMedicines, totalPrice }: StepFour
             >
               <div className="relative">
                 <img
-                  src={medicine.thumbnail.url}
-                  alt={medicine.thumbnail.alt || medicine.name}
+                                        src={medicine.thumbnail?.url || ""}
+                      alt={medicine.thumbnail?.alt || medicine.name || "Thuốc"}
                   className="w-14 h-14 object-cover rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
                   onError={(e) => {
                     e.currentTarget.src = '/placeholder-medicine.png';

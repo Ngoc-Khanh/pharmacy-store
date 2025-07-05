@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react';
-import { useQuery } from "@tanstack/react-query";
 import { StoreAPI } from "@/services/v1";
+import { useQuery } from "@tanstack/react-query";
+import React, { Suspense } from 'react';
 
 // Lazy load components for better performance
 const RootHero = React.lazy(() => import("@/components/pages/store/root").then(m => ({ default: m.RootHero })));
@@ -10,7 +10,6 @@ const RootFeaturedProduct = React.lazy(() => import("@/components/pages/store/ro
 const RootPictures = React.lazy(() => import("@/components/pages/store/root").then(m => ({ default: m.RootPictures })));
 const RootDifferentFeatureCards = React.lazy(() => import("@/components/pages/store/root").then(m => ({ default: m.RootDifferentFeatureCards })));
 const RootLessIsMoreCard = React.lazy(() => import("@/components/pages/store/root").then(m => ({ default: m.RootLessIsMoreCard })));
-const RootAiConsultation = React.lazy(() => import("@/components/pages/store/root").then(m => ({ default: m.RootAiConsultation })));
 
 // Loading fallback component
 const SectionSkeleton = React.memo(() => (
@@ -30,36 +29,36 @@ export default React.memo(function RootPage() {
       <Suspense fallback={<SectionSkeleton />}>
         <RootHero />
       </Suspense>
-      
+
       <Suspense fallback={<SectionSkeleton />}>
         <RootServices />
       </Suspense>
-      
+
       <Suspense fallback={<SectionSkeleton />}>
         <RootCategories />
       </Suspense>
-      
+
       {/* <RootFeatured /> */}
       <Suspense fallback={<SectionSkeleton />}>
         <RootFeaturedProduct medicines={popularMedicines} />
       </Suspense>
-      
+
       <Suspense fallback={<SectionSkeleton />}>
         <RootPictures />
       </Suspense>
-      
+
       {/* <RootCTA /> */}
       <Suspense fallback={<SectionSkeleton />}>
         <RootDifferentFeatureCards />
       </Suspense>
-      
+
       <Suspense fallback={<SectionSkeleton />}>
         <RootLessIsMoreCard />
       </Suspense>
-      
-      <Suspense fallback={<SectionSkeleton />}>
+
+      {/* <Suspense fallback={<SectionSkeleton />}>
         <RootAiConsultation />
-      </Suspense>
+      </Suspense> */}
     </div>
   );
 });

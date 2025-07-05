@@ -1,6 +1,7 @@
 import { Icons } from "@/components/custom/icons";
 import { siteConfig } from "@/config";
 import { cn } from "@/lib/utils";
+import { Facebook, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -20,8 +21,8 @@ export function StoreSocialMedias({ containerClassName, itemsClassName }: Props)
         />
       </Link>
 
-      {/* <Link to={siteConfig.links.twitter} target="_blank">
-        <Icons.twitter
+      <Link to={siteConfig.links.facebook} target="_blank">
+        <Facebook
           className={cn(
             "w-4 h-4 md:w-5 md:h-5 text-muted-foreground hover:text-primary",
             itemsClassName,
@@ -29,14 +30,14 @@ export function StoreSocialMedias({ containerClassName, itemsClassName }: Props)
         />
       </Link>
 
-      <Link to={siteConfig.links.hugo} target="_blank">
-        <Icons.globe
+      <Link to={siteConfig.links.instagram} target="_blank">
+        <Instagram
           className={cn(
             "w-4 h-4 md:w-5 md:h-5 text-muted-foreground hover:text-primary",
             itemsClassName,
           )}
         />
-      </Link> */}
+      </Link>
     </div>
   );
 }

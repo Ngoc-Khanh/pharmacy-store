@@ -8,18 +8,21 @@ interface StepThreePaymentMethodCardProps {
   method: any;
   isSelected: boolean;
   onSelect: () => void;
+  disabled?: boolean;
 }
 
-export const StepThreePaymentMethodCard = ({ method, isSelected, onSelect }: StepThreePaymentMethodCardProps) => (
+export const StepThreePaymentMethodCard = ({ method, isSelected, onSelect, disabled }: StepThreePaymentMethodCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
-    className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${
+    className={`p-4 rounded-xl border-2 transition-all ${
+      disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+    } ${
       isSelected
         ? "border-teal-500 bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-950/30 dark:to-emerald-950/30"
         : "border-gray-200 hover:border-teal-300 dark:border-gray-700 dark:hover:border-teal-600"
     }`}
-    onClick={onSelect}
+    onClick={disabled ? undefined : onSelect}
   >
     <div className="flex items-start gap-3">
       <div className={`p-2.5 rounded-xl ${

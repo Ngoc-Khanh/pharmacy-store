@@ -171,11 +171,21 @@ export default function OrderDetails() {
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-16 h-16 bg-white dark:bg-gray-600 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-500 shadow-sm flex items-center justify-center">
-                        {item.medicine.thumbnail ? (
+                        {item.medicine?.thumbnail ? (
                           <img
-                            src={item.medicine.thumbnail.url}
-                            alt={item.medicine.thumbnail.alt}
+                            src={item.medicine.thumbnail.url || ""}
+                            alt={item.medicine.thumbnail.alt || item.medicine.name || "Thuốc"}
                             className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.parentElement!.innerHTML = `
+                                <div class="w-full h-full bg-gradient-to-br from-teal-50 to-emerald-50 dark:from-teal-900/30 dark:to-emerald-900/20 flex items-center justify-center">
+                                  <svg class="h-8 w-8 text-teal-500 dark:text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"/>
+                                  </svg>
+                                </div>
+                              `;
+                            }}
                           />
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-teal-50 to-emerald-50 dark:from-teal-900/30 dark:to-emerald-900/20 flex items-center justify-center">
@@ -184,9 +194,9 @@ export default function OrderDetails() {
                         )}
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-800 dark:text-gray-200">{item.medicine.name}</h4>
+                        <h4 className="font-medium text-gray-800 dark:text-gray-200">{item.medicine?.name || "Tên thuốc không xác định"}</h4>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          {item.medicine.description ?
+                          {item.medicine?.description ?
                             item.medicine.description.slice(0, 50) + (item.medicine.description.length > 50 ? '...' : '') :
                             "Thuốc chính hãng"}
                         </p>

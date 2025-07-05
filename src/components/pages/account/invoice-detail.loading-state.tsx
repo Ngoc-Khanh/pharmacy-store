@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function InvoiceDetailLoadingState() {
   return (
-    <div className="py-6 px-4 max-w-7xl mx-auto">
+    <div className="py-8 px-4 max-w-7xl mx-auto min-h-screen bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
       {/* Header Skeleton */}
       <div className="mb-6 flex items-center">
         <Skeleton className="h-10 w-10 rounded-full mr-4" />

@@ -81,7 +81,7 @@ export function RootHero() {
                 className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 font-medium rounded-xl px-6 py-3 lg:py-4 text-base group"
                 asChild
               >
-                <Link to={routes.store.medicines}>
+                <Link to={routes.store.categories}>
                   <ShoppingBag className="mr-2 h-5 w-5" />
                   Khám phá ngay
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />

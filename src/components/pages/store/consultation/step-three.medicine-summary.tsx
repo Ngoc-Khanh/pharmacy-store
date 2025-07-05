@@ -21,7 +21,7 @@ export const StepThreeMedicineSummary = ({ medicines }: { medicines: MedicineRes
           {medicines.map((medicine) => (
             <div key={medicine.id} className="flex items-center gap-3 p-3 bg-white/80 dark:bg-gray-800/60 rounded-lg border border-teal-100 dark:border-teal-800">
               <img
-                src={medicine.thumbnail.url}
+                src={medicine.thumbnail?.url || ""}
                 alt={medicine.name}
                 className="w-12 h-12 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
                 onError={(e) => { e.currentTarget.src = '/placeholder-medicine.png'; }}

@@ -1,4 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
+import { routes } from "@/config";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 
@@ -37,7 +38,7 @@ export function RootLessIsMoreCard() {
           
           <div className="relative inline-block group/button">
             <Link
-              to="/shop"
+              to={routes.store.categories}
               className={cn(
                 buttonVariants(), 
                 "relative rounded-full text-xs md:text-md font-semibold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-700 dark:to-emerald-700 dark:hover:from-green-600 dark:hover:to-emerald-600 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-0 text-white px-8 py-3 hover:translate-y-[-2px]"

@@ -22,13 +22,23 @@ const InvoiceProductItem = ({ item, index }: { item: InvoiceDetailsItem; index: 
   >
     <TableCell className="py-4">
       <div className="flex items-center">
-        {item.medicine.thumbnail ? (
+        {item.medicine?.thumbnail ? (
           <div className="h-16 w-16 mr-4 rounded-xl border border-gray-200 dark:border-gray-600 overflow-hidden flex-shrink-0 shadow-sm hover:shadow-md transition-shadow duration-200">
             <img
               src={item.medicine.thumbnail.url || ""}
-              alt={item.medicine.thumbnail.alt}
+              alt={item.medicine.thumbnail.alt || item.medicine.name || "Thuốc"}
               className="h-full w-full object-cover"
               loading="lazy"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.innerHTML = `
+                  <div class="h-full w-full bg-gradient-to-br from-teal-100 to-emerald-200 dark:from-teal-800 dark:to-emerald-800 flex items-center justify-center">
+                    <svg class="h-7 w-7 text-teal-600 dark:text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"/>
+                    </svg>
+                  </div>
+                `;
+              }}
             />
           </div>
         ) : (
@@ -38,14 +48,14 @@ const InvoiceProductItem = ({ item, index }: { item: InvoiceDetailsItem; index: 
         )}
         <div className="min-w-0 flex-1">
           <h4 className="font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
-            {item.medicine.name}
+            {item.medicine?.name || "Tên thuốc không xác định"}
           </h4>
           <div className="flex items-center mt-1">
             <Badge variant="outline" className="mr-2 px-1.5 py-0 text-xs border-teal-100 dark:border-teal-800 bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400">
               Thuốc
             </Badge>
             <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
-              {item.medicine.description?.substring(0, 40) || "Không có mô tả"}
+              {item.medicine?.description?.substring(0, 40) || "Không có mô tả"}
             </p>
           </div>
         </div>
@@ -53,14 +63,14 @@ const InvoiceProductItem = ({ item, index }: { item: InvoiceDetailsItem; index: 
     </TableCell>
     <TableCell className="text-center">
       <span className="inline-flex items-center justify-center px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-800 dark:text-gray-200 text-sm font-medium min-w-[38px] shadow-sm">
-        {item.quantity}
+        {item.quantity || 0}
       </span>
     </TableCell>
     <TableCell className="text-right font-medium text-gray-800 dark:text-gray-200 text-sm">
-      {formatCurrency(item.price)}
+      {formatCurrency(item.price || 0)}
     </TableCell>
     <TableCell className="text-right font-semibold text-teal-700 dark:text-teal-400 text-sm">
-      {formatCurrency(item.itemTotal)}
+      {formatCurrency(item.itemTotal || 0)}
     </TableCell>
   </motion.tr>
 );
@@ -71,15 +81,15 @@ const InvoiceTotals = ({ invoice }: { invoice: InvoiceDetails }) => (
     <div className="space-y-3 max-w-md ml-auto">
       <div className="flex justify-between items-center text-gray-700 dark:text-gray-300">
         <span className="font-medium">Tạm tính</span>
-        <span className="font-semibold">{formatCurrency(invoice.items.reduce((sum, item) => sum + item.itemTotal, 0))}</span>
+        <span className="font-semibold">{formatCurrency(invoice.items?.reduce((sum, item) => sum + (item.itemTotal || 0), 0) || 0)}</span>
       </div>
       <div className="flex justify-between items-center text-gray-700 dark:text-gray-300">
         <span className="font-medium">Phí vận chuyển</span>
-        <span className="font-semibold">{formatCurrency(Number(invoice.order.shippingFee))}</span>
+        <span className="font-semibold">{formatCurrency(Number(invoice.order?.shippingFee || 0))}</span>
       </div>
       <div className="flex justify-between items-center text-gray-700 dark:text-gray-300">
         <span className="font-medium">Khuyến mãi</span>
-        <span className="font-semibold text-rose-600 dark:text-rose-400">{formatCurrency(Number(invoice.order.discount))}</span>
+        <span className="font-semibold text-rose-600 dark:text-rose-400">{formatCurrency(Number(invoice.order?.discount || 0))}</span>
       </div>
 
       <Separator className="my-3 bg-gray-300/50 dark:bg-gray-600/50" />
@@ -87,7 +97,7 @@ const InvoiceTotals = ({ invoice }: { invoice: InvoiceDetails }) => (
       <div className="flex justify-between items-center text-base">
         <span className="font-bold text-gray-900 dark:text-gray-100">Tổng cộng</span>
         <div className="font-bold text-white bg-gradient-to-r from-teal-500 to-emerald-500 px-4 py-2 rounded-lg shadow-sm">
-          {formatCurrency(invoice.totalPrice)}
+          {formatCurrency(invoice.totalPrice || 0)}
         </div>
       </div>
     </div>
@@ -102,7 +112,16 @@ const CustomerAddress = ({ invoice }: { invoice: InvoiceDetails }) => (
       <div>
         <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-1">Địa Chỉ Giao Hàng</h3>
         <div className="text-sm text-gray-600 dark:text-gray-300">
-          <p className="font-medium">{invoice.order.shippingAddress.name || "Khách hàng"}, {invoice.order.shippingAddress.phone || "Không có số điện thoại"}, {[invoice.order.shippingAddress.addressLine1, invoice.order.shippingAddress.addressLine2, invoice.order.shippingAddress.city, invoice.order.shippingAddress.state, invoice.order.shippingAddress.country, invoice.order.shippingAddress.postalCode].filter(Boolean).join(", ") || "Không có địa chỉ giao hàng"}</p>
+          <p className="font-medium">
+            {invoice.order?.shippingAddress?.name || "Khách hàng"}, {invoice.order?.shippingAddress?.phone || "Không có số điện thoại"}, {[
+              invoice.order?.shippingAddress?.addressLine1,
+              invoice.order?.shippingAddress?.addressLine2,
+              invoice.order?.shippingAddress?.city,
+              invoice.order?.shippingAddress?.state,
+              invoice.order?.shippingAddress?.country,
+              invoice.order?.shippingAddress?.postalCode
+            ].filter(Boolean).join(", ") || "Không có địa chỉ giao hàng"}
+          </p>
         </div>
       </div>
     </div>
@@ -114,7 +133,7 @@ interface InvoiceProductsProps {
 }
 
 export function InvoiceDetailProducts({ invoice }: InvoiceProductsProps) {
-  const totalItems = invoice.items.reduce((sum: number, item: InvoiceDetailsItem) => sum + item.quantity, 0);
+  const totalItems = invoice.items?.reduce((sum: number, item: InvoiceDetailsItem) => sum + (item.quantity || 0), 0) || 0;
 
   return (
     <Card className="shadow-md border-0 rounded-xl overflow-hidden h-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
@@ -145,9 +164,15 @@ export function InvoiceDetailProducts({ invoice }: InvoiceProductsProps) {
             </TableHeader>
             <TableBody>
               <AnimatePresence>
-                {invoice.items.map((item: InvoiceDetailsItem, index: number) => (
-                  <InvoiceProductItem key={item.medicineId} item={item} index={index} />
-                ))}
+                {invoice.items?.map((item: InvoiceDetailsItem, index: number) => (
+                  <InvoiceProductItem key={item.medicineId || index} item={item} index={index} />
+                )) || (
+                  <tr>
+                    <td colSpan={4} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      Không có sản phẩm nào
+                    </td>
+                  </tr>
+                )}
               </AnimatePresence>
             </TableBody>
           </Table>

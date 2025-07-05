@@ -1,6 +1,6 @@
 import { Icons } from "@/components/custom/icons";
 import { ModeSwitcher } from "@/components/custom/mode-switch";
-import { SearchInput, StoreCart, StoreNavMobile, StoreNavPC, StoreNavUser } from "@/components/layouts/store";
+import { StoreCart, StoreNavMobile, StoreNavPC, StoreNavUser } from "@/components/layouts/store";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { routes, siteConfig } from "@/config";
@@ -40,9 +40,9 @@ export function StoreHeader() {
           </div>
 
           <div className="flex flex-1 items-center justify-end gap-3">
-            <Suspense>
+            {/* <Suspense>
               <SearchInput />
-            </Suspense>
+            </Suspense> */}
 
             <div className="w-full max-w-sm md:w-auto md:flex-none">
               {/* <CommandMenu /> */}
